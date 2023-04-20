@@ -1,0 +1,110 @@
+{
+  "meta": {
+    "buckets": {
+      "internal": {
+        "name": "svc-uat-big-internal",
+        "type": "internal"
+      },
+      "private": {
+        "name": "svc-uat-big-private",
+        "type": "private"
+      },
+      "protected": {
+        "name": "svc-uat-big-protected",
+        "type": "protected"
+      },
+      "public": {
+        "name": "svc-uat-big-public",
+        "type": "public"
+      }
+    },
+    "cmr": {
+      "clientId": "POCLOUD",
+      "cmrEnvironment": "UAT",
+      "cmrLimit": 100,
+      "cmrPageSize": 50,
+      "provider": "POCLOUD",
+      "username": "podaaccumulus"
+    },
+    "collection": {
+      "name": "MUR-JPL-L4-GLOB-v4.1",
+      "duplicateHandling": "replace"
+    }
+  },
+  "payload": {
+    "granules": [
+      {
+        "cmrConceptId": "G1240564978-POCLOUD",
+        "cmrLink": "https://cmr.uat.earthdata.nasa.gov/search/concepts/G1240564978-POCLOUD.umm_json",
+        "cmrMetadataFormat": "umm_json_v1_6",
+        "dataType": "MUR-JPL-L4-GLOB-v4.1",
+        "files": [
+          {
+            "bucket": "svc-uat-big-protected",
+            "checksum": "412a8833fb314df802f987b629670feb",
+            "checksumType": "md5",
+            "fileName": "s3://podaac-uat-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc",
+            "key": "MUR-JPL-L4-GLOB-v4.1/20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc",
+            "filepath": "MUR-JPL-L4-GLOB-v4.1/20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc",
+            "name": "20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc",
+            "path": "20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1/store/ghrsst/open/data/GDS2/L4/GLOB/JPL/MUR/v4.1/2021/015",
+            "size": 755943681,
+            "type": "data",
+            "url_path": "{cmrMetadata.CollectionReference.ShortName}"
+          },
+          {
+            "bucket": "podaac-uat-cumulus-public",
+            "checksum": "ba0b513b1395fa782a7e4f4b75976430",
+            "checksumType": "md5",
+            "fileName": "s3://podaac-uat-cumulus-public/MUR-JPL-L4-GLOB-v4.1/20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.md5",
+            "key": "MUR-JPL-L4-GLOB-v4.1/20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.md5",
+            "filepath": "MUR-JPL-L4-GLOB-v4.1/20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.md5",
+            "name": "20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.md5",
+            "path": "20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1/store/ghrsst/open/data/GDS2/L4/GLOB/JPL/MUR/v4.1/2021/015",
+            "size": 95,
+            "type": "metadata",
+            "url_path": "{cmrMetadata.CollectionReference.ShortName}"
+          },
+          {
+            "bucket": "podaac-uat-cumulus-public",
+            "etag": "\"ae169607ae91866b8fc7644395105a15\"",
+            "fileName": "s3://podaac-uat-cumulus-public/MUR-JPL-L4-GLOB-v4.1/20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.cmr.json",
+            "key": "MUR-JPL-L4-GLOB-v4.1/20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.cmr.json",
+            "filepath": "MUR-JPL-L4-GLOB-v4.1/20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.cmr.json",
+            "name": "20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.cmr.json",
+            "size": 1551,
+            "type": "metadata",
+            "url_path": "{cmrMetadata.CollectionReference.ShortName}"
+          },
+          {
+            "bucket": "podaac-uat-cumulus-protected",
+            "fileName": "s3://podaac-uat-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.dmrpp",
+            "key": "MUR-JPL-L4-GLOB-v4.1/20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.dmrpp",
+            "filepath": "MUR-JPL-L4-GLOB-v4.1/20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.dmrpp",
+            "name": "20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1.nc.dmrpp",
+            "path": "MUR-JPL-L4-GLOB-v4.1",
+            "size": 167411,
+            "type": "metadata",
+            "url_path": "{cmrMetadata.CollectionReference.ShortName}"
+          }
+        ],
+        "granuleId": "20210115090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1",
+        "post_to_cmr_duration": 775,
+        "published": true,
+        "sync_granule_duration": 13342,
+        "version": "4.1"
+      }
+    ]
+  },
+  "task_config": {
+    "collection": "{$.meta.collection}",
+    "cmr_provider": "{$.meta.cmr.provider}",
+    "cmr_environment": "{$.meta.cmr.cmrEnvironment}",
+    "cmr_clientid": "{$.meta.cmr.clientId}",
+    "buckets": "{$.meta.buckets}",
+    "cumulus_message": {
+      "input": "{$.payload}"
+    }
+  },
+  "exception": "None"
+}
