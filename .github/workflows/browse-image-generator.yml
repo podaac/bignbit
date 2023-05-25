@@ -1,0 +1,189 @@
+name: <daaac>-cloud/cumulus/browse-image-generator
+on:
+  push:
+  workflow_dispatch:
+concurrency:
+  group: "${{ github.ref }}"
+  cancel-in-progress: true
+env:
+  NEXUS_CREDS_EXPORT_FILE: |-
+    #!/bin/sh
+    export NEXUS_USERNAME=<TODO- remove from pipeline>
+    export NEXUS_PASSWORD=<TODO- remove from pipeline>
+jobs:
+  build-tf-asset:
+    runs-on:
+      - self-hosted
+      - docker
+    if: ((github.ref == 'refs/heads//^release.*/' || github.ref == 'refs/heads//^hotfix.*/' || github.ref == 'refs/heads/develop')) && !(startsWith(github.ref, 'refs/tags'))
+    timeout-minutes: 60
+    env:
+      NEXUS_REPO_NAME: cloud-migration
+      NEXUS_ASSET_GROUP: browse-image-gen
+      TF_FILE_BASE_NAME: terraform-big-mod
+      IMAGE_BASE_NAME: big
+      NEXUS_CLIENT_DOCKER_IMAGE: <repo>/nexus/nexus-client:1.0.0
+      AWS_CLI_IMAGE: amazon/aws-cli
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        fetch-depth: 20
+    - run: filename=$(source scripts/get-tf-asset-filename.sh "${TF_FILE_BASE_NAME}" "${{ github.ref }}")
+    - run: echo "building Terraform module asset ${filename} ..."
+    - run: source scripts/create-tf-asset-file.sh "${filename}"
+    - run: mkdir assets
+    - run: mv "${filename}" assets/
+    - run: echo "build complete"
+    - uses: actions/upload-artifact@v3.1.1
+      if: success()
+      with:
+        name: "${{ github.job }}"
+        path: assets/
+  build-tf-asset-for-feature:
+    runs-on:
+      - self-hosted
+      - docker
+    if: (github.ref == 'refs/heads//^feature.*/' && $CI_COMMIT_MESSAGE =~ /\[build-asset-for-feature\]/) && !(startsWith(github.ref, 'refs/tags'))
+    timeout-minutes: 60
+    env:
+      NEXUS_REPO_NAME: cloud-migration
+      NEXUS_ASSET_GROUP: browse-image-gen
+      TF_FILE_BASE_NAME: terraform-big-mod
+      IMAGE_BASE_NAME: big
+      NEXUS_CLIENT_DOCKER_IMAGE: <repo>/nexus/nexus-client:1.0.0
+      AWS_CLI_IMAGE: amazon/aws-cli
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        fetch-depth: 20
+    - run: filename=$(source scripts/get-tf-asset-filename.sh "${TF_FILE_BASE_NAME}" "${{ github.ref }}")
+    - run: echo "building Terraform module asset ${filename} ..."
+    - run: source scripts/create-tf-asset-file.sh "${filename}"
+    - run: mkdir assets
+    - run: mv "${filename}" assets/
+    - run: echo "build complete"
+    - uses: actions/upload-artifact@v3.1.1
+      if: success()
+      with:
+        name: "${{ github.job }}"
+        path: assets/
+  build-image:
+    runs-on:
+      - self-hosted
+      - docker-build
+    if: ((github.ref == 'refs/heads//^release.*/' || github.ref == 'refs/heads//^hotfix.*/' || github.ref == 'refs/heads/develop')) && !(startsWith(github.ref, 'refs/tags'))
+    timeout-minutes: 60
+    env:
+      NEXUS_REPO_NAME: cloud-migration
+      NEXUS_ASSET_GROUP: browse-image-gen
+      TF_FILE_BASE_NAME: terraform-big-mod
+      IMAGE_BASE_NAME: big
+      NEXUS_CLIENT_DOCKER_IMAGE: <repo>/nexus/nexus-client:1.0.0
+      AWS_CLI_IMAGE: amazon/aws-cli
+      IMAGE: "${NEXUS_DEPLOY_REGISTRY}/${{ github.repository }}/${IMAGE_BASE_NAME}"
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        fetch-depth: 20
+    - run: docker login -u ${NEXUS_DEPLOY_USER} -p ${NEXUS_DEPLOY_PASS} ${NEXUS_DEPLOY_REGISTRY}
+    - run: tag=$(source scripts/get-img-tag.sh "${{ github.ref }}")
+    - run: img_tag="${IMAGE}:${tag}"
+    - run: echo "building image ${img_tag} ..."
+    - run: docker build -f ./docker/Dockerfile -t ${img_tag} .
+    - run: echo "build complete"
+    - run: echo "storing image ${img_tag} ..."
+    - run: docker push "${img_tag}"
+    - run: echo "store complete"
+    - run: docker logout ${NEXUS_DEPLOY_REGISTRY}
+      if: always()
+  build-image-for-feature:
+    runs-on:
+      - self-hosted
+      - docker-build
+    if: (github.ref == 'refs/heads//^feature.*/' && $CI_COMMIT_MESSAGE =~ /\[build-asset-for-feature\]/) && !(startsWith(github.ref, 'refs/tags'))
+    timeout-minutes: 60
+    env:
+      NEXUS_REPO_NAME: cloud-migration
+      NEXUS_ASSET_GROUP: browse-image-gen
+      TF_FILE_BASE_NAME: terraform-big-mod
+      IMAGE_BASE_NAME: big
+      NEXUS_CLIENT_DOCKER_IMAGE: <repo>/nexus/nexus-client:1.0.0
+      AWS_CLI_IMAGE: amazon/aws-cli
+      IMAGE: "${NEXUS_DEPLOY_REGISTRY}/${{ github.repository }}/${IMAGE_BASE_NAME}"
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        fetch-depth: 20
+    - run: docker login -u ${NEXUS_DEPLOY_USER} -p ${NEXUS_DEPLOY_PASS} ${NEXUS_DEPLOY_REGISTRY}
+    - run: tag=$(source scripts/get-img-tag.sh "${{ github.ref }}")
+    - run: img_tag="${IMAGE}:${tag}"
+    - run: echo "building image ${img_tag} ..."
+    - run: docker build -f ./docker/Dockerfile -t ${img_tag} .
+    - run: echo "build complete"
+    - run: echo "storing image ${img_tag} ..."
+    - run: docker push "${img_tag}"
+    - run: echo "store complete"
+    - run: docker logout ${NEXUS_DEPLOY_REGISTRY}
+      if: always()
+  store-tf-asset:
+    needs:
+    - build-tf-asset
+    - build-tf-asset-for-feature
+    - build-image
+    - build-image-for-feature
+    runs-on:
+      - self-hosted
+      - docker-run
+    if: ((github.ref == 'refs/heads//^release.*/' || github.ref == 'refs/heads//^hotfix.*/' || github.ref == 'refs/heads/develop')) && !(startsWith(github.ref, 'refs/tags'))
+    timeout-minutes: 60
+    env:
+      NEXUS_REPO_NAME: cloud-migration
+      NEXUS_ASSET_GROUP: browse-image-gen
+      TF_FILE_BASE_NAME: terraform-big-mod
+      IMAGE_BASE_NAME: big
+      NEXUS_CLIENT_DOCKER_IMAGE: <repo>/nexus/nexus-client:1.0.0
+      AWS_CLI_IMAGE: amazon/aws-cli
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        fetch-depth: 20
+    - uses: actions/download-artifact@v3.0.1
+    - run: filename=$(source scripts/get-tf-asset-filename.sh "${TF_FILE_BASE_NAME}" "${{ github.ref }}")
+    - run: host_file=$(pwd)"/assets/${filename}"
+    - run: con_file="/app/assets/${filename}"
+    - run: asset_path="${NEXUS_ASSET_GROUP}/${filename}"
+    - run: |
+        echo "storing Terraform module file ${filename} as asset ${asset_path} in repo ${NEXUS_REPO_NAME} ..." echo "NEXUS_CLIENT_DOCKER_IMAGE ${NEXUS_CLIENT_DOCKER_IMAGE} host_file ${host_file}  con_file ${con_file} ..."
+        docker run --rm  -v ${NEXUS_CREDS_EXPORT_FILE}:/app/set-creds.sh  -v "${host_file}":"${con_file}"  --entrypoint sh  ${NEXUS_CLIENT_DOCKER_IMAGE}  -c "source set-creds.sh; python -m nexus.cli upload-raw-asset -f ${con_file} -r ${NEXUS_REPO_NAME} -a ${asset_path}"
+        echo "storage complete"
+  store-tf-asset-for-feature:
+    needs:
+    - build-tf-asset
+    - build-tf-asset-for-feature
+    - build-image
+    - build-image-for-feature
+    runs-on:
+      - self-hosted
+      - docker-run
+    if: (github.ref == 'refs/heads//^feature.*/' && $CI_COMMIT_MESSAGE =~ /\[build-asset-for-feature\]/) && !(startsWith(github.ref, 'refs/tags'))
+    timeout-minutes: 60
+    env:
+      NEXUS_REPO_NAME: cloud-migration
+      NEXUS_ASSET_GROUP: browse-image-gen
+      TF_FILE_BASE_NAME: terraform-big-mod
+      IMAGE_BASE_NAME: big
+      NEXUS_CLIENT_DOCKER_IMAGE: <repo>/nexus/nexus-client:1.0.0
+      AWS_CLI_IMAGE: amazon/aws-cli
+    steps:
+    - uses: actions/checkout@v3.5.0
+      with:
+        fetch-depth: 20
+    - uses: actions/download-artifact@v3.0.1
+    - run: filename=$(source scripts/get-tf-asset-filename.sh "${TF_FILE_BASE_NAME}" "${{ github.ref }}")
+    - run: host_file=$(pwd)"/assets/${filename}"
+    - run: con_file="/app/assets/${filename}"
+    - run: asset_path="${NEXUS_ASSET_GROUP}/${filename}"
+    - run: |
+        echo "storing Terraform module file ${filename} as asset ${asset_path} in repo ${NEXUS_REPO_NAME} ..." echo "NEXUS_CLIENT_DOCKER_IMAGE ${NEXUS_CLIENT_DOCKER_IMAGE} host_file ${host_file}  con_file ${con_file} ..."
+        docker run --rm  -v ${NEXUS_CREDS_EXPORT_FILE}:/app/set-creds.sh  -v "${host_file}":"${con_file}"  --entrypoint sh  ${NEXUS_CLIENT_DOCKER_IMAGE}  -c "source set-creds.sh; python -m nexus.cli upload-raw-asset -f ${con_file} -r ${NEXUS_REPO_NAME} -a ${asset_path}"
+        echo "storage complete"
