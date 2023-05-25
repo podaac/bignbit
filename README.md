@@ -7,15 +7,14 @@ bignbit combines the Browse Image Generator (BIG) and the PO.DAAC Browse Image T
   * create a virtual environment:  conda env create -f conda-environment.yaml
 
 # Implementation
+    TODO: Gitlab pipeline was ported to Github Actions. It's in .github/workflows/browse-image-generator.yml. No work has been done on it yet to get it running. The CI/CD documentation below will need to be updated as well. The gitlab pipeline pushed the image to Nexus. Use Github instead?
+    TODO: Get Nexus credentials out of the pipeline
 
   * Use commands below to add values to the AWS Systems Manager Parameter store:
     ```
     aws ssm put-parameter --region us-west-2 --profile `<your profile>`  --name "<prefix>-urs_<daac>cloud_user" --value "<var.cmr_username>" --type "String"
     aws ssm put-parameter --region us-west-2 --profile `<your profile>`  --name "<prefix>-urs_<daac>cloud_pass" --value "<var.cmr_password>" --type "String"
-   ```
-
-TODO: Update pipeline to push the image to Github instead of Nexus?
-TODO: Get credentials out of the pipeline
+    ```
 
   * run deployment pipeline to build docker image and push it to <Nexus>, and build terraform asset file and push it to <Nexus> repo.
     To run a pipeline for a feature branch, set the pipeline variable `CI_COMMIT_MESSAGE` to the value `[build-asset-for-feature]`. When the pipeline completes, retrieve the zip file name from the output of the `store` stage. 
@@ -167,8 +166,6 @@ If you've added a Choice in the workflow, set the configuration accordingly, the
 # CI/CD
 
 ## Overview
-
-TODO: Gitlab pipeline was ported to Github Actions. It's in .github/workflows/browse-image-generator.yml. No work has been done on it yet to get it running. The following documentation will need to be updated as well.
 
 A GitLab CI/CD pipeline exists for the project.  It primarily exists to: 
 
