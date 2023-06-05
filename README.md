@@ -23,9 +23,11 @@ bignbit combines the Browse Image Generator (BIG) and the PO.DAAC Browse Image T
 
     See `CI/CD` below for further details.
   
+  * Where ever you create your SQS queues in your Cumulus deployment, create a `big_background_job_queue` queue
+
   * update cumulus-tf/main.tf:
     ```
-    add this definition to `throttled_queues`:
+    If using throttled queues, add this definition to `throttled_queues`:
       {
         url = aws_sqs_queue.big_background_job_queue.id,
         execution_limit = var.big_throttled_execution_limit
@@ -121,11 +123,11 @@ bignbit combines the Browse Image Generator (BIG) and the PO.DAAC Browse Image T
     ```
   
   * Define `module "browse_image_module"` in your `cumulus-tf` folder.  An example can be found under `examples/cumulus-tf/browse_image_module.tf`
-    You may need to change the `source` to pull the correct version. You'll need to insert your repo for repo_url.
+    You may need to change the `source` to pull the correct version built by the pipeline. You'll need to insert your repo for repo_url.
 
   * Add `resource "aws_iam_role_policy" "pobit_lambda_processing"` in a file named pobit_lambda.iam.tf to your `cumulus-tf` folder. An example can be found under `examples/cumulus-tf/pobit_lambda.iam.tf`
 
-  * Add a browse_image_workflow.tf to your Cumlulus repo to define the browse image post ingest workflow. An example can be found under `examples/cumulus-tf/browse_image_workflow.tf`.  You may need to update the `source` in `module "browse_image_module"` to use the zip file built by the pipeline.
+  * Add a browse_image_workflow.tf to your Cumlulus repo to define the browse image post ingest workflow. An example can be found under `examples/cumulus-tf/browse_image_workflow.tf`.  You may need to update the source of terraform-aws-cumulus-workflow.zip to your version of Cumulus. 
 
   * Update your Cumulus ingest workflow to run the post ingest workflow defined in browse_image_workflow.tf
 
