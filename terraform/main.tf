@@ -8,9 +8,13 @@ terraform {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
 locals {
   name = var.app_name
   environment = var.prefix
+
+  account_id = data.aws_caller_identity.current.account_id
 
   tags = length(var.default_tags) == 0 ? {
     team: "PODAAC TVA",

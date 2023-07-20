@@ -46,3 +46,37 @@ output "config_bucket_name"{
 output "config_path"{
   value = var.config_dir
 }
+
+#outputs for browse image transfer
+
+output "pobit_build_image_sets_arn" {
+  value = aws_lambda_function.build_image_sets.arn
+}
+
+output "pobit_send_to_gitc_arn" {
+  value = aws_lambda_function.send_to_gitc.arn
+}
+
+output "pobit_handle_gitc_response_arn" {
+  value = aws_lambda_function.handle_gitc_response.arn
+}
+
+output "pobit_save_cma_message_arn" {
+  value = aws_lambda_function.save_cma_message.arn
+}
+
+output "pobit_gibs_topic" {
+  value = aws_sns_topic.gibs_response_topic.arn
+}
+
+output "pobit_gibs_queue" {
+  value = aws_sqs_queue.gibs_response_queue.arn
+}
+
+output "pobit_audit_bucket"{
+  value = var.pobit_audit_bucket
+}
+
+output "pobit_audit_path"{
+  value = var.pobit_audit_path
+}

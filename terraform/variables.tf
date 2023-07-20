@@ -74,3 +74,36 @@ variable "lambda_container_image_uri" {
   type = string
   default = ""
 }
+
+# browse image transfer vars
+
+variable "stage" {
+  type = string
+}
+
+variable "pobit_audit_bucket" {
+  type = string
+  description = "S3 bucket where messages exchanged with GITC will be saved. Typically the cumulus internal bucket"
+}
+
+variable "pobit_audit_path" {
+  type = string
+  description = "Path relative to pobit_audit_bucket where messages exchanged with GITC will be saved."
+  default = "pobit-cma-output"
+}
+
+variable "gibs_region" {
+  type = string
+}
+
+variable "gibs_queue_name" {
+  type = string
+}
+
+variable "gibs_account_id" {
+  type = string
+}
+
+#variable "app_name" {
+#  default = "pobit"
+#}

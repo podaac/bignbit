@@ -1,5 +1,5 @@
 module "browse_image_workflow" {
-  source = "https://github.com/nasa/cumulus/releases/download/v15.0.1/terraform-aws-cumulus-workflow.zip"
+  source = "https://github.com/nasa/cumulus/releases/download/v15.0.4/terraform-aws-cumulus-workflow.zip"
 
   prefix          = var.prefix
   name            = "BrowseImageWorkflow"
@@ -372,7 +372,7 @@ module "browse_image_workflow" {
         },
         "Clean Output": {
             "Type": "Pass",
-            "Next": "WorkflowSucceeded",
+            "Next": "BuildImageSets",
             "Parameters": {
                 "cumulus_meta.$": "$.cumulus_meta",
                 "meta": {
@@ -391,8 +391,145 @@ module "browse_image_workflow" {
             },
             "Comment": "Removes extra data from payload that is no longer necessary"
         },
+        "BuildImageSets": {
+            "Parameters": {
+                "cma": {
+                    "event.$": "$",
+                    "task_config": {
+                        "collection": "{$.meta.collection}",
+                        "cmr_provider": "{$.meta.cmr.provider}",
+                        "cumulus_message": {
+                            "input": "{$.payload}"
+                        }
+                    }
+                }
+            },
+            "Type": "Task",
+            "Resource": "${module.browse_image_module.pobit_build_image_sets_arn}",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "ResultPath": "$.exception",
+                    "Next": "WorkflowFailed"
+                }
+            ],
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "IntervalSeconds": 2,
+                    "MaxAttempts": 1
+                }
+            ],
+            "Next": "TransferImageSets"
+        },
+        "TransferImageSets": {
+            "Type": "Map",
+            "InputPath": "$",
+            "ItemsPath": "$.payload.pobit",
+            "MaxConcurrency": 20,
+            "Iterator": {
+                "StartAt": "SendToGITC",
+                "States": {
+                    "SendToGITC": {
+                        "Parameters": {
+                            "FunctionName": "${module.browse_image_module.pobit_send_to_gitc_arn}",
+                            "Payload": {
+                                "cma": {
+                                    "event.$": "$",
+                                    "task_config": {
+                                        "collection": "{$.collection}",
+                                        "cmr_provider": "{$.cmr_provider}",
+                                        "token.$": "$$.Task.Token",
+                                        "cumulus_message": {
+                                            "input": "{$}"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "Type": "Task",
+                        "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+                        "TimeoutSeconds": 86400,
+                        "End": true,
+                        "ResultPath": "$.gitc_response",
+                        "Catch": [
+                            {
+                                "ErrorEquals": [
+                                    "States.Timeout"
+                                ],
+                                "ResultPath": "$.gitc_response",
+                                "Next": "GITC Timeout"
+                            }
+                        ]
+                    },
+                    "GITC Timeout": {
+                        "Type": "Pass",
+                        "End": true,
+                        "Comment": "No response was received from GITC within the configured timeout"
+                    }
+                }
+            },
+            "ResultPath": "$.payload.pobit",
+            "Catch": [
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "ResultPath": "$.exception",
+                    "Next": "WorkflowFailed"
+                }
+            ],
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "States.ALL"
+                    ],
+                    "IntervalSeconds": 2,
+                    "MaxAttempts": 1
+                }
+            ],
+            "Next": "Save CMA Message"
+        },
+        "Save CMA Message": {
+            "Type": "Task",
+            "Resource": "${module.browse_image_module.pobit_save_cma_message_arn}",
+            "Parameters": {
+                "cma": {
+                    "event.$": "$",
+                    "task_config": {
+                        "pobit_audit_bucket": "${module.browse_image_module.pobit_audit_bucket}",
+                        "cma_key_name.$": "States.Format('${module.browse_image_module.pobit_audit_path}/{}/{}.{}.cma.json', $.meta.collection.name, $.payload.granules[0].granuleId, $$.State.EnteredTime)",
+                        "cumulus_message": {
+                            "input": "{$.payload}"
+                        }
+                    }
+                }
+            },
+            "Retry": [
+                {
+                    "ErrorEquals": [
+                        "Lambda.ServiceException",
+                        "Lambda.AWSLambdaException",
+                        "Lambda.SdkClientException",
+                        "Lambda.TooManyRequestsException"
+                    ],
+                    "IntervalSeconds": 2,
+                    "MaxAttempts": 6,
+                    "BackoffRate": 2
+                }
+            ],
+            "Next": "WorkflowSucceeded"
+        },
         "WorkflowSucceeded": {
             "Type": "Succeed"
+        },
+        "WorkflowFailed": {
+            "Type": "Fail",
+            "Cause": "Workflow failed"
         }
     }
 }

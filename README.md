@@ -7,8 +7,7 @@ bignbit combines the Browse Image Generator (BIG) and the PO.DAAC Browse Image T
   * create a virtual environment:  conda env create -f conda-environment.yaml
 
 # Implementation
-    TODO: Gitlab pipeline was ported to Github Actions. It's in .github/workflows/browse-image-generator.yml. No work has been done on it yet to get it running. The CI/CD documentation below will need to be updated as well. The gitlab pipeline pushed the image to Nexus. Use Github instead?
-    TODO: Get Nexus credentials out of the pipeline
+    TODO: Gitlab pipeline was ported to Github Actions. It's in .github/workflows/browse-image-generator.yml. No work has been done on it yet to get it running. The CI/CD documentation below will need to be updated as well. The gitlab pipeline pushed the image to Nexus. The Github pipeline will/should publish the artifacts to github packages (ghcr.io for the docker image)
 
   * Use commands below to add values to the AWS Systems Manager Parameter store:
     ```
@@ -16,10 +15,9 @@ bignbit combines the Browse Image Generator (BIG) and the PO.DAAC Browse Image T
     aws ssm put-parameter --region us-west-2 --profile `<your profile>`  --name "<prefix>-urs_<daac>cloud_pass" --value "<var.cmr_password>" --type "String"
     ```
 
+  LPDAAC instructions for Gitlab build (need to be replaced by instructions for bignbit Github build which should publish the artifacts to github packages (ghcr.io for the docker image)):
   * run deployment pipeline to build docker image and push it to <Nexus>, and build terraform asset file and push it to <Nexus> repo.
     To run a pipeline for a feature branch, set the pipeline variable `CI_COMMIT_MESSAGE` to the value `[build-asset-for-feature]`. When the pipeline completes, retrieve the zip file name from the output of the `store` stage. 
-
-    If the pipeline fails, you may need to update pipeline values NEXUS_USERNAME and NEXUS_PASSWORD. Also note, that using a $ symbol in your password will cause the 'store tf asset..' step to fail to push to the <Nexus> repo, even though the job will show as passed.
 
     See `CI/CD` below for further details.
   
@@ -117,11 +115,11 @@ bignbit combines the Browse Image Generator (BIG) and the PO.DAAC Browse Image T
     edl_pass = "<prefix>-urs_<daac>cloud_pass"
     big_image_name = "browse-image-generator"
     big_version = "feature-lpcumulus-1581-bignbit"
-    big_throttled_execution_limit = 20      (sandbox=20, SIT=, UAT=, PROD=)
-    big_throttled_message_limit = 2
+    big_throttled_execution_limit = 20      (sandbox=20, SIT=50, UAT=100, PROD=100)
+    big_throttled_message_limit = 2         (sandbox=2, SIT=5, UAT=10, PROD=10)
     big_throttled_time_limit = 60
     ```
-  
+
   * Define `module "browse_image_module"` in your `cumulus-tf` folder.  An example can be found under `examples/cumulus-tf/browse_image_module.tf`
     You may need to change the `source` to pull the correct version built by the pipeline. You'll need to insert your repo for repo_url.
 
@@ -149,7 +147,7 @@ bignbit combines the Browse Image Generator (BIG) and the PO.DAAC Browse Image T
     "variables":[]
  }
 
- TODO: Question for Frank - What do these fields mean, valid values, etc. Any information useful to an integrator...
+ TODO: Question for PODAAC - What do these fields mean, valid values, etc. Any information useful to an integrator...
    convertToPNG:
    operaTreatment:
    imageFilenameRegex: a regex to apply to the filenames to determine which file should be used for browse image generation
@@ -157,7 +155,7 @@ bignbit combines the Browse Image Generator (BIG) and the PO.DAAC Browse Image T
    variables: 
 
 # Development
-If you make changes to the files in the bignbit folder that make up the image, which is used to create the lambdas, they don't seem to pick up the changes upon redeployment. You may have to delete the lambda from the AWS console and then deploy.
+If you make changes to the files in the bignbit folder that make up the image, which is used to create the lambdas, they don't seem to pick up the changes upon redeployment. You may have to delete the lambda from the AWS console and then deploy. There's probably a way to force this...
 
 ## Unit Testing
 TODO: Add instructions for kicking off the unit tests
@@ -174,7 +172,6 @@ A GitLab CI/CD pipeline exists for the project.  It primarily exists to:
 1) build a Terraform module zip file and store it as an asset in the Nexus repository. 
 2) create a Docker image for the reconciliation task in the Nexus repo
 
-It currently pushes to NEXUS and the pipeline needs values for NEXUS_USERNAME and NEXUS_PASSWORD
 ```
 ---------------------------------------------
 Creating the Terraform module zip file has two stages: 
