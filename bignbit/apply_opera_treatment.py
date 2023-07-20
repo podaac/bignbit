@@ -174,7 +174,10 @@ def the_opera_treatment(source_image_filepath: pathlib.Path, working_dirpath: pa
     try:
         # Need to strip off the leading 'T' from the actual grid code in order to look it up in the json data
         # this is done using a slice on the string mgrs_grid_code[1:]
-        sub_tiles = MGRS_GIBS_INTERSECTION[mgrs_grid_code[1:]]
+        if mgrs_grid_code.startswith('T'):
+            sub_tiles = MGRS_GIBS_INTERSECTION[mgrs_grid_code[1:]]
+        else:
+            sub_tiles = MGRS_GIBS_INTERSECTION[mgrs_grid_code]
     except KeyError as e:
         raise KeyError(f"Could not locate grid code {mgrs_grid_code[1:]} in mgrs_gibs_intersection.json.pickle") from e
 
