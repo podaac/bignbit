@@ -24,17 +24,16 @@ jobs:
           version: 1.5.1
           installer-parallel: true
 
-      - name: Make BIGnBIT 
+      - name: Make BIGnBIT
           run: |
-            chmod +x /build-lambda-zip.sh
-            ./build-lambda-zip.sh
+            ls -al
           shell: bash
 
-      - name: Upload
-          uses: actions/upload-artifact@v3.1.0
-          with:
-            name: bignbit
-            path: dist/lambda-package/
+#      - name: Upload
+#          uses: actions/upload-artifact@v3.1.0
+#          with:
+#            name: bignbit
+#            path: dist/lambda-package/
 
   test:
     runs-on: ubuntu-latest
