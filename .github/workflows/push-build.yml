@@ -1,0 +1,60 @@
+name: BIG n BIT Build & Deploy
+# github workflow on push
+
+on:
+  push:
+    branches: [ "feature/*" ]
+
+jobs:
+  build-and-publish:
+    name: build and publish bignbit
+    runs-on: ubuntu-latest
+    env:
+      VCS_CREDENTIALS_ID: "github.jpl.nasa.gov_devops_pw"
+      ARTIFACTORY_CREDENTIALS_ID: "jenkins.cae.artifactory"
+      GHCR_CREDENTIALS_ID: "github.com_packages_write_PAT"
+      ARTIFACTORY_URL: "https://cae-artifactory.jpl.nasa.gov/artifactory"
+      ARTIFACTORY_DOCKER_REGISTRY: "cae-artifactory.jpl.nasa.gov:16003"
+      ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
+      ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
+          installer-parallel: true
+
+      - name: Build lambda package
+          run: ./build-lambda-zip.sh
+            - name: Upload packaged zip
+              uses: actions/upload-artifact@v3.1.0
+              with:
+                name: dist
+                path: dist/bignbit.zip
+
+  test:
+    runs-on: ubuntu-latest
+    env:
+      VCS_CREDENTIALS_ID: "github.jpl.nasa.gov_devops_pw"
+      ARTIFACTORY_CREDENTIALS_ID: "jenkins.cae.artifactory"
+      GHCR_CREDENTIALS_ID: "github.com_packages_write_PAT"
+      ARTIFACTORY_URL: "https://cae-artifactory.jpl.nasa.gov/artifactory"
+      ARTIFACTORY_DOCKER_REGISTRY: "cae-artifactory.jpl.nasa.gov:16003"
+      ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
+      ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
+          installer-parallel: true
+
+      - name: Poetry update
+        run: poetry update
+
