@@ -11,10 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VCS_CREDENTIALS_ID: "github.jpl.nasa.gov_devops_pw"
-      ARTIFACTORY_CREDENTIALS_ID: "jenkins.cae.artifactory"
       GHCR_CREDENTIALS_ID: "github.com_packages_write_PAT"
-      ARTIFACTORY_URL: "https://cae-artifactory.jpl.nasa.gov/artifactory"
-      ARTIFACTORY_DOCKER_REGISTRY: "cae-artifactory.jpl.nasa.gov:16003"
       ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
       ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
 
@@ -27,22 +24,23 @@ jobs:
           version: 1.5.1
           installer-parallel: true
 
-      - name: Build lambda package
-          run: ./build-lambda-zip.sh
-            - name: Upload packaged zip
-              uses: actions/upload-artifact@v3.1.0
-              with:
-                name: dist
-                path: dist/bignbit.zip
+      - name: Make BIGnBIT 
+          run: |
+            chmod +x /build-lambda-zip.sh
+            ./build-lambda-zip.sh
+          shell: bash
+
+      - name: Upload
+          uses: actions/upload-artifact@v3.1.0
+          with:
+            name: bignbit
+            path: dist/lambda-package/
 
   test:
     runs-on: ubuntu-latest
     env:
       VCS_CREDENTIALS_ID: "github.jpl.nasa.gov_devops_pw"
-      ARTIFACTORY_CREDENTIALS_ID: "jenkins.cae.artifactory"
       GHCR_CREDENTIALS_ID: "github.com_packages_write_PAT"
-      ARTIFACTORY_URL: "https://cae-artifactory.jpl.nasa.gov/artifactory"
-      ARTIFACTORY_DOCKER_REGISTRY: "cae-artifactory.jpl.nasa.gov:16003"
       ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
       ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
 
