@@ -9,7 +9,6 @@ jobs:
     name: build and publish bignbit
     runs-on: ubuntu-latest
     env:
-      VCS_CREDENTIALS_ID: "github.jpl.nasa.gov_devops_pw"
       GHCR_CREDENTIALS_ID: "github.com_packages_write_PAT"
       ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
       ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
@@ -46,7 +45,6 @@ jobs:
     runs-on: ubuntu-latest
     name: build and test
     env:
-      VCS_CREDENTIALS_ID: "github.jpl.nasa.gov_devops_pw"
       GHCR_CREDENTIALS_ID: "github.com_packages_write_PAT"
       ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
       ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
@@ -67,7 +65,6 @@ jobs:
     runs-on: ubuntu-latest
     name: build, publish, and release
     env:
-      VCS_CREDENTIALS_ID: "github.jpl.nasa.gov_devops_pw"
       GHCR_CREDENTIALS_ID: "github.com_packages_write_PAT"
       ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
       ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
