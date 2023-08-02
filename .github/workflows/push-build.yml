@@ -3,7 +3,6 @@ name: BIG n BIT Build & Deploy
 
 on:
   push:
-    branches: [ "feature/*" ]
 
 jobs:
   build-and-publish:
@@ -15,6 +14,7 @@ jobs:
       ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
       ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
 
+    if: github.ref == 'refs/heads/feature/*'
     steps:
       - uses: actions/checkout@v3
 
@@ -25,24 +25,49 @@ jobs:
           installer-parallel: true
 
       - name: Make BIGnBIT
-          run: |
-            ls -al
-          shell: bash
+        run: |
+          ls -al
 
-#      - name: Upload
-#          uses: actions/upload-artifact@v3.1.0
-#          with:
-#            name: bignbit
-#            path: dist/lambda-package/
+      - name: Zip bignbit Package
+        run: zip bignbit.zip ./dist/lambda-package -r
 
-  test:
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: bignbit-package
+          path: bignbit.zip
+
+  build-and-test:
     runs-on: ubuntu-latest
+    name: build and test
     env:
       VCS_CREDENTIALS_ID: "github.jpl.nasa.gov_devops_pw"
       GHCR_CREDENTIALS_ID: "github.com_packages_write_PAT"
       ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
       ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
 
+    if: github.ref == 'refs/heads/develop'
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install and configure Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.5.1
+          installer-parallel: true
+      - name: Poetry update
+        run: poetry update
+
+  release:
+    runs-on: ubuntu-latest
+    name: build, publish, and release
+    env:
+      VCS_CREDENTIALS_ID: "github.jpl.nasa.gov_devops_pw"
+      GHCR_CREDENTIALS_ID: "github.com_packages_write_PAT"
+      ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
+      ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
+
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
 
@@ -54,4 +79,3 @@ jobs:
 
       - name: Poetry update
         run: poetry update
-
