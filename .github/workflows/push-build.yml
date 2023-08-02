@@ -36,6 +36,8 @@ jobs:
         run: |
           cd dist
           zip bignbit-lambda.zip ./lambda-package -r
+          mv bignbit-lambda.zip ../
+          poetry --version
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
