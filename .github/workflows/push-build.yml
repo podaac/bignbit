@@ -13,7 +13,7 @@ jobs:
       ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
       ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
 
-    #if: github.ref == 'refs/heads/feature*'
+    if: startsWith(github.ref, 'refs/heads/feature/')
     steps:
       - uses: actions/checkout@v3
 
@@ -33,13 +33,15 @@ jobs:
           ./build-lambda-zip.sh
 
       - name: Zip bignbit Package
-        run: zip bignbit.zip ./dist/lambda-package -r
+        run: |
+          cd dist
+          zip bignbit.zip ./lambda-package -r
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: bignbit-package
-          path: bignbit.zip
+          name: bignbit-lambda
+          path: bignbit-lambda.zip
 
   build-and-test:
     runs-on: ubuntu-latest
