@@ -35,7 +35,7 @@ jobs:
       - name: Zip bignbit Package
         run: |
           cd dist
-          zip bignbit.zip ./lambda-package -r
+          zip bignbit-lambda.zip ./lambda-package -r
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
