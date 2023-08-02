@@ -24,9 +24,14 @@ jobs:
           version: 1.5.1
           installer-parallel: true
 
-      - name: Make BIGnBIT
+      - name: bignbit source
         run: |
           ls -al
+
+      - name: Generate bignbit package
+        run: |
+          chmod +x build-lambda-zip.sh
+          ./build-lambda-zip.sh
 
       - name: Zip bignbit Package
         run: zip bignbit.zip ./dist/lambda-package -r
