@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 set -e
 
-#poetry build
-#poetry install --only main --sync
+poetry build
+poetry install --only main --sync
 rm -rf dist/lambda-package || true
 mkdir -p dist/lambda-package
 #cp -r $(poetry env list --full-path | awk '{print $1}')/lib/python*/site-packages/* dist/lambda-package/
-echo $(poetry env list --full-path | awk '{print $1}')
-ls -al $(poetry env list --full-path | awk '{print $1}')/lib/python*/site-packages/
+#echo $(poetry env list --full-path | awk '{print $1}')
+#ls -al $(poetry env list --full-path | awk '{print $1}')/lib/python*/site-packages/
 
 cp -r ./bignbit dist/lambda-package/
 touch dist/lambda-package/bignbit/__init__.py
 # zip does not exist on the Jenkins build container so comment this out and use the zipFile jenkins step directly
 #pushd dist/lambda-package
-#zip -r ../pobit-lambda.zip .
+#zip -r ../bignbit-lambda.zip .
 #popd

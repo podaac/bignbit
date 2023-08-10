@@ -3,6 +3,10 @@ variable "aws_profile" {
   default = null
 }
 
+variable "stage" {
+  type = string
+}
+
 variable "prefix" {
   type = string
 }
@@ -15,6 +19,29 @@ variable "config_bucket" {
 variable "config_dir" {
   type = string
   default = "datset-config"
+}
+
+variable "pobit_audit_bucket" {
+  type = string
+  description = "S3 bucket where messages exchanged with GITC will be saved. Typically the cumulus internal bucket"
+}
+
+variable "pobit_audit_path" {
+  type = string
+  description = "Path relative to pobit_audit_bucket where messages exchanged with GITC will be saved."
+  default = "pobit-cma-output"
+}
+
+variable "gibs_region" {
+  type = string
+}
+
+variable "gibs_queue_name" {
+  type = string
+}
+
+variable "gibs_account_id" {
+  type = string
 }
 
 variable "edl_user_ssm" {
@@ -65,10 +92,7 @@ variable tags{
   default = {}
 }
 
-variable "profile" {
-  type    = string
-  default = null
-}
+
 
 variable "lambda_container_image_uri" {
   type = string

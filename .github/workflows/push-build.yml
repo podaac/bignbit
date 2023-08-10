@@ -27,7 +27,7 @@ jobs:
         run: |
           ls -al
 
-      - name: Generate bignbit package
+      - name: Generate bignbit Package
         run: |
           chmod +x build-lambda-zip.sh
           ./build-lambda-zip.sh
@@ -37,7 +37,6 @@ jobs:
           cd dist
           zip bignbit-lambda.zip ./lambda-package -r
           mv bignbit-lambda.zip ../
-          poetry --version
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -52,28 +51,11 @@ jobs:
       GHCR_CREDENTIALS_ID: "github.com_packages_write_PAT"
       ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
       ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID_SERVICES_SIT }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_SERVICES_SIT }}
+      AWS_DEFAULT_REGION: us-west-2
 
-    if: github.ref == 'refs/heads/develop'
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install and configure Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: 1.5.1
-          installer-parallel: true
-      - name: Poetry update
-        run: poetry update
-
-  release:
-    runs-on: ubuntu-latest
-    name: build, publish, and release
-    env:
-      GHCR_CREDENTIALS_ID: "github.com_packages_write_PAT"
-      ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
-      ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
-
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v3
 
@@ -83,5 +65,49 @@ jobs:
           version: 1.5.1
           installer-parallel: true
 
-      - name: Poetry update
-        run: poetry update
+      - name: bignbit source
+        run: |
+          ls -al
+
+      - name: Generate bignbit Package
+        run: |
+          chmod +x build-lambda-zip.sh
+          ./build-lambda-zip.sh
+
+      - name: Zip bignbit Package
+        run: |
+          cd dist
+          zip bignbit-lambda.zip ./lambda-package -r
+          mv bignbit-lambda.zip ../
+          cd ..
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: bignbit-lambda
+          path: bignbit-lambda.zip
+
+      - uses: hashicorp/setup-terraform@v2.0.3
+        with:
+          terraform_version: 1.3.4
+
+      - name: Set Up Lambda Module ZIP
+        run: |
+          ls -al
+          cd terraform_deploy
+          mkdir bignbit_module
+          cp -r ../terraform .
+          mv terraform bignbit_module
+          cp ../bignbit-lambda.zip bignbit_module/
+          cd ..
+
+      - name: Terraform Deploy bignbit Module
+        run: |
+          ls -al
+          cd terraform_deploy
+          terraform --version
+          terraform init -reconfigure -input=false -backend-config="bucket=podaac-services-sit-haile-terraform"
+          terraform plan -input=false -var-file=./tfvars/sit.tfvars -var=app_version=0.3.3 -var=lambda_container_image_uri=ghcr.io/podaac/podaac-big:0.3.3 -out=tfplan
+          terraform apply -input=false -auto-approve tfplan
+
+

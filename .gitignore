@@ -142,3 +142,4 @@ tests/2021*
 .terraform
 /.bash_history
 /terraform_deploy/cumulus-message-adapter.zip
+.terraform.lock.hcl
