@@ -5,50 +5,9 @@ on:
   push:
 
 jobs:
-  build-and-publish:
-    name: build and publish bignbit
-    runs-on: ubuntu-latest
-    env:
-      GHCR_CREDENTIALS_ID: "github.com_packages_write_PAT"
-      ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
-      ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
-
-    if: startsWith(github.ref, 'refs/heads/test/')
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Install and configure Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: 1.5.1
-          installer-parallel: true
-
-      - name: bignbit source
-        run: |
-          ls -al
-
-      - name: Generate bignbit Package
-        run: |
-          chmod +x build-lambda-zip.sh
-          ./build-lambda-zip.sh
-
-      - name: Zip bignbit Package
-        run: |
-          cd dist
-          zip bignbit-lambda.zip ./lambda-package -r
-          mv bignbit-lambda.zip ../
-          pwd
-          cd ..
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: bignbit-lambda
-          path: bignbit-lambda.zip
-
   build-publish-deploy:
     runs-on: ubuntu-latest
-    name: build and test
+    name: Build, Publish, Deploy
     env:
       GHCR_CREDENTIALS_ID: "github.com_packages_write_PAT"
       ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
@@ -57,7 +16,6 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_SERVICES_SIT }}
       AWS_DEFAULT_REGION: us-west-2
 
-    if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/feature/')
     steps:
       - uses: actions/checkout@v3
 
@@ -96,6 +54,7 @@ jobs:
           terraform_version: 1.3.4
 
       - name: Set Up Lambda Module ZIP
+        if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/feature/')
         run: |
           ls -al
           cd terraform_deploy
@@ -110,6 +69,7 @@ jobs:
           pwd
 
       - name: Terraform Deploy bignbit Module
+        if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/feature/')
         run: |
           ls -al
           cd terraform_deploy
