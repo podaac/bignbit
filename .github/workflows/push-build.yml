@@ -13,7 +13,7 @@ jobs:
       ECC_NEXUS_CREDENTIALS_ID: "earthdata.nexus"
       ECC_NEXUS_HOST: "maven.earthdata.nasa.gov"
 
-    if: startsWith(github.ref, 'refs/heads/feature/')
+    if: startsWith(github.ref, 'refs/heads/test/')
     steps:
       - uses: actions/checkout@v3
 
@@ -46,7 +46,7 @@ jobs:
           name: bignbit-lambda
           path: bignbit-lambda.zip
 
-  build-and-test:
+  build-publish-deploy:
     runs-on: ubuntu-latest
     name: build and test
     env:
@@ -80,6 +80,7 @@ jobs:
       - name: Zip bignbit Package
         run: |
           cd dist
+          ls -al lambda-package/bignbit/
           zip bignbit-lambda.zip ./lambda-package -r
           mv bignbit-lambda.zip ../
           cd ..
@@ -101,12 +102,17 @@ jobs:
           mkdir bignbit_module
           cp -r ../terraform/ bignbit_module/
           cp ../bignbit-lambda.zip bignbit_module/
+          ls -al bignbit_module/
+          pwd
           cd ..
+          pwd
 
       - name: Terraform Deploy bignbit Module
         run: |
           ls -al
           cd terraform_deploy
+          pwd
+          ls -al bignbit_module/
           terraform --version
           terraform init -reconfigure -input=false -backend-config="bucket=podaac-services-sit-haile-terraform"
           terraform plan -input=false -var-file=./tfvars/sit.tfvars -var=gibs_account_id=$GIBS_ACCOUNT_ID_SIT -var=app_version=0.3.3 -var=lambda_container_image_uri=ghcr.io/podaac/podaac-big:0.3.3 -out=tfplan
