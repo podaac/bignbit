@@ -57,7 +57,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_SERVICES_SIT }}
       AWS_DEFAULT_REGION: us-west-2
 
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/feature/'
+    if: github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/heads/feature/')
     steps:
       - uses: actions/checkout@v3
 
