@@ -37,6 +37,8 @@ jobs:
           cd dist
           zip bignbit-lambda.zip ./lambda-package -r
           mv bignbit-lambda.zip ../
+          pwd
+          cd ..
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -55,7 +57,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_SERVICES_SIT }}
       AWS_DEFAULT_REGION: us-west-2
 
-    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/feature/'
     steps:
       - uses: actions/checkout@v3
 
@@ -68,6 +70,7 @@ jobs:
       - name: bignbit source
         run: |
           ls -al
+          pwd
 
       - name: Generate bignbit Package
         run: |
