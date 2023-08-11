@@ -96,8 +96,7 @@ jobs:
           ls -al
           cd terraform_deploy
           mkdir bignbit_module
-          cp -r ../terraform .
-          mv terraform bignbit_module
+          cp -r ../terraform/ bignbit_module/
           cp ../bignbit-lambda.zip bignbit_module/
           cd ..
 
@@ -107,7 +106,7 @@ jobs:
           cd terraform_deploy
           terraform --version
           terraform init -reconfigure -input=false -backend-config="bucket=podaac-services-sit-haile-terraform"
-          terraform plan -input=false -var-file=./tfvars/sit.tfvars -var=app_version=0.3.3 -var=lambda_container_image_uri=ghcr.io/podaac/podaac-big:0.3.3 -out=tfplan
+          terraform plan -input=false -var-file=./tfvars/sit.tfvars -var=gibs_account_id=$GIBS_ACCOUNT_ID_SIT -var=app_version=0.3.3 -var=lambda_container_image_uri=ghcr.io/podaac/podaac-big:0.3.3 -out=tfplan
           terraform apply -input=false -auto-approve tfplan
 
 
