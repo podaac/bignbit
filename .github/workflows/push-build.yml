@@ -99,8 +99,10 @@ jobs:
         run: |
           ls -al
           cd terraform_deploy
-          mkdir bignbit_module
-          cp -r ../terraform/ bignbit_module/
+          cp -r ../terraform/ .
+          ls -al
+          mv terraform bignbit_module
+          ls -al
           cp ../bignbit-lambda.zip bignbit_module/
           ls -al bignbit_module/
           pwd
