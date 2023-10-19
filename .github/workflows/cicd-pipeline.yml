@@ -102,6 +102,12 @@ jobs:
           poetry version major
           echo "software_version=$(poetry version | awk '{print $2}')" >> $GITHUB_ENV
           echo "TARGET_ENV_UPPERCASE=OPS" >> $GITHUB_ENV
+      - name: Install conda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: bignbit
+          environment-file: conda-environment.yaml
+          auto-activate-base: false
       - name: Install package
         run: poetry install
       - name: Lint
