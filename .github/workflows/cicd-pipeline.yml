@@ -102,20 +102,16 @@ jobs:
           poetry version major
           echo "software_version=$(poetry version | awk '{print $2}')" >> $GITHUB_ENV
           echo "TARGET_ENV_UPPERCASE=OPS" >> $GITHUB_ENV
-      - name: Install conda
+      - name: Install lint and test
         uses: conda-incubator/setup-miniconda@v2
         with:
           activate-environment: bignbit
           environment-file: conda-environment.yaml
           auto-activate-base: false
-      - name: Install package
-        run: poetry install
-      - name: Lint
         run: |
+          poetry install
           poetry run pylint bignbit
           poetry run flake8 bignbit
-      - name: Test and coverage
-        run: |
           poetry run pytest --junitxml=build/reports/pytest.xml --cov=bignbit --cov-report=xml:build/reports/coverage.xml tests/
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
