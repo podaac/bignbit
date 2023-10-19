@@ -56,7 +56,7 @@ def fake_gibs_sqs_queue(monkeypatch):
     mock_gibs_sqs_resource = boto3.resource('sqs', region_name=FAKE_GIBS_REGION)
     gibs_sqs_queue = mock_gibs_sqs_resource.create_queue(
         QueueName=FAKE_GIBS_QUEUE_NAME,
-        Attributes={"FifoQueue": "true"}
+        Attributes={"FifoQueue": "true", "ContentBasedDeduplication": "true"}
     )
     monkeypatch.setenv(bignbit.send_to_gitc.GIBS_REGION_ENV_NAME, FAKE_GIBS_REGION)
     monkeypatch.setenv(bignbit.send_to_gitc.GIBS_SQS_URL_ENV_NAME, gibs_sqs_queue.url)

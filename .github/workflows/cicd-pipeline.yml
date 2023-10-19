@@ -1,0 +1,240 @@
+# This is the main build pipeline that verifies and tags the software
+name: CICD Pipeline
+on:
+  # Triggers the workflow on push events
+  push:
+    tags-ignore:
+      - '*'
+    # Do not trigger build if pyproject.toml was the only thing changed
+    paths-ignore:
+      - 'package.json'
+      - 'package-lock.json'
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      venue:
+        type: choice
+        description: Venue to deploy to
+        options:
+          - SIT
+env:
+  POETRY_VERSION: "1.6.1"
+  PYTHON_VERSION: "3.10"
+  REGISTRY: ghcr.io
+jobs:
+  build:
+    name: Build python
+    runs-on: ubuntu-latest
+    outputs:
+      deploy_env: ${{ steps.poetry-build.outputs.deploy_env }}
+      version: ${{ steps.poetry-build.outputs.the_version }}
+      pyproject_name: ${{ steps.poetry-build.outputs.pyproject_name }}
+    steps:
+      - uses: getsentry/action-github-app-token@v2.0.0
+        name: CICD Token
+        id: cicd-app
+        with:
+          app_id: ${{ secrets.CICD_APP_ID }}
+          private_key: ${{ secrets.CICD_APP_PRIVATE_KEY }}
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+          token: ${{ steps.cicd-app.outputs.token }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+      - name: Get version
+        id: get-version
+        run: |
+          echo "current_version=$(poetry version | awk '{print $2}')" >> $GITHUB_OUTPUT
+          echo "pyproject_name=$(poetry version | awk '{print $1}')" >> $GITHUB_ENV
+      - name: Bump pre-alpha version
+        # If triggered by push to a non-tracked branch
+        if: |
+            github.ref != 'refs/heads/develop' &&
+            github.ref != 'refs/heads/main'    &&
+            !startsWith(github.ref, 'refs/heads/release')
+        run: |
+          new_ver="${{ steps.get-version.outputs.current_version }}+$(git rev-parse --short ${GITHUB_SHA})"
+          poetry version $new_ver
+          echo "software_version=$(poetry version | awk '{print $2}')" >> $GITHUB_ENV
+          echo "TARGET_ENV_UPPERCASE=SIT" >> $GITHUB_ENV
+      - name: Bump alpha version
+        # If triggered by push to the develop branch
+        if: ${{ github.ref == 'refs/heads/develop' }}
+        id: alpha
+        run: |
+          poetry version prerelease
+          echo "software_version=$(poetry version | awk '{print $2}')" >> $GITHUB_ENV
+          echo "TARGET_ENV_UPPERCASE=SIT" >> $GITHUB_ENV
+      - name: Bump rc version
+        # If triggered by push to a release branch
+        if: ${{ startsWith(github.ref, 'refs/heads/release/') }}
+        id: rc
+        env:
+          # True if the version already has a 'rc' pre-release identifier
+          BUMP_RC: ${{ contains(steps.get-version.outputs.current_version, 'rc') }}
+        run: |
+          if [ "$BUMP_RC" = true ]; then
+            poetry version prerelease
+          else
+            poetry version ${GITHUB_REF#refs/heads/release/}rc1
+          fi
+          echo "software_version=$(poetry version | awk '{print $2}')" >> $GITHUB_ENV
+          echo "TARGET_ENV_UPPERCASE=UAT" >> $GITHUB_ENV
+      - name: Release version
+        # If triggered by push to the main branch
+        if: ${{ startsWith(github.ref, 'refs/heads/main') }}
+        id: release
+        run: |
+          poetry version major
+          echo "software_version=$(poetry version | awk '{print $2}')" >> $GITHUB_ENV
+          echo "TARGET_ENV_UPPERCASE=OPS" >> $GITHUB_ENV
+      - name: Install package
+        run: poetry install
+      - name: Lint
+        run: |
+          poetry run pylint bignbit
+          poetry run flake8 bignbit
+      - name: Test and coverage
+        run: |
+          poetry run pytest --junitxml=build/reports/pytest.xml --cov=bignbit --cov-report=xml:build/reports/coverage.xml tests/
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=${{ github.repository_owner }}
+            -Dsonar.projectKey=${{ github.repository_owner }}_${{ github.event.repository.name }}
+            -Dsonar.python.coverage.reportPaths=build/reports/coverage.xml
+            -Dsonar.sources=bignbit/
+            -Dsonar.tests=tests/
+            -Dsonar.projectName=${{ github.repository }}
+            -Dsonar.projectVersion=${{ env.software_version }}
+            -Dsonar.python.version=3.8,3.9,3.10
+      - name: Build Python Artifact
+        id: poetry-build
+        run: |
+          poetry build
+          echo "deploy_env=${{ env.TARGET_ENV_UPPERCASE }}" >> $GITHUB_OUTPUT
+          echo "the_version=$(poetry version | awk '{print $2}')" >> $GITHUB_OUTPUT
+          echo "pyproject_name=$(poetry version | awk '{print $1}')" >> $GITHUB_OUTPUT
+      - uses: actions/upload-artifact@v3
+        with:
+          name: python-artifact
+          path: dist/*
+      - name: Commit Version Bump
+        # If building an alpha, release candidate, or release then we commit the version bump back to the repo
+        if: |
+          steps.alpha.conclusion == 'success'   ||
+          steps.rc.conclusion == 'success'      ||
+          steps.release.conclusion == 'success'
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git commit -am "/version ${{ env.software_version }}"
+          git push
+      - name: Push Tag
+        if: |
+          steps.alpha.conclusion == 'success'   ||
+          steps.rc.conclusion == 'success'      ||
+          steps.release.conclusion == 'success'
+        run: |
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git tag -a "${{ env.software_version }}" -m "Version ${{ env.software_version }}"
+          git push origin "${{ env.software_version }}"
+  docker:
+    name: Build & Publish Docker Image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    needs: build
+    outputs:
+      deploy_env: ${{ steps.set-outputs.outputs.container_image_uri }}
+    env:
+      THE_VERSION: ${{ needs.build.outputs.version }}
+      PYPROJECT_NAME: ${{ needs.build.outputs.pyproject_name }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install Poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/${{env.PYPROJECT_NAME}}
+          tags: |
+            type=pep440,pattern={{version}}
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: docker/Dockerfile
+          push: true
+          pull: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: Set output
+        id: set-outputs
+        run: |
+          echo "container_image_uri=${{ env.REGISTRY }}/${{ github.repository }}/${{env.PYPROJECT_NAME}}:${{ steps.meta.outputs.tags }}" >> $GITHUB_OUTPUT
+  deploy:
+    name: Deploy
+    needs: [build, docker]
+    runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.venue || needs.build.outputs.deploy_env }} ${{ needs.build.outputs.deploy_env }}
+    env:
+      THE_VERSION: ${{ needs.build.outputs.version }}
+      CONTAINER_IMAGE_URI: ${{ needs.docker.outputs.container_image_uri }}
+    if: |
+      github.ref == 'refs/heads/develop' ||
+      github.ref == 'refs/heads/main'    ||
+      startsWith(github.ref, 'refs/heads/release') ||
+      github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.3.7
+          terraform_wrapper: false
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: us-west-2
+          role-session-name: GitHubActions
+          aws-access-key-id: ${{ secrets[vars.AWS_ACCESS_KEY_ID_SECRET_NAME] }}
+          aws-secret-access-key: ${{ secrets[vars.AWS_SECRET_ACCESS_KEY_SECRET_NAME] }}
+
+      - name: Validate Terraform
+        run: terraform validate -no-color
+
+      - name: Deploy to venue
+        id: terraform-deploy
+        working-directory: examples/cumulus-tf
+        env:
+          AWS_DEFAULT_REGION: us-west-2
+        run: |
+          ./bin/deploy.sh --app-version ${{ env.THE_VERSION }} --tf-venue ${{ vars.TF_VENUE }} --lambda_container_image_uri ${{ env.CONTAINER_IMAGE_URI }}

@@ -118,7 +118,7 @@ def test_construct_cnm(cnm_v151_schema):
 
     image_sets = bignbit.image_set.from_big_output(test_input)
 
-    cnm = bignbit.send_to_gitc.construct_cnm(image_sets[0], 'pytest', 'token', {'name': 'testcollection'})
+    cnm = bignbit.send_to_gitc.construct_cnm(image_sets[0], 'pytest', 'token', 'testcollection')
     jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
 
 
@@ -149,5 +149,5 @@ def test_construct_cnm_no_wld(cnm_v151_schema):
 
     image_sets = bignbit.image_set.from_big_output(test_input)
 
-    cnm = bignbit.send_to_gitc.construct_cnm(image_sets[0], 'pytest', 'token', {'name': 'testcollection'})
+    cnm = bignbit.send_to_gitc.construct_cnm(image_sets[0], 'pytest', 'token', 'testcollection')
     jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())

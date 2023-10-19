@@ -14,7 +14,7 @@ harmony-py = "^0.4.3"
 cumulus-process = "^1.1.0"
 python-graphql-client = "^0.4.3"
 requests = "^2.28.2"
-gdal = "3.5.3"
+gdal = "3.6.3"
 importlib-resources = "^5.12.0"
 
 [tool.poetry.group.dev.dependencies]

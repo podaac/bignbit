@@ -1,6 +1,8 @@
+# Conda is only used during local development of bignbit
+# The Cumulus module runtime uses a lambda container image based on the official GDAL docker image. See docker/Dockerfile
 name: bignbit
 channels:
   - conda-forge
 dependencies:
-  - python=3.9
-  - gdal=3.5.3
+  - python=3.10
+  - gdal=3.6.3
