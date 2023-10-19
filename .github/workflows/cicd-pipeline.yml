@@ -201,7 +201,7 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ github.repository }}/${{env.PYPROJECT_NAME}}
           tags: |
-            type=pep440,pattern={{version}}
+            type=pep440,pattern={{version}},value=${{ env.THE_VERSION }}
       - name: Build and push Docker image
         uses: docker/build-push-action@v3
         with:
