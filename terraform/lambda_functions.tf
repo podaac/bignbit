@@ -65,7 +65,7 @@ resource "aws_lambda_function" "get_dataset_configuration" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["podaac.big.get_dataset_configuration.lambda_handler"]
+    command = ["bignbit.get_dataset_configuration.lambda_handler"]
   }
   function_name = "${local.lambda_resources_name}-get_dataset_configuration-lambda"
   role          = var.lambda_role.arn
@@ -96,7 +96,7 @@ resource "aws_lambda_function" "get_granule_umm_json" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["podaac.big.get_granule_umm_json.lambda_handler"]
+    command = ["bignbit.get_granule_umm_json.lambda_handler"]
   }
   function_name = "${local.lambda_resources_name}-get_granule_umm_json-lambda"
   role          = var.lambda_role.arn
@@ -129,7 +129,7 @@ resource "aws_lambda_function" "get_collection_concept_id" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["podaac.big.get_collection_concept_id.lambda_handler"]
+    command = ["bignbit.get_collection_concept_id.lambda_handler"]
   }
   function_name = "${local.lambda_resources_name}-get_collection_concept_id-lambda"
   role          = var.lambda_role.arn
@@ -162,7 +162,7 @@ resource "aws_lambda_function" "identify_image_file" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["podaac.big.identify_image_file.lambda_handler"]
+    command = ["bignbit.identify_image_file.lambda_handler"]
   }
   function_name = "${local.lambda_resources_name}-identify_image_file-lambda"
   role          = var.lambda_role.arn
@@ -193,7 +193,7 @@ resource "aws_lambda_function" "submit_harmony_job" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["podaac.big.submit_harmony_job.lambda_handler"]
+    command = ["bignbit.submit_harmony_job.lambda_handler"]
   }
   function_name = "${local.lambda_resources_name}-submit_harmony_job-lambda"
   role          = var.lambda_role.arn
@@ -226,7 +226,7 @@ resource "aws_lambda_function" "generate_image_metadata" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["podaac.big.generate_image_metadata.lambda_handler"]
+    command = ["bignbit.generate_image_metadata.lambda_handler"]
   }
   function_name = "${local.lambda_resources_name}-generate_image_metadata-lambda"
   role          = var.lambda_role.arn
@@ -257,7 +257,7 @@ resource "aws_lambda_function" "get_harmony_job_status" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["podaac.big.get_harmony_job_status.lambda_handler"]
+    command = ["bignbit.get_harmony_job_status.lambda_handler"]
   }
   function_name = "${local.lambda_resources_name}-get_harmony_job_status-lambda"
   role          = var.lambda_role.arn
@@ -290,7 +290,7 @@ resource "aws_lambda_function" "copy_harmony_results_to_s3" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["podaac.big.copy_harmony_results_to_s3.lambda_handler"]
+    command = ["bignbit.copy_harmony_results_to_s3.lambda_handler"]
   }
   function_name = "${local.lambda_resources_name}-copy_harmony_results_to_s3-lambda"
   role          = var.lambda_role.arn
@@ -323,7 +323,7 @@ resource "aws_lambda_function" "apply_opera_treatment" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["podaac.big.apply_opera_treatment.lambda_handler"]
+    command = ["bignbit.apply_opera_treatment.lambda_handler"]
   }
   function_name = "${local.lambda_resources_name}-apply_opera_treatment-lambda"
   role          = var.lambda_role.arn
@@ -350,12 +350,19 @@ resource "aws_lambda_function" "apply_opera_treatment" {
 
 
 resource "aws_lambda_function" "build_image_sets" {
-  filename         = "${path.module}/bignbit-lambda.zip"
+  
+  depends_on = [
+    null_resource.upload_ecr_image
+  ]
+
+  package_type = "Image"
+  image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
+  image_config {
+    command = ["bignbit.build_image_sets.lambda_handler"]
+  }
+  
   function_name    = local.build_image_sets_function_name
-  source_code_hash = filebase64sha256("${path.module}/bignbit-lambda.zip")
-  handler          = "podaac.pobit.build_image_sets.lambda_handler"
   role             = var.lambda_role.arn
-  runtime          = "python3.8"
   timeout          = 15
   memory_size      = 128
 
@@ -378,12 +385,17 @@ resource "aws_lambda_function" "build_image_sets" {
 }
 
 resource "aws_lambda_function" "send_to_gitc" {
-  filename         = "${path.module}/bignbit-lambda.zip"
+  depends_on = [
+    null_resource.upload_ecr_image
+  ]
+
+  package_type = "Image"
+  image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
+  image_config {
+    command = ["bignbit.send_to_gitc.lambda_handler"]
+  }
   function_name    = "${local.lambda_resources_name}-send_to_gitc-lambda"
-  source_code_hash = filebase64sha256("${path.module}/bignbit-lambda.zip")
-  handler          = "podaac.pobit.send_to_gitc.lambda_handler"
   role             = var.lambda_role.arn
-  runtime          = "python3.8"
   timeout          = 15
   memory_size      = 128
 
@@ -407,12 +419,17 @@ resource "aws_lambda_function" "send_to_gitc" {
 
 
 resource "aws_lambda_function" "handle_gitc_response" {
-  filename         = "${path.module}/bignbit-lambda.zip"
+  depends_on = [
+    null_resource.upload_ecr_image
+  ]
+
+  package_type = "Image"
+  image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
+  image_config {
+    command = ["bignbit.handle_gitc_response.handler"]
+  }
   function_name    = "${local.lambda_resources_name}-handle_gitc_response-lambda"
-  source_code_hash = filebase64sha256("${path.module}/bignbit-lambda.zip")
-  handler          = "podaac.pobit.handle_gitc_response.handler"
   role             = var.lambda_role.arn
-  runtime          = "python3.8"
   timeout          = 5
   memory_size      = 128
 
@@ -433,12 +450,17 @@ resource "aws_lambda_function" "handle_gitc_response" {
 }
 
 resource "aws_lambda_function" "save_cma_message" {
-  filename         = "${path.module}/bignbit-lambda.zip"
+  depends_on = [
+    null_resource.upload_ecr_image
+  ]
+
+  package_type = "Image"
+  image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
+  image_config {
+    command = ["bignbit.save_cma_message.lambda_handler"]
+  }
   function_name    = "${local.lambda_resources_name}-save_cma_message-lambda"
-  source_code_hash = filebase64sha256("${path.module}/bignbit-lambda.zip")
-  handler          = "podaac.pobit.save_cma_message.lambda_handler"
   role             = var.lambda_role.arn
-  runtime          = "python3.8"
   timeout          = 5
   memory_size      = 128
 
