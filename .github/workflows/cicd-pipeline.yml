@@ -72,7 +72,7 @@ jobs:
             github.ref != 'refs/heads/main'    &&
             !startsWith(github.ref, 'refs/heads/release')
         run: |
-          new_ver="${{ steps.get-version.outputs.current_version }}+$(git rev-parse --short ${GITHUB_SHA})"
+          new_ver="${{ steps.get-version.outputs.current_version }}-$(git rev-parse --short ${GITHUB_SHA})"
           poetry version $new_ver
           echo "software_version=$(poetry version | awk '{print $2}')" >> $GITHUB_ENV
           echo "TARGET_ENV_UPPERCASE=SIT" >> $GITHUB_ENV
@@ -153,7 +153,7 @@ jobs:
           echo "deploy_env=${{ env.TARGET_ENV_UPPERCASE }}" >> $GITHUB_OUTPUT
           echo "the_version=$(poetry version | awk '{print $2}')" >> $GITHUB_OUTPUT
           echo "pyproject_name=$(poetry version | awk '{print $1}')" >> $GITHUB_OUTPUT
-          echo "tf_module_artifact_name=${{ steps.poetry-build.outputs.pyproject_name }}-${{ env.software_version }}-cumulus-tf" >> $GITHUB_OUTPUT
+          echo "tf_module_artifact_name=$(poetry version | awk '{print $1}')-${{ env.software_version }}-cumulus-tf" >> $GITHUB_OUTPUT
       - uses: actions/upload-artifact@v3
         with:
           name: ${{ steps.poetry-build.outputs.pyproject_name }}-dist
