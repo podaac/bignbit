@@ -1,8 +1,7 @@
 # stage: dev, sandbox, sit, uat, prod
-stage = "bignbit-sit"
-prefix = "bignbit-svc-sit"
+stage = "sit"
+prefix = "bignbit-svc"
 
-
-gibs_region="us-west-2"
-gibs_queue_name="gitc-sit-bignbit-PODAAC-IN.fifo"
-
+gibs_region="mocked"
+gibs_queue_name="mocked"
+gibs_account_id="mocked"

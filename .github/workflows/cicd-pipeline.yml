@@ -28,10 +28,11 @@ on:
 env:
   POETRY_VERSION: "1.6.1"
   PYTHON_VERSION: "3.10"
+  TERRAFORM_VERSION: "1.3.7"
   REGISTRY: ghcr.io
 jobs:
   build:
-    name: Build python
+    name: Build python and tf module
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -40,6 +41,7 @@ jobs:
       deploy_env: ${{ steps.poetry-build.outputs.deploy_env }}
       version: ${{ steps.poetry-build.outputs.the_version }}
       pyproject_name: ${{ steps.poetry-build.outputs.pyproject_name }}
+      tf_module_artifact_name: ${{ steps.poetry-build.outputs.tf_module_artifact_name }}
     steps:
       - uses: getsentry/action-github-app-token@v2.0.0
         name: CICD Token
@@ -120,6 +122,13 @@ jobs:
       - name: Test and coverage
         run: |
           poetry run pytest --junitxml=build/reports/pytest.xml --cov=bignbit --cov-report=xml:build/reports/coverage.xml tests/
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+      - name: Validate Terraform
+        working-directory: terraform
+        run: terraform validate -no-color
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
@@ -142,10 +151,17 @@ jobs:
           echo "deploy_env=${{ env.TARGET_ENV_UPPERCASE }}" >> $GITHUB_OUTPUT
           echo "the_version=$(poetry version | awk '{print $2}')" >> $GITHUB_OUTPUT
           echo "pyproject_name=$(poetry version | awk '{print $1}')" >> $GITHUB_OUTPUT
+          echo "tf_module_artifact_name=${{ steps.poetry-build.outputs.pyproject_name }}-${{ env.software_version }}-cumulus-tf" >> $GITHUB_OUTPUT
       - uses: actions/upload-artifact@v3
         with:
-          name: python-artifact
+          name: ${{ steps.poetry-build.outputs.pyproject_name }}-dist
           path: dist/*
+      - name: Zip artifact for deployment
+        run: zip ${{ steps.poetry-build.outputs.tf_module_artifact_name }} terraform/* -r
+      - uses: actions/upload-artifact@v3
+        with:
+          name: ${{ steps.poetry-build.outputs.tf_module_artifact_name }}
+          path: ${{ steps.poetry-build.outputs.tf_module_artifact_name }}.zip
       - name: Commit Version Bump
         # If building an alpha, release candidate, or release then we commit the version bump back to the repo
         if: |
@@ -167,6 +183,17 @@ jobs:
           git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           git tag -a "${{ env.software_version }}" -m "Version ${{ env.software_version }}"
           git push origin "${{ env.software_version }}"
+      - name: Create GH release
+        if: |
+          steps.alpha.conclusion == 'success'   ||
+          steps.rc.conclusion == 'success'      ||
+          steps.release.conclusion == 'success'
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: ${{ steps.poetry-build.outputs.tf_module_artifact_name }}.zip
+          generateReleaseNotes: true
+          name: ${{ env.software_version }}
+          prerelease: ${{ steps.alpha.conclusion == 'success' || steps.rc.conclusion == 'success'}}
   docker:
     name: Build & Publish Docker Image
     runs-on: ubuntu-latest
@@ -216,6 +243,7 @@ jobs:
     env:
       THE_VERSION: ${{ needs.build.outputs.version }}
       CONTAINER_IMAGE_URI: ${{ needs.docker.outputs.container_image_uri }}
+      TF_MODULE_ARTIFACT_NAME: ${{ needs.build.outputs.tf_module_artifact_name }}
     if: |
       github.ref == 'refs/heads/develop' ||
       github.ref == 'refs/heads/main'    ||
@@ -227,7 +255,7 @@ jobs:
           repository: ${{ github.repository }}
       - uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.3.7
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
 
       - name: Configure AWS credentials
@@ -239,6 +267,7 @@ jobs:
           aws-secret-access-key: ${{ secrets[vars.AWS_SECRET_ACCESS_KEY_SECRET_NAME] }}
 
       - name: Validate Terraform
+        working-directory: examples/cumulus-tf
         run: terraform validate -no-color
 
       - name: Deploy to venue

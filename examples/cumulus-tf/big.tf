@@ -1,5 +1,5 @@
 module "bignbit_module" {
-    source = "./bignbit_module"
+    source = "../../terraform"
     prefix = var.prefix
     stage = var.stage
     region = var.region
