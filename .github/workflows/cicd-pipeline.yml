@@ -72,7 +72,7 @@ jobs:
             github.ref != 'refs/heads/main'    &&
             !startsWith(github.ref, 'refs/heads/release')
         run: |
-          new_ver="${{ steps.get-version.outputs.current_version }}-$(git rev-parse --short ${GITHUB_SHA})"
+          new_ver="${{ steps.get-version.outputs.current_version }}+$(git rev-parse --short ${GITHUB_SHA})"
           poetry version $new_ver
           echo "software_version=$(poetry version | awk '{print $2}')" >> $GITHUB_ENV
           echo "TARGET_ENV_UPPERCASE=SIT" >> $GITHUB_ENV
