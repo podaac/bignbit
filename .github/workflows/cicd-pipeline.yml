@@ -196,6 +196,7 @@ jobs:
           generateReleaseNotes: true
           name: ${{ env.software_version }}
           prerelease: ${{ steps.alpha.conclusion == 'success' || steps.rc.conclusion == 'success'}}
+          tag: ${{ env.software_version }}
   docker:
     name: Build & Publish Docker Image
     runs-on: ubuntu-latest
