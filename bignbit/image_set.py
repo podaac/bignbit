@@ -91,6 +91,8 @@ def to_cnm_product_dict(image_set: ImageSet) -> dict:
             file_dict['uri'] = f's3://{file_dict["bucket"]}/{file_dict["key"]}'
         if 'name' not in file_dict and 'fileName' in file_dict:
             file_dict['name'] = file_dict['fileName']
+        if 'checksumType' in file_dict:
+            file_dict['checksumType'] = file_dict['checksumType'].upper()
         return file_dict
 
     product = {

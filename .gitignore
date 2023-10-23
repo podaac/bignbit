@@ -142,3 +142,6 @@ tests/2021*
 .terraform
 /.bash_history
 /terraform_deploy/cumulus-message-adapter.zip
+/terraform_deploy/.terraform.lock.hcl
+bignbit-lambda.zip
+terraform_deploy/bignbit_module/
