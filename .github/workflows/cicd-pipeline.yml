@@ -15,8 +15,8 @@ on:
       - '*'
     # Do not trigger build if pyproject.toml was the only thing changed
     paths-ignore:
-      - 'package.json'
-      - 'package-lock.json'
+      - 'pyproject.toml'
+      - 'poetry.lock'
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
@@ -204,7 +204,7 @@ jobs:
       packages: write
     needs: build
     outputs:
-      deploy_env: ${{ steps.set-outputs.outputs.container_image_uri }}
+      container_image_uri: ${{ steps.set-outputs.outputs.container_image_uri }}
     env:
       THE_VERSION: ${{ needs.build.outputs.version }}
       PYPROJECT_NAME: ${{ needs.build.outputs.pyproject_name }}
@@ -242,7 +242,7 @@ jobs:
     name: Deploy
     needs: [build, docker]
     runs-on: ubuntu-latest
-    environment: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.venue || needs.build.outputs.deploy_env }} ${{ needs.build.outputs.deploy_env }}
+    environment: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.venue || needs.build.outputs.deploy_env }}
     env:
       THE_VERSION: ${{ needs.build.outputs.version }}
       CONTAINER_IMAGE_URI: ${{ needs.docker.outputs.container_image_uri }}
@@ -262,12 +262,13 @@ jobs:
           terraform_wrapper: false
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: us-west-2
           role-session-name: GitHubActions
           aws-access-key-id: ${{ secrets[vars.AWS_ACCESS_KEY_ID_SECRET_NAME] }}
           aws-secret-access-key: ${{ secrets[vars.AWS_SECRET_ACCESS_KEY_SECRET_NAME] }}
+          mask-aws-account-id: true
 
       - name: Validate Terraform
         working-directory: examples/cumulus-tf
