@@ -51,7 +51,7 @@ data "aws_iam_policy_document" "allow_access_from_gitc" {
   statement {
     principals {
       type        = "AWS"
-      identifiers = [var.gibs_account_id, local.account_id]
+      identifiers = [var.gibs_account_id == "mocked" ? local.account_id : var.gibs_account_id, local.account_id]
     }
 
     actions = [
