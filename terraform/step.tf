@@ -8,13 +8,13 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
    "States":{
       "GetDatasetConfiguration":{
          "Type":"Task",
-         "Resource":"${module.bignbit_module.get_dataset_configuration_arn}",
+         "Resource":"${aws_lambda_function.get_dataset_configuration.arn}",
          "Parameters":{
             "cma":{
                "event.$":"$",
                "task_config":{
-                  "config_bucket_name":"${module.bignbit_module.config_bucket_name}",
-                  "config_key_name.$":"States.Format('${module.bignbit_module.config_path}/{}.cfg', $.meta.collection.name)",
+                  "config_bucket_name":"${var.config_bucket}",
+                  "config_key_name.$":"States.Format('${var.config_dir}/{}.cfg', $.meta.collection.name)",
                   "cumulus_message":{
                      "input":"{$.payload}"
                   }
@@ -38,7 +38,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
       },
       "Get Granule umm_json":{
          "Type":"Task",
-         "Resource":"${module.bignbit_module.get_granule_umm_json_arn}",
+         "Resource":"${aws_lambda_function.get_granule_umm_json.arn}",
          "Parameters":{
             "cma":{
                "event.$":"$",
@@ -87,7 +87,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
       },
       "Identify Image File":{
          "Type":"Task",
-         "Resource":"${module.bignbit_module.identify_image_file_arn}",
+         "Resource":"${aws_lambda_function.identify_image_file.arn}",
          "Parameters":{
             "cma":{
                "event.$":"$",
@@ -135,7 +135,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
       },
       "Apply OPERA Treatment":{
          "Type":"Task",
-         "Resource":"${module.bignbit_module.apply_opera_treatment_arn}",
+         "Resource":"${aws_lambda_function.apply_opera_treatment.arn}",
          "Parameters":{
             "cma":{
                "event.$":"$",
@@ -163,7 +163,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
       },
       "Get Collection Concept Id":{
          "Type":"Task",
-         "Resource":"${module.bignbit_module.get_collection_concept_id_arn}",
+         "Resource":"${aws_lambda_function.get_collection_concept_id.arn}",
          "Parameters":{
             "cma":{
                "event.$":"$",
@@ -228,7 +228,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                         }
                      }
                   },
-                  "Resource":"${module.bignbit_module.submit_harmony_job_arn}",
+                  "Resource":"${aws_lambda_function.submit_harmony_job.arn}",
                   "Next":"Wait 20 Seconds"
                },
                "Wait 20 Seconds":{
@@ -238,7 +238,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                },
                "Get Harmony Job Status":{
                   "Type":"Task",
-                  "Resource":"${module.bignbit_module.get_harmony_job_status_arn}",
+                  "Resource":"${aws_lambda_function.get_harmony_job_status.arn}",
                   "Parameters":{
                      "cma":{
                         "event.$":"$",
@@ -298,7 +298,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                },
                "Copy Harmony Results to S3":{
                   "Type":"Task",
-                  "Resource":"${module.bignbit_module.copy_harmony_results_to_s3_arn}",
+                  "Resource":"${aws_lambda_function.copy_harmony_results_to_s3.arn}",
                   "Parameters":{
                      "cma":{
                         "event.$":"$",
@@ -338,7 +338,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
       },
       "Generate Image Metadata":{
          "Type":"Task",
-         "Resource":"${module.bignbit_module.generate_image_metadata_arn}",
+         "Resource":"${aws_lambda_function.generate_image_metadata.arn}",
          "Parameters":{
             "cma":{
                "event.$":"$",
@@ -404,7 +404,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                       }
                   },
                   "Type": "Task",
-                  "Resource": "${module.bignbit_module.pobit_build_image_sets_arn}",
+                  "Resource": "${aws_lambda_function.build_image_sets.arn}",
                   "Catch": [
                       {
                           "ErrorEquals": [
@@ -435,7 +435,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                         "States": {
                             "SendToGITC": {
                                 "Parameters": {
-                                    "FunctionName": "${module.bignbit_module.pobit_send_to_gitc_arn}",
+                                    "FunctionName": "${aws_lambda_function.send_to_gitc.arn}",
                                     "Payload": {
                                         "cma": {
                                             "event.$": "$",
@@ -495,13 +495,13 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                 },
                 "Save CMA Message": {
                     "Type": "Task",
-                    "Resource": "${module.bignbit_module.pobit_save_cma_message_arn}",
+                    "Resource": "${aws_lambda_function.save_cma_message.arn}",
                     "Parameters": {
                         "cma": {
                             "event.$": "$",
                             "task_config": {
-                                "pobit_audit_bucket": "${module.bignbit_module.pobit_audit_bucket}",
-                                "cma_key_name.$": "States.Format('${module.bignbit_module.pobit_audit_path}/{}/{}.{}.cma.json', $.meta.collection.name, $.payload.granules[0].granuleId, $$.State.EnteredTime)",
+                                "pobit_audit_bucket": "${var.pobit_audit_bucket}",
+                                "cma_key_name.$": "States.Format('${var.pobit_audit_path}/{}/{}.{}.cma.json', $.meta.collection.name, $.payload.granules[0].granuleId, $$.State.EnteredTime)",
                                 "cumulus_message": {
                                     "input": "{$.payload}"
                                 }
