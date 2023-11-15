@@ -18,6 +18,8 @@ locals {
 
   lambda_resources_name = terraform.workspace == "default" ? "svc-${local.name}-${local.environment}" : "svc-${local.name}-${local.environment}-${terraform.workspace}"
 
+  ec2_resources_name = terraform.workspace == "default" ? "svc-${local.environment}-${local.name}" : "svc-${local.environment}-${local.name}-${terraform.workspace}"
+
   tags = length(var.default_tags) == 0 ? {
     team: "PODAAC TVA",
     application: local.lambda_resources_name,
