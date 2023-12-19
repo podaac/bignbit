@@ -158,8 +158,9 @@ jobs:
         with:
           name: ${{ steps.poetry-build.outputs.pyproject_name }}-dist
           path: dist/*
-      - name: Zip artifact for deployment
+      - name: Rename TF Module directory
         run: mv terraform ${{ steps.poetry-build.outputs.tf_module_artifact_name }}
+      - name: Zip artifact for deployment
         run: zip ${{ steps.poetry-build.outputs.tf_module_artifact_name }}.zip ${{ steps.poetry-build.outputs.tf_module_artifact_name }}/* -r
       - uses: actions/upload-artifact@v3
         with:
