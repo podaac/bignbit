@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `bignbit` Issue #2: [Create github action pipeline to build artifacts](https://github.com/podaac/bignbit/issues/2),
 - `bignbit` Issue #3: [Update terraform mock deployment of cumulus module to services accounts](https://github.com/podaac/bignbit/issues/3),
 
-
+### Changed
+- `bignbit` Issue #6: [BIG terraform failing in SWOT venues due to long lambda name](https://github.com/podaac/bignbit/issues/6),
 
 
 [unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.1...HEAD

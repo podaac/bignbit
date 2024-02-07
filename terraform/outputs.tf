@@ -31,8 +31,8 @@ output "get_harmony_job_status_arn" {
   value = aws_lambda_function.get_harmony_job_status.arn
 }
 
-output "copy_harmony_results_to_s3_arn"{
-  value = aws_lambda_function.copy_harmony_results_to_s3.arn
+output "copy_harmony_output_to_s3_arn"{
+  value = aws_lambda_function.copy_harmony_output_to_s3.arn
 }
 
 output "apply_opera_treatment_arn"{
