@@ -298,7 +298,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
                },
                "Copy Harmony Results to S3":{
                   "Type":"Task",
-                  "Resource":"${aws_lambda_function.copy_harmony_results_to_s3.arn}",
+                  "Resource":"${module.bignbit_module.copy_harmony_output_to_s3_arn}",
                   "Parameters":{
                      "cma":{
                         "event.$":"$",

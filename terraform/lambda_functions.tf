@@ -282,7 +282,7 @@ resource "aws_lambda_function" "get_harmony_job_status" {
   tags = var.default_tags
 }
 
-resource "aws_lambda_function" "copy_harmony_results_to_s3" {
+resource "aws_lambda_function" "copy_harmony_output_to_s3" {
   depends_on = [
     null_resource.upload_ecr_image
   ]
@@ -290,9 +290,9 @@ resource "aws_lambda_function" "copy_harmony_results_to_s3" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["bignbit.copy_harmony_results_to_s3.lambda_handler"]
+    command = ["bignbit.copy_harmony_output_to_s3.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-copy_harmony_results_to_s3-lambda"
+  function_name = "${local.lambda_resources_name}-copy_harmony_output_to_s3-lambda"
   role          = var.lambda_role.arn
   timeout       = 30
   memory_size   = 256
@@ -350,7 +350,7 @@ resource "aws_lambda_function" "apply_opera_treatment" {
 
 
 resource "aws_lambda_function" "build_image_sets" {
-  
+
   depends_on = [
     null_resource.upload_ecr_image
   ]
@@ -360,7 +360,7 @@ resource "aws_lambda_function" "build_image_sets" {
   image_config {
     command = ["bignbit.build_image_sets.lambda_handler"]
   }
-  
+
   function_name    = local.build_image_sets_function_name
   role             = var.lambda_role.arn
   timeout          = 15
