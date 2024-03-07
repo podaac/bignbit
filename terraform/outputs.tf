@@ -1,5 +1,3 @@
-
-
 output "config_bucket_name"{
   value = var.config_bucket
 }
@@ -26,4 +24,8 @@ output "pobit_audit_bucket"{
 
 output "pobit_audit_path"{
   value = var.pobit_audit_path
+}
+
+output "browse_image_state_machine_definition"{
+  value = aws_sfn_state_machine.sfn_state_machine.definition
 }
