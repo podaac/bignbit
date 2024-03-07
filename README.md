@@ -1,7 +1,8 @@
 # About
 
-bignbit combines the Browse Image Generator (BIG) and the PO.DAAC Browse Image Transfer (pobit) modules
+bignbit is a Cumulus module that can be installed as a post-ingest workflow to generate browse imagery via Harmony and then transfer that imagery to GIBS.
 
+See an example of how to use this cumulus module in [browse_image_workflow.tf](/examples/cumulus-tf/browse_image_workflow.tf).
 
 # Assumptions
  - Using `ContentBasedDeduplication` strategy for GITC input queue
