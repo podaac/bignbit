@@ -8,6 +8,7 @@ module "browse_image_workflow" {
   name            = "BrowseImageWorkflow"
   workflow_config = module.cumulus.workflow_config
   system_bucket   = var.system_bucket
+  tags            = merge(local.tags, { application = "BrowseImageWorkflow" })
 
   definition = module.bignbit_module.browse_image_state_machine_definition
 }
