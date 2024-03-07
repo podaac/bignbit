@@ -7,7 +7,6 @@ module "bignbit_module" {
     security_group_ids = []
     subnet_ids = []
     app_name = var.app_name
-    #lambda_container_image_uri = "ghcr.io/podaac/podaac-big:${var.app_version}"
     lambda_container_image_uri = var.lambda_container_image_uri
 
     default_tags = local.default_tags

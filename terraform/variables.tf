@@ -98,3 +98,8 @@ variable "lambda_container_image_uri" {
   type = string
   default = ""
 }
+
+variable "system_bucket" {
+  type = string
+  default = "svc-bignbit-workflow-internal"
+}
