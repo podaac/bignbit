@@ -9,7 +9,7 @@ module "browse_image_workflow" {
   system_bucket   = var.system_bucket
   tags            = merge(local.tags, { application = "BrowseImageWorkflow" })
 
-  definition = templatefile("../../terraform/state_machine_definition.json", {
+  state_machine_definition = templatefile("../../terraform/state_machine_definition.json", {
       GetDatasetConfigurationLambda = module.bignbit_module.get_dataset_configuration_arn,
       ConfigBucket                  = module.bignbit_module.config_bucket_name,
       ConfigDir                     = module.bignbit_module.config_path,
