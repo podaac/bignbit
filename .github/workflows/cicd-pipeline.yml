@@ -275,6 +275,8 @@ jobs:
       - name: Validate Terraform
         working-directory: examples/cumulus-tf
         run: |
+          ls -al
+          ls -al .terraform
           terraform init -backend=false
           terraform validate -no-color
 
