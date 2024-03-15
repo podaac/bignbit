@@ -129,7 +129,7 @@ jobs:
       - name: Validate Terraform
         working-directory: terraform
         run: |
-          terraform init -backend=false
+          terraform init -backend=false -upgrade
           terraform validate -no-color
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
@@ -275,7 +275,7 @@ jobs:
       - name: Validate Terraform
         working-directory: examples/cumulus-tf
         run: |
-          terraform init -backend=false
+          terraform init -backend=false -upgrade
           terraform validate -no-color
 
       - name: Deploy to venue
