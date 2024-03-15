@@ -1,4 +1,5 @@
 {
+  "Comment": "Run BIG & BIT",
   "StartAt":"GetDatasetConfiguration",
   "States":{
     "GetDatasetConfiguration":{

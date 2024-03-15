@@ -1,5 +1,5 @@
 
-
+/*
 # In a typical cumulus installation, this is how you would define the workflow:
 
 module "browse_image_workflow" {
@@ -30,16 +30,16 @@ module "browse_image_workflow" {
      }
   )
 }
+*/
 
-/*
+
 # This example is deployable without cumulus installed for the purpose of testing the module in isolation; so it does not use terraform-aws-cumulus-workflow.zip
-
 
 resource "aws_sfn_state_machine" "sfn_state_machine" {
   name     = "${local.ec2_resources_name}-BrowseImageWorkflow"
   role_arn = aws_iam_role.iam_execution.arn
 
-  definition = templatefile("../../terraform/state_machine_definition.json", {
+  definition = templatefile("${path.module}/.terraform/modules/bignbit_module/state_machine_definition.json", {
       GetDatasetConfigurationLambda = module.bignbit_module.get_dataset_configuration_arn,
       ConfigBucket                  = module.bignbit_module.config_bucket_name,
       ConfigDir                     = module.bignbit_module.config_path,
@@ -59,4 +59,4 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
      }
   )
 }
-*/
+
