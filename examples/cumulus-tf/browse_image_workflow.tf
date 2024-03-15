@@ -1,16 +1,16 @@
-/*
 
-In a typcial cumulus installation, this is how you would define the workflow:
+
+# In a typcial cumulus installation, this is how you would define the workflow:
 
 module "browse_image_workflow" {
-  source = source = "https://github.com/nasa/cumulus/releases/download/v16.1.2/terraform-aws-cumulus-workflow.zip"
+  source          = "https://github.com/nasa/cumulus/releases/download/v16.1.2/terraform-aws-cumulus-workflow.zip"
   prefix          = var.prefix
   name            = "BrowseImageWorkflow"
   workflow_config = module.cumulus.workflow_config
   system_bucket   = var.system_bucket
   tags            = merge(local.tags, { application = "BrowseImageWorkflow" })
 
-  definition = templatefile("../../terraform/state_machine_definition.json", {
+  definition = templatefile("${path.module}/.terraform/modules/bignbit_module/state_machine_definition.json", {
       GetDatasetConfigurationLambda = module.bignbit_module.get_dataset_configuration_arn,
       ConfigBucket                  = module.bignbit_module.config_bucket_name,
       ConfigDir                     = module.bignbit_module.config_path,
@@ -31,8 +31,9 @@ module "browse_image_workflow" {
   )
 }
 
-This example is deployable without cumulus installed for the purpose of testing the module in isolation; so it does not use terraform-aws-cumulus-workflow.zip
-*/
+/*
+# This example is deployable without cumulus installed for the purpose of testing the module in isolation; so it does not use terraform-aws-cumulus-workflow.zip
+
 
 resource "aws_sfn_state_machine" "sfn_state_machine" {
   name     = "${local.ec2_resources_name}-BrowseImageWorkflow"
@@ -58,3 +59,4 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
      }
   )
 }
+*/
