@@ -29,4 +29,6 @@ locals {
     Environment = var.stage
     Version = var.app_version
   } : var.default_tags
+
+  tags = merge(var.tags, { Deployment = var.prefix })
 }

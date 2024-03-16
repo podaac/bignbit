@@ -69,3 +69,15 @@ variable "gibs_region" {
 variable "gibs_queue_name" {
   type = string
 }
+
+/*
+variable "tags" {
+  description = "Tags to be applied to Cumulus resources that support tags"
+  type        = map(string)
+  default     = {}
+}
+
+variable "system_bucket" {
+  type = string
+}
+*/
