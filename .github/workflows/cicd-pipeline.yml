@@ -276,7 +276,6 @@ jobs:
         working-directory: examples/cumulus-tf
         run: |
           terraform init -backend=false -upgrade
-          ls -al .terraform/modules/
           terraform validate -no-color
 
       - name: Deploy to venue
