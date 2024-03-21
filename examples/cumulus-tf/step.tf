@@ -3,6 +3,7 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
   name     = "${local.ec2_resources_name}-BrowseImageWorkflow"
   role_arn = aws_iam_role.step.arn
 
+  /*
   definition = templatefile("../../terraform/state_machine_definition.json", {
       GetDatasetConfigurationLambda = module.bignbit_module.get_dataset_configuration_arn,
       ConfigBucket                  = module.bignbit_module.config_bucket_name,
@@ -22,4 +23,8 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
       PobitAuditPath                = module.bignbit_module.pobit_audit_path
      }
   )
+  */
+
+  definition = module.bignbit_module.bignbit_state_machine_definition_arn
+
 }
