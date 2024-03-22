@@ -17,7 +17,7 @@ RUN apt-get update && \
   unzip \
   libcurl4-openssl-dev
 
-RUN adduser --quiet --disabled-password --shell /bin/sh --home /home/dockeruser --gecos "" --uid 1000 dockeruser
+RUN adduser --quiet --disabled-password --shell /bin/sh --home /home/dockeruser --gecos "" --uid 993 dockeruser
 USER dockeruser
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
@@ -36,15 +36,15 @@ RUN mkdir -p "${FUNCTION_DIR}" && \
 
 FROM osgeo/gdal:ubuntu-small-${GDAL_VERSION}
 ARG FUNCTION_DIR
-RUN adduser --quiet --disabled-password --shell /bin/sh --home /home/dockeruser --gecos "" --uid 1000 dockeruser
+RUN adduser --quiet --disabled-password --shell /bin/sh --home /home/dockeruser --gecos "" --uid 993 dockeruser
 USER dockeruser
 ENV HOME /home/dockeruser
 WORKDIR ${FUNCTION_DIR}
 
-COPY --chown=1000:1000 --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
+COPY --chown=dockeruser --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
 # (Optional) Add Lambda Runtime Interface Emulator and use a script in the ENTRYPOINT for simpler local runs
-ADD --chown=1000:1000 https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /home/dockeruser/.local/bin/aws-lambda-rie
-COPY --chown=1000:1000 docker/docker-entrypoint.sh /home/dockeruser/.local/bin/
+ADD --chown=dockeruser https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /home/dockeruser/.local/bin/aws-lambda-rie
+COPY --chown=dockeruser docker/docker-entrypoint.sh /home/dockeruser/.local/bin/
 RUN chmod 755 /home/dockeruser/.local/bin/aws-lambda-rie /home/dockeruser/.local/bin/docker-entrypoint.sh && \
     touch bignbit/__init__.py
 ENTRYPOINT [ "/home/dockeruser/.local/bin/docker-entrypoint.sh" ]

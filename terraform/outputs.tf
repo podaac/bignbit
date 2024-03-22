@@ -78,6 +78,6 @@ output "pobit_save_cma_message_arn" {
   value = aws_lambda_function.save_cma_message.arn
 }
 
-output "bignbit_state_machine_definition_arn" {
-  value = data.aws_sfn_state_machine.bignbit_sm_def.arn
+output "workflow_definition" {
+  value = data.template_file.workflow_definition.rendered
 }
