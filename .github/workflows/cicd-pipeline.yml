@@ -216,7 +216,7 @@ jobs:
           steps.release.conclusion == 'success'
         uses: ncipollo/release-action@v1
         with:
-          artifacts: ${{ steps.poetry-build.outputs.tf_module_artifact_name }}.zip
+          artifacts: build/${{ steps.poetry-build.outputs.tf_module_artifact_name }}.zip
           generateReleaseNotes: true
           name: ${{ env.software_version }}
           prerelease: ${{ steps.alpha.conclusion == 'success' || steps.rc.conclusion == 'success'}}
