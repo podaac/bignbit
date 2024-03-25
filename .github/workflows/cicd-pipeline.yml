@@ -179,7 +179,11 @@ jobs:
           name: ${{ steps.poetry-build.outputs.pyproject_name }}-dist
           path: dist/*
       - name: Zip artifact for deployment
-        run: zip ${{ steps.poetry-build.outputs.tf_module_artifact_name }}.zip terraform/* -r
+        run: |
+          mkdir -p build/${{ steps.poetry-build.outputs.tf_module_artifact_name }}
+          cp terraform/* build/${{ steps.poetry-build.outputs.tf_module_artifact_name }}/*
+          cd build
+          zip ${{ steps.poetry-build.outputs.tf_module_artifact_name }}.zip ${{ steps.poetry-build.outputs.tf_module_artifact_name }}/* -r
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.poetry-build.outputs.tf_module_artifact_name }}
