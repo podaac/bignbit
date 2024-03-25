@@ -10,4 +10,4 @@
 - outputs.tf
 - main.tf
 - lambda_functions.tf
-- state_machine_definition.json
+- state_machine_definition.tpl
