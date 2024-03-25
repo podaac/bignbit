@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `bignbit` Issue #3: [Update terraform mock deployment of cumulus module to services accounts](https://github.com/podaac/bignbit/issues/3),
 
 ### Changed
+- `bignbit` Issue #10: [Move combined big and pobit state machine into terraform module](https://github.com/podaac/bignbit/issues/10),
 - `bignbit` Issue #6: [BIG terraform failing in SWOT venues due to long lambda name](https://github.com/podaac/bignbit/issues/6),
 
 

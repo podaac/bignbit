@@ -92,8 +92,6 @@ variable tags{
   default = {}
 }
 
-
-
 variable "lambda_container_image_uri" {
   type = string
   default = ""
