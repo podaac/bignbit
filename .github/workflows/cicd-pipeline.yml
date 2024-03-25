@@ -181,7 +181,7 @@ jobs:
       - name: Zip artifact for deployment
         run: |
           mkdir -p build/${{ steps.poetry-build.outputs.tf_module_artifact_name }}
-          cp terraform/* build/${{ steps.poetry-build.outputs.tf_module_artifact_name }}/*
+          cp terraform/* build/${{ steps.poetry-build.outputs.tf_module_artifact_name }}/
           cd build
           zip ${{ steps.poetry-build.outputs.tf_module_artifact_name }}.zip ${{ steps.poetry-build.outputs.tf_module_artifact_name }}/* -r
       - uses: actions/upload-artifact@v4
