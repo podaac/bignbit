@@ -100,7 +100,7 @@ data "aws_iam_policy_document" "iam_policy" {
        "s3:PutReplicationConfiguration"
     ]
     #resources = [for b in local.all_bucket_names : "arn:aws:s3:::${b}/*"]
-    resources = ["arn:aws:s3:::${var.prefix}-*/*"]
+    resources = ["arn:aws:s3:::${local.ec2_resources_name}-*/*"]
   }
 
   statement {
