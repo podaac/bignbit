@@ -272,6 +272,7 @@ jobs:
       THE_VERSION: ${{ needs.build.outputs.version }}
       CONTAINER_IMAGE_URI: ${{ needs.docker.outputs.container_image_uri }}
       TF_MODULE_ARTIFACT_NAME: ${{ needs.build.outputs.tf_module_artifact_name }}
+      TF_VAR_gibs_account_id: ${{ secrets.GIBS_ACCOUNT_ID }}
     if: |
       github.ref == 'refs/heads/develop' ||
       github.ref == 'refs/heads/main'    ||
