@@ -10,9 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.1]
 
 ### Added 
-- Initial port from JPL GHE to public GitHub.com
 - [issues/2](https://github.com/podaac/bignbit/issues/2): Create github action pipeline to build artifacts
 - [issues/3](https://github.com/podaac/bignbit/issues/3): Update terraform mock deployment of cumulus module to services accounts
+- Initial port from JPL GHE to public GitHub.com
 
 ### Changed
 - [issues/10](https://github.com/podaac/bignbit/issues/10): Move combined big and pobit state machine into terraform module
