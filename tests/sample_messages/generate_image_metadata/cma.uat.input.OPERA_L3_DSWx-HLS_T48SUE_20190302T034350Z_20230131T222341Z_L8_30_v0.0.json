@@ -526,7 +526,7 @@
         ],
         "datasetConfigurationForBIG": {
           "config": {
-            "convertToPNG": "false",
+            "sendToHarmony": "false",
             "imageFilenameRegex": ".*BROWSE.tif",
             "imgVariables": [
               {

@@ -59,23 +59,23 @@
           "BackoffRate":2
         }
       ],
-      "Next":"Convert to PNG?"
+      "Next":"Send to Harmony?"
     },
-    "Convert to PNG?":{
+    "Send to Harmony?":{
       "Type":"Choice",
       "Choices":[
         {
           "And":[
             {
-              "Variable":"$.payload.datasetConfigurationForBIG.config.convertToPNG",
+              "Variable":"$.payload.datasetConfigurationForBIG.config.sendToHarmony",
               "IsPresent":true
             },
             {
-              "Variable":"$.payload.datasetConfigurationForBIG.config.convertToPNG",
+              "Variable":"$.payload.datasetConfigurationForBIG.config.sendToHarmony",
               "BooleanEquals":true
             }
           ],
-          "Comment":"If convertToPNG is true",
+          "Comment":"If sendToHarmony is true",
           "Next":"Get Collection Concept Id"
         }
       ],
