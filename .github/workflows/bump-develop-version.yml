@@ -12,22 +12,22 @@ jobs:
     if:
       ${{ startsWith(github.ref, 'refs/heads/release/') }}
     steps:
-      - uses: getsentry/action-github-app-token@v2.0.0
+      - uses: getsentry/action-github-app-token@v3
         name: CICD Token
         id: cicd-app
         with:
           app_id: ${{ secrets.CICD_APP_ID }}
           private_key: ${{ secrets.CICD_APP_PRIVATE_KEY }}
       # Checks-out the develop branch
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           ref: 'refs/heads/develop'
           repository: ${{ github.repository }}
           token: ${{ steps.cicd-app.outputs.token }}
       - name: Install Poetry
-        uses: abatilo/actions-poetry@v2
+        uses: abatilo/actions-poetry@v3
         with:
-          poetry-version: 1.2.2
+          poetry-version: 1.8.2
       - name: Bump minor version
         run: |
           poetry version ${GITHUB_REF#refs/heads/release/}
