@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - `bignbit` Issue #10: [Move combined big and pobit state machine into terraform module](https://github.com/podaac/bignbit/issues/10),
 - `bignbit` Issue #6: [BIG terraform failing in SWOT venues due to long lambda name](https://github.com/podaac/bignbit/issues/6),
+- `bignbit` Issue #15: [Change 'convertToPNG' choice to a generic send to harmony choice](https://github.com/podaac/bignbit/issues/15),
 
 
 [unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.0.1...HEAD
