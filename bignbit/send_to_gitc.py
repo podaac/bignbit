@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+import uuid
 from datetime import datetime, timezone
 
 import boto3
@@ -46,19 +47,19 @@ class NotifyGitc(Process):
         """
 
         notification_id = ""
-        token = self.config.get('token')
+        gitc_id = uuid.uuid4()
 
         if self.input is not None:
             # Send ImageSet(s) to GITC for processing
             collection_name = self.input.get('collection_name')
             cmr_provider = self.input.get('cmr_provider')
             image_set = ImageSet(**self.input['image_set'])
-            notification_id = notify_gitc(image_set, cmr_provider, token, collection_name)
+            notification_id = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
 
         return notification_id
 
 
-def notify_gitc(image_set: ImageSet, cmr_provider: str, token: str, collection_name: str):
+def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str):
     """
     Builds and sends a CNM message to GITC
 
@@ -68,8 +69,8 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, token: str, collection_n
       The image set to send
     cmr_provider: str
       The provider sent in the CNM message
-    token: str
-      The token identifying this particular request to GITC
+    gitc_id: str
+      The uuid identifying this particular request to GITC
     collection_name: str
       Collection that this image set belongs to
 
@@ -82,7 +83,7 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, token: str, collection_n
     queue_url = os.environ.get(GIBS_SQS_URL_ENV_NAME)
     CUMULUS_LOGGER.info(f'Sending SQS message to GITC for image {image_set.name}')
 
-    cnm = construct_cnm(image_set, cmr_provider, token, collection_name)
+    cnm = construct_cnm(image_set, cmr_provider, gitc_id, collection_name)
 
     cnm_json = json.dumps(cnm)
     sqs_message_params = {
@@ -102,7 +103,7 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, token: str, collection_n
     return cnm['identifier']
 
 
-def construct_cnm(image_set: ImageSet, cmr_provider: str, token: str, collection_name: str):
+def construct_cnm(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str):
     """
     Construct the CNM message for GITC
 
@@ -112,8 +113,8 @@ def construct_cnm(image_set: ImageSet, cmr_provider: str, token: str, collection
         ImageSet for one image to be sent to gibs
     cmr_provider: str
       The provider sent in the CNM message
-    token: str
-      The token identifying this particular request to GITC
+    gitc_id: str
+      The uuid identifying this particular request to GITC
     collection_name: str
       Collection that this image set belongs to
 
@@ -131,7 +132,7 @@ def construct_cnm(image_set: ImageSet, cmr_provider: str, token: str, collection
         "duplicationid": image_set.name,
         "collection": new_collection,
         "submissionTime": submission_time,
-        "identifier": token,
+        "identifier": gitc_id,
         "product": product,
         'provider': cmr_provider
     }
