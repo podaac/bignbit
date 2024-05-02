@@ -37,7 +37,7 @@ def handler(event, _):
         collection = message_body["collection"]
         cma_key = "{}/{}/{}.{}.cma.json"
 
-        received_time = datetime.now(timezone.utc).isoformat()[:-9] + 'Z',
+        received_time = datetime.now(timezone.utc).isoformat()[:-9] + 'Z'
 
         client = boto3.client('lambda')
 
