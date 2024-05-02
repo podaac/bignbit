@@ -1,40 +1,8 @@
 """lambda function that stores the CMA message into a s3 bucket"""
 import json
 import logging
-import os
 
 import boto3
-from cumulus_logger import CumulusLogger
-from cumulus_process import Process
-
-CUMULUS_LOGGER = CumulusLogger('save_cma_message')
-
-
-class CMA(Process):
-    """
-    A cumulus message adapter
-    """
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.logger = CUMULUS_LOGGER
-
-    def process(self):
-        """
-        Upload CMA message into a s3 bucket
-
-        Returns
-        -------
-        dict
-          Same input sent to this function
-
-        """
-        pobit_audit_bucket = self.config['pobit_audit_bucket']
-        cma_key_name = self.config['cma_key_name']
-
-        upload_cma(pobit_audit_bucket, cma_key_name, self.input)
-
-        return self.input
 
 
 def upload_cma(pobit_audit_bucket: str, cma_key_name: str, cma_content: dict):
@@ -72,27 +40,15 @@ def lambda_handler(event, context):
         event from a lambda call
     context: dictionary
         context from a lambda call
-    Returns
-    ----------
-        dict
-            A CMA json message
+
     """
-    # pylint: disable=duplicate-code
-    levels = {
-        'critical': logging.CRITICAL,
-        'error': logging.ERROR,
-        'warn': logging.WARNING,
-        'warning': logging.WARNING,
-        'info': logging.INFO,
-        'debug': logging.DEBUG
-    }
+    logger = logging.getLogger('save_cma_message')
 
-    logging_level = os.environ.get('LOGGING_LEVEL', 'info')
-    CUMULUS_LOGGER.logger.level = levels.get(logging_level, 'info')
-    CUMULUS_LOGGER.setMetadata(event, context)
+    pobit_audit_bucket = event['pobit_audit_bucket']
+    cma_key_name = event['cma_key_name']
+    cma_content = event['cma_content']
 
-    return CMA.cumulus_handler(event, context=context)
+    gitc_id = cma_content['identifier']
 
-
-if __name__ == "__main__":
-    CMA()
+    logger.info("Uploading CMA message to S3 for uuid %s", gitc_id)
+    upload_cma(pobit_audit_bucket, cma_key_name, cma_content)
