@@ -43,14 +43,14 @@ def handler(event, _):
 
         cma_event = ('{"pobit_audit_bucket": "' + os.environ['POBIT_AUDIT_BUCKET_NAME']
                      + '", "cma_key_name": "' + cma_key.format(os.environ['POBIT_AUDIT_PATH_NAME'], collection, gitc_id, received_time)
-                     + '", "cma_content": "' + json.dumps(message_body) + '"}')
+                     + '", "cma_content": ' + json.dumps(message_body) + '}')
 
         try:
             client.invoke(
                 FunctionName=os.environ['SAVE_CMA_LAMBDA_FUNCTION_NAME'],
                 InvocationType='Event',
                 Payload=cma_event)
-            logger.info("Save CMA message lambda invoked for uuid %s", gitc_id)
+            logger.info("Save CMA message lambda invoked for id %s", gitc_id)
         except ClientError:
             logger.warning("Error invoking save cma lambda for messageId %s gitcID %s",
                            message['messageId'], gitc_id,

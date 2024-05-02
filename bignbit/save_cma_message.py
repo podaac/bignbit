@@ -50,5 +50,5 @@ def lambda_handler(event, _context):
 
     gitc_id = cma_content['identifier']
 
-    logger.info("Uploading CMA message to S3 for uuid %s", gitc_id)
+    logger.info("Uploading CMA message to S3 for id %s", gitc_id)
     upload_cma(pobit_audit_bucket, cma_key_name, cma_content)
