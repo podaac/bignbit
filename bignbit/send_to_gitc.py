@@ -47,13 +47,13 @@ class NotifyGitc(Process):
         """
 
         notification_id = ""
-        gitc_id = str(uuid.uuid4())
 
         if self.input is not None:
             # Send ImageSet(s) to GITC for processing
             collection_name = self.input.get('collection_name')
             cmr_provider = self.input.get('cmr_provider')
             image_set = ImageSet(**self.input['image_set'])
+            gitc_id = image_set.name
             notification_id = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
 
         return notification_id
@@ -70,7 +70,7 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection
     cmr_provider: str
       The provider sent in the CNM message
     gitc_id: str
-      The uuid identifying this particular request to GITC
+      The unique identifier for this particular request to GITC
     collection_name: str
       Collection that this image set belongs to
 
@@ -114,7 +114,7 @@ def construct_cnm(image_set: ImageSet, cmr_provider: str, gitc_id: str, collecti
     cmr_provider: str
       The provider sent in the CNM message
     gitc_id: str
-      The uuid identifying this particular request to GITC
+      The unique identifier for this particular request to GITC
     collection_name: str
       Collection that this image set belongs to
 

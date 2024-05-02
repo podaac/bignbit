@@ -42,7 +42,7 @@ def handler(event, _):
         client = boto3.client('lambda')
 
         cma_event = ('{"pobit_audit_bucket": "' + os.environ['POBIT_AUDIT_BUCKET_NAME']
-                     + '", "cma_key_name": "' + cma_key.format(os.environ['POBIT_AUDIT_PATH_NAME'], collection, received_time)
+                     + '", "cma_key_name": "' + cma_key.format(os.environ['POBIT_AUDIT_PATH_NAME'], collection, gitc_id, received_time)
                      + '", "cma_content": "' + json.dumps(message_body) + '"}')
 
         try:
