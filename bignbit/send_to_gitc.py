@@ -47,7 +47,7 @@ class NotifyGitc(Process):
         """
 
         notification_id = ""
-        gitc_id = uuid.uuid4()
+        gitc_id = str(uuid.uuid4())
 
         if self.input is not None:
             # Send ImageSet(s) to GITC for processing
