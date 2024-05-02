@@ -450,7 +450,7 @@
             "TimeoutSeconds": 86400,
             "End": true,
             "ResultPath": "$.gitc_response"
-          },
+          }
         }
       },
       "ResultPath": "$.payload.pobit",
