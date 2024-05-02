@@ -32,7 +32,7 @@ def upload_cma(pobit_audit_bucket: str, cma_key_name: str, cma_content: dict):
     )
 
 
-def lambda_handler(event, context):
+def lambda_handler(event, _context):
     """handler that gets called by aws lambda
     Parameters
     ----------
