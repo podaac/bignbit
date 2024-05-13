@@ -52,7 +52,7 @@ class NotifyGitc(Process):
             collection_name = self.input.get('collection_name')
             cmr_provider = self.input.get('cmr_provider')
             image_set = ImageSet(**self.input['image_set'])
-            gitc_id = image_set.name + '_' + self.input.get('granule_conceptId')
+            gitc_id = image_set.name
             notification_id = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
 
         return notification_id

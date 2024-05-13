@@ -438,7 +438,6 @@
                   "task_config": {
                     "collection": "{$.collection}",
                     "cmr_provider": "{$.cmr_provider}",
-                    "granule_conceptId": "{$.payload.granules.cmrConceptId}
                     "cumulus_message": {
                       "input": "{$}"
                     }
