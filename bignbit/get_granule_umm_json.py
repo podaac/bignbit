@@ -4,7 +4,6 @@ Simple CMA lambda that get a granule's umm-json document and ads it to the paylo
 import logging
 import os
 
-import requests
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 
