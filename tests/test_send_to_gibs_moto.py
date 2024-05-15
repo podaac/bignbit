@@ -106,7 +106,6 @@ def test_process_sends_message(fake_response_sqs_queue, mock_gitc_success, cnm_v
         sub_event = event.copy()
         del sub_event['cma']['event']['payload']['pobit']
         sub_event['cma']['event']['payload'] = imageset
-        sub_event['cma']['task_config']['token'] = str(uuid.uuid4())
         bignbit.send_to_gitc.lambda_handler(sub_event, {})
 
     sent_messages = mock_gitc_success.wait_for_messages(count=1)
