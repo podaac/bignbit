@@ -32,37 +32,10 @@ class CMA(Process):
 
         """
         cmr_environment = self.config['cmr_environment']
-        cmr_link = self.input['granules'][0]['cmrLink']
+        cmr_concept_id = self.input['granules'][0]['cmrConceptId']
 
-        self.input['granule_umm_json'] = download_umm_json(cmr_link, cmr_environment)
+        self.input['granule_umm_json'] = utils.get_umm_json(cmr_concept_id, cmr_environment)
         return self.input
-
-
-def download_umm_json(cmr_link: str, cmr_environment: str) -> dict:
-    """
-    Retrieve the umm-json document from the given cmr_link
-
-    Parameters
-    ----------
-    cmr_link: str
-      Link to the umm-g for downloading
-
-    cmr_environment: str
-      CMR environment used to retrieve user token
-
-    Returns
-    -------
-    dict
-      The umm-json document
-    """
-    edl_user, edl_pass = utils.get_edl_creds()
-    token = utils.get_cmr_user_token(edl_user, edl_pass, cmr_environment)
-
-    umm_json_response = requests.get(cmr_link, headers={'Authorization': f'Bearer {token}'}, timeout=10)
-    umm_json_response.raise_for_status()
-    umm_json = umm_json_response.json()
-
-    return umm_json
 
 
 def lambda_handler(event, context):

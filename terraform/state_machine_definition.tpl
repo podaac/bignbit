@@ -438,6 +438,8 @@
                   "task_config": {
                     "collection": "{$.collection}",
                     "cmr_provider": "{$.cmr_provider}",
+                    "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
+                    "pobit_audit_bucket": "${PobitAuditBucket}",
                     "cumulus_message": {
                       "input": "{$}"
                     }
