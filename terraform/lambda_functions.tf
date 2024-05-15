@@ -315,7 +315,7 @@ resource "aws_lambda_function" "copy_harmony_output_to_s3" {
   tags = var.default_tags
 }
 
-resource "aws_lambda_function" "apply_opera_treatment" {
+resource "aws_lambda_function" "apply_opera_hls_treatment" {
   depends_on = [
     null_resource.upload_ecr_image
   ]
@@ -323,9 +323,9 @@ resource "aws_lambda_function" "apply_opera_treatment" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["bignbit.apply_opera_treatment.lambda_handler"]
+    command = ["bignbit.apply_opera_hls_treatment.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-apply_opera_treatment-lambda"
+  function_name = "${local.lambda_resources_name}-apply_opera_hls_treatment-lambda"
   role          = var.lambda_role.arn
   timeout       = 30
   memory_size   = 512

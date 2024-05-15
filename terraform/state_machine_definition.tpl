@@ -107,31 +107,31 @@
           "BackoffRate":2
         }
       ],
-      "Next":"Apply OPERA Treatment?"
+      "Next":"Apply OPERA HLS Treatment?"
     },
-    "Apply OPERA Treatment?":{
+    "Apply OPERA HLS Treatment?":{
       "Type":"Choice",
       "Choices":[
         {
           "And":[
             {
-              "Variable":"$.payload.datasetConfigurationForBIG.config.operaTreatment",
+              "Variable":"$.payload.datasetConfigurationForBIG.config.operaHLSTreatment",
               "IsPresent":true
             },
             {
-              "Variable":"$.payload.datasetConfigurationForBIG.config.operaTreatment",
+              "Variable":"$.payload.datasetConfigurationForBIG.config.operaHLSTreatment",
               "BooleanEquals":true
             }
           ],
-          "Comment":"If operaTreatment is true",
-          "Next":"Apply OPERA Treatment"
+          "Comment":"If operaHLSTreatment is true",
+          "Next":"Apply OPERA HLS Treatment"
         }
       ],
       "Default":"Generate Image Metadata"
     },
-    "Apply OPERA Treatment":{
+    "Apply OPERA HLS Treatment":{
       "Type":"Task",
-      "Resource":"${ApplyOperaTreatmentLambda}",
+      "Resource":"${ApplyOperaHLSTreatmentLambda}",
       "Parameters":{
         "cma":{
           "event.$":"$",

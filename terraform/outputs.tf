@@ -62,8 +62,8 @@ output "copy_harmony_output_to_s3_arn"{
   value = aws_lambda_function.copy_harmony_output_to_s3.arn
 }
 
-output "apply_opera_treatment_arn"{
-  value = aws_lambda_function.apply_opera_treatment.arn
+output "apply_opera_hls_treatment_arn"{
+  value = aws_lambda_function.apply_opera_hls_treatment.arn
 }
 
 output "pobit_build_image_sets_arn" {
