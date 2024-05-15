@@ -406,6 +406,8 @@ resource "aws_lambda_function" "send_to_gitc" {
       REGION                      = var.region
       GIBS_REGION                 = var.gibs_region
       GIBS_SQS_URL                = "https://sqs.${var.gibs_region}.amazonaws.com/${var.gibs_account_id}/${var.gibs_queue_name}"
+      EDL_USER_SSM                = var.edl_user_ssm
+      EDL_PASS_SSM                = var.edl_pass_ssm
     }
   }
 
@@ -441,6 +443,8 @@ resource "aws_lambda_function" "handle_gitc_response" {
       POBIT_AUDIT_BUCKET_NAME = var.pobit_audit_bucket
       POBIT_AUDIT_PATH_NAME = var.pobit_audit_path
       CMR_ENVIRONMENT = local.environment != "OPS" ? "UAT" : ""
+      EDL_USER_SSM                = var.edl_user_ssm
+      EDL_PASS_SSM                = var.edl_pass_ssm
     }
   }
 
