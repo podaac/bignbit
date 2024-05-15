@@ -53,7 +53,7 @@ class ImageSetGenerator(Process):
             response_payload['pobit'] = []
 
             for image_set in image_sets:
-                image_set.name = image_set.name + '_' + self.input['granules']['cmrConceptId']
+                image_set.name = image_set.name + '_' + self.input['granules'][0]['cmrConceptId']
 
                 response_payload['pobit'].append({
                     'image_set': image_set._asdict(),
