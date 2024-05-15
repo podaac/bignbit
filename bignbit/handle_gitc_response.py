@@ -3,9 +3,8 @@ import json
 import logging
 import os
 from json import loads
-from datetime import datetime, timezone
-import boto3
-from botocore.exceptions import ClientError
+
+from bignbit import utils
 
 
 def handler(event, _):
@@ -34,25 +33,17 @@ def handler(event, _):
     for message in event["Records"]:
         message_body = loads(message["body"])
         gitc_id = message_body["identifier"]
-        collection = message_body["collection"]
-        cma_key = "{}/{}/{}.{}.cma.json"
+        collection_name = message_body["collection"]
+        cmr_env = os.environ['CMR_ENVIRONMENT']
 
-        received_time = datetime.now(timezone.utc).isoformat()[:-9] + 'Z'
+        granule_concept_id = gitc_id[-19:]
+        umm_json = utils.get_umm_json(granule_concept_id, cmr_env)
+        granule_ur = umm_json['GranuleUR']
 
-        client = boto3.client('lambda')
+        cnm_key_name = collection_name + "/" + granule_ur + "." + message_body['submission_time'] + "." + "cnm-r.json"
 
-        cma_event = ('{"pobit_audit_bucket": "' + os.environ['POBIT_AUDIT_BUCKET_NAME']
-                     + '", "cma_key_name": "' + cma_key.format(os.environ['POBIT_AUDIT_PATH_NAME'], collection, gitc_id, received_time)
-                     + '", "cma_content": ' + json.dumps(message_body) + '}')
+        utils.upload_cnm(os.environ['POBIT_AUDIT_BUCKET_NAME'], cnm_key_name, json.dumps(message_body))
 
-        try:
-            client.invoke(
-                FunctionName=os.environ['SAVE_CMA_LAMBDA_FUNCTION_NAME'],
-                InvocationType='Event',
-                Payload=cma_event)
-            logger.info("Save CMA message lambda invoked for id %s", gitc_id)
-        except ClientError:
-            logger.warning("Error invoking save cma lambda for messageId %s gitcID %s",
-                           message['messageId'], gitc_id,
-                           exc_info=True)
+        logging.debug('CNM-R uploaded to s3 audit bucket for id %s', gitc_id)
+
     return {"statusCode": 200, "body": "All good"}

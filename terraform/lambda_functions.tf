@@ -438,9 +438,9 @@ resource "aws_lambda_function" "handle_gitc_response" {
       STACK_NAME                  = local.lambda_resources_name
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
       REGION                      = var.region
-      SAVE_CMA_LAMBDA_FUNCTION_NAME = aws_lambda_function.save_cma_message.function_name
       POBIT_AUDIT_BUCKET_NAME = var.pobit_audit_bucket
       POBIT_AUDIT_PATH_NAME = var.pobit_audit_path
+      CMR_ENVIRONMENT = local.environment != "OPS" ? "UAT" : ""
     }
   }
 
