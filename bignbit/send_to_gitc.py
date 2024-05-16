@@ -109,7 +109,7 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection
 
     CUMULUS_LOGGER.debug(f'SQS send_message output: {response}')
 
-    cnm_key_name = collection_name + "/" + granule_ur + "." + cnm_json['submission_time'] + "." + "cnm.json"
+    cnm_key_name = collection_name + "/" + granule_ur + "." + cnm['submissionTime'] + "." + "cnm.json"
 
     utils.upload_cnm(audit_bucket, cnm_key_name, cnm_json)
     CUMULUS_LOGGER.debug('CNM uploaded to s3 audit bucket')
