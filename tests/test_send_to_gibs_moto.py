@@ -8,7 +8,6 @@ import json
 import os
 import threading
 import urllib.request
-import uuid
 
 import boto3
 import jsonschema

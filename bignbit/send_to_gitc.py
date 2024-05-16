@@ -9,8 +9,8 @@ import boto3
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 
-from bignbit import utils
 from bignbit.image_set import ImageSet, to_cnm_product_dict
+from bignbit import utils
 
 REGION_NAME = 'us-west-2'
 CUMULUS_LOGGER = CumulusLogger('send_to_gitc')
@@ -53,16 +53,18 @@ class NotifyGitc(Process):
             collection_name = self.input.get('collection_name')
             cmr_provider = self.input.get('cmr_provider')
             image_set = ImageSet(**self.input['image_set'])
-            pobit_audit_bucket = self.input.get('pobit_audit_bucket')
-            cmr_env = self.input.get('cmr_environment')
             gitc_id = image_set.name
 
-            notification_id = notify_gitc(image_set, cmr_provider, gitc_id, collection_name, pobit_audit_bucket, cmr_env)
+            granule_ur = self.input.get('granule_ur')
+            pobit_audit_bucket = self.input.get('pobit_audit_bucket')
+            cmr_env = self.input.get('cmr_environment')
+
+            notification_id = notify_gitc(image_set, cmr_provider, gitc_id, collection_name, granule_ur, pobit_audit_bucket, cmr_env)
 
         return notification_id
 
 
-def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str, audit_bucket: str, cmr_env: str):
+def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str, granule_ur: str, audit_bucket, cmr_environment):
     """
     Builds and sends a CNM message to GITC
 
@@ -76,6 +78,8 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection
       The unique identifier for this particular request to GITC
     collection_name: str
       Collection that this image set belongs to
+    granuleUR: str
+        The granuleUR for this image set
     audit_bucket: str
         The name of the S3 bucket where a copy of the outgoing CNM will be saved
     cmr_env: str
@@ -107,10 +111,6 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection
     response = sqs.send_message(**sqs_message_params)
 
     CUMULUS_LOGGER.debug(f'SQS send_message output: {response}')
-
-    granule_concept_id = image_set.name[-19:]
-    umm_json = utils.get_umm_json(granule_concept_id, cmr_env)
-    granule_ur = umm_json['GranuleUR']
 
     cnm_key_name = collection_name + "/" + granule_ur + "." + cnm_json['submission_time'] + "." + "cnm.json"
 
