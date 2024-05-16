@@ -63,7 +63,7 @@ class ImageSetGenerator(Process):
                     'image_set': pobit_image_set._asdict(),
                     'cmr_provider': self.config.get('cmr_provider'),
                     'collection_name': self.config.get('collection').get('name'),
-                    'granule_ur': self.input['granules'][0]['granuleID']
+                    'granule_ur': self.input['granules'][0]['granuleId']
                 })
 
         return response_payload
