@@ -57,14 +57,13 @@ class NotifyGitc(Process):
 
             granule_ur = self.input.get('granule_ur')
             pobit_audit_bucket = self.input.get('pobit_audit_bucket')
-            cmr_env = self.input.get('cmr_environment')
 
-            notification_id = notify_gitc(image_set, cmr_provider, gitc_id, collection_name, granule_ur, pobit_audit_bucket, cmr_env)
+            notification_id = notify_gitc(image_set, cmr_provider, gitc_id, collection_name, granule_ur, pobit_audit_bucket)
 
         return notification_id
 
 
-def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str, granule_ur: str, audit_bucket, cmr_environment):
+def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str, granule_ur: str, audit_bucket):
     """
     Builds and sends a CNM message to GITC
 
@@ -82,8 +81,6 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection
         The granuleUR for this image set
     audit_bucket: str
         The name of the S3 bucket where a copy of the outgoing CNM will be saved
-    cmr_env: str
-        The CMR environment to use for getting granule metadata
 
     Returns
     -------
