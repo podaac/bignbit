@@ -27,7 +27,7 @@ data "template_file" "workflow_definition" {
     GenerateImageMetadataLambda   = aws_lambda_function.generate_image_metadata.arn,
     BuildImageSetsLambda          = aws_lambda_function.build_image_sets.arn,
     SendToGITCLambda              = aws_lambda_function.send_to_gitc.arn,
-    SaveCMAMessageLambda          = aws_lambda_function.save_cma_message.arn,
+    SaveCNMMessageLambda          = aws_lambda_function.save_cnm_message.arn,
     PobitAuditBucket              = var.pobit_audit_bucket,
     PobitAuditPath                = var.pobit_audit_path
   }

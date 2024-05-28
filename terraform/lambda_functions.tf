@@ -456,7 +456,7 @@ resource "aws_lambda_function" "handle_gitc_response" {
   tags = local.tags
 }
 
-resource "aws_lambda_function" "save_cma_message" {
+resource "aws_lambda_function" "save_cnm_message" {
   depends_on = [
     null_resource.upload_ecr_image
   ]
@@ -464,9 +464,9 @@ resource "aws_lambda_function" "save_cma_message" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["bignbit.save_cma_message.lambda_handler"]
+    command = ["bignbit.save_cmm_message.lambda_handler"]
   }
-  function_name    = "${local.lambda_resources_name}-save_cma_message-lambda"
+  function_name    = "${local.lambda_resources_name}-save_cnm_message-lambda"
   role             = var.lambda_role.arn
   timeout          = 15
   memory_size      = 128
