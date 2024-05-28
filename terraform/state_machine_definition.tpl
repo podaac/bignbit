@@ -438,8 +438,6 @@
                   "task_config": {
                     "collection": "{$.collection}",
                     "cmr_provider": "{$.cmr_provider}",
-                    "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
-                    "pobit_audit_bucket": "${PobitAuditBucket}",
                     "cumulus_message": {
                       "input": "{$}"
                     }
@@ -472,6 +470,36 @@
           ],
           "IntervalSeconds": 2,
           "MaxAttempts": 1
+        }
+      ],
+      "Next": "SaveCNMMessage"
+    },
+    "SaveCNMMessage": {
+      "Type": "Task",
+      "Resource": "${SaveCNMMessageLambda}",
+      "Parameters": {
+        "cma": {
+          "event.$": "$",
+          "task_config": {
+            "collection": "{$.collection}",
+            "pobit_audit_bucket": "${PobitAuditBucket}",
+            "cumulus_message": {
+              "input": "{$.payload}"
+            }
+          }
+        }
+      },
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 6,
+          "BackoffRate": 2
         }
       ],
       "Next": "WorkflowSucceeded"

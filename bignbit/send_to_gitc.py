@@ -10,9 +10,7 @@ from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 
 from bignbit.image_set import ImageSet, to_cnm_product_dict
-from bignbit import utils
 
-REGION_NAME = 'us-west-2'
 CUMULUS_LOGGER = CumulusLogger('send_to_gitc')
 
 GIBS_REGION_ENV_NAME = "GIBS_REGION"
@@ -55,15 +53,12 @@ class NotifyGitc(Process):
             image_set = ImageSet(**self.input['image_set'])
             gitc_id = image_set.name
 
-            granule_ur = self.input.get('granule_ur')
-            pobit_audit_bucket = self.input.get('pobit_audit_bucket')
-
-            notification_id = notify_gitc(image_set, cmr_provider, gitc_id, collection_name, granule_ur, pobit_audit_bucket)
+            notification_id = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
 
         return notification_id
 
 
-def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str, granule_ur: str, audit_bucket):
+def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str):
     """
     Builds and sends a CNM message to GITC
 
@@ -77,10 +72,6 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection
       The unique identifier for this particular request to GITC
     collection_name: str
       Collection that this image set belongs to
-    granuleUR: str
-        The granuleUR for this image set
-    audit_bucket: str
-        The name of the S3 bucket where a copy of the outgoing CNM will be saved
 
     Returns
     -------
@@ -108,11 +99,6 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection
     response = sqs.send_message(**sqs_message_params)
 
     CUMULUS_LOGGER.debug(f'SQS send_message output: {response}')
-
-    cnm_key_name = collection_name + "/" + granule_ur + "." + cnm['submissionTime'] + "." + "cnm.json"
-
-    utils.upload_cnm(audit_bucket, cnm_key_name, cnm_json)
-    CUMULUS_LOGGER.debug('CNM uploaded to s3 audit bucket')
 
     return cnm['identifier']
 
