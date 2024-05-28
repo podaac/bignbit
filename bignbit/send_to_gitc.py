@@ -44,8 +44,6 @@ class NotifyGitc(Process):
             list of granules
         """
 
-        notification_id = ""
-
         if self.input is not None:
             # Send ImageSet(s) to GITC for processing
             collection_name = self.input.get('collection_name')
@@ -53,9 +51,14 @@ class NotifyGitc(Process):
             image_set = ImageSet(**self.input['image_set'])
             gitc_id = image_set.name
 
-            notification_id = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
+            response_payload = {}
+            response_payload = self.input.copy()
+            response_payload['cnm'] = []
 
-        return notification_id
+            cnm_message = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
+            response_payload['cnm'].append(cnm_message)
+
+        return response_payload
 
 
 def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str):
@@ -100,7 +103,7 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection
 
     CUMULUS_LOGGER.debug(f'SQS send_message output: {response}')
 
-    return cnm['identifier']
+    return cnm
 
 
 def construct_cnm(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str):

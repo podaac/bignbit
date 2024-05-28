@@ -481,10 +481,11 @@
         "cma": {
           "event.$": "$",
           "task_config": {
-            "collection": "{$.collection}",
+            "collection": "{$.collection_name}",
+            "granule_ur": "{$.granule_ur}",
             "pobit_audit_bucket": "${PobitAuditBucket}",
             "cumulus_message": {
-              "input": "{$.payload}"
+              "input": "{$.payload.cnm}"
             }
           }
         }
