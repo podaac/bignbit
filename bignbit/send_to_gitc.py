@@ -53,10 +53,9 @@ class NotifyGitc(Process):
 
             response_payload = {}
             response_payload = self.input.copy()
-            response_payload['cnm'] = []
 
             cnm_message = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
-            response_payload['cnm'].append(cnm_message)
+            response_payload['cnm'] = cnm_message
 
         return response_payload
 
