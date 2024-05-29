@@ -34,7 +34,7 @@ class CNM(Process):
         collection_name = self.config['collection']
         granule_ur = self.config['granule_ur']
 
-        cnm_content = self.input[0]
+        cnm_content = self.input
 
         CUMULUS_LOGGER.info(collection_name)
         CUMULUS_LOGGER.info(granule_ur)
