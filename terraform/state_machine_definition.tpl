@@ -448,10 +448,32 @@
             "Type": "Task",
             "Resource": "arn:aws:states:::lambda:invoke",
             "TimeoutSeconds": 86400,
-            "Next": "SaveCNMMessage",
+            "End": "true",
             "ResultPath": "$.gitc_response"
-          },
-          "SaveCNMMessage": {
+          }
+      },
+      "ResultPath": "$.payload.pobit",
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.exception",
+          "Next": "WorkflowFailed"
+        }
+      ],
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 1
+        }
+      ],
+      "Next": "SaveCNMMessage"
+    },
+    "SaveCNMMessage": {
             "Type": "Task",
             "Resource": "${SaveCNMMessageLambda}",
             "Parameters": {
@@ -483,28 +505,6 @@
             "Next": "WorkflowSucceeded"
           }
         }
-      },
-      "ResultPath": "$.payload.pobit",
-      "Catch": [
-        {
-          "ErrorEquals": [
-            "States.ALL"
-          ],
-          "ResultPath": "$.exception",
-          "Next": "WorkflowFailed"
-        }
-      ],
-      "Retry": [
-        {
-          "ErrorEquals": [
-            "States.ALL"
-          ],
-          "IntervalSeconds": 2,
-          "MaxAttempts": 1
-        }
-      ],
-      "Next": "WorkflowSucceeded"
-    },
     
     "WorkflowSucceeded": {
       "Type": "Succeed"
