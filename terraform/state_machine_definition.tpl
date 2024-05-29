@@ -503,7 +503,7 @@
           "MaxAttempts": 1
         }
       ],
-      "End": "True"
+      "Next": "WorkflowSucceeded"
     },
     
     "WorkflowSucceeded": {
