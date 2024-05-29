@@ -34,8 +34,11 @@ class CNM(Process):
         collection_name = self.config['collection']
         granule_ur = self.config['granule_ur']
 
-        cnm_content = self.input
+        cnm_content = self.input[0]
 
+        CUMULUS_LOGGER.info(collection_name)
+        CUMULUS_LOGGER.info(granule_ur)
+        CUMULUS_LOGGER.info(cnm_content['submissionTime'])
         cnm_key_name = collection_name + "/" + granule_ur + "." + cnm_content['submissionTime'] + "." + "cnm.json"
 
         upload_cnm(pobit_audit_bucket, cnm_key_name, cnm_content)
