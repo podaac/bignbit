@@ -38,7 +38,6 @@ class CNM(Process):
 
         print(collection_name)
         print(granule_ur)
-        
 
         cnm_content = self.input
         print(cnm_content)
