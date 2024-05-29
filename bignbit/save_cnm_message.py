@@ -30,15 +30,18 @@ class CNM(Process):
 
         """
         pobit_audit_bucket = self.config['pobit_audit_bucket']
+        print(pobit_audit_bucket)
+        print(self.input.get('cnm_sent'))
 
         collection_name = self.config['collection']
         granule_ur = self.config['granule_ur']
 
         print(collection_name)
         print(granule_ur)
-        print(self.input)
+        
 
-        cnm_content = self.input.get('cnm_sent')
+        cnm_content = self.input
+        print(cnm_content)
 
         print(cnm_content)
         print(cnm_content['submissionTime'])

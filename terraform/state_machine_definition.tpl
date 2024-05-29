@@ -448,9 +448,40 @@
             "Type": "Task",
             "Resource": "arn:aws:states:::lambda:invoke",
             "TimeoutSeconds": 86400,
-            "End": true,
+            "Next": "SaveCNMMessage",
             "ResultPath": "$.gitc_response"
-          }
+          },
+          "SaveCNMMessage": {
+            "Type": "Task",
+            "Resource": "${SaveCNMMessageLambda}",
+            "Parameters": {
+              "cma": {
+                "event.$": "$",
+                "task_config": {
+                  "collection": "{$.collection_name}",
+                  "granule_ur": "{$.granule_ur}",
+                  "pobit_audit_bucket": "${PobitAuditBucket}",
+                  "cumulus_message": {
+                    "input": "{$.gitc_response}"
+                  }
+                }
+              }
+            },
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException",
+                  "Lambda.TooManyRequestsException"
+                  ],
+                  "IntervalSeconds": 2,
+                  "MaxAttempts": 6,
+                  "BackoffRate": 2
+                }
+              ],
+            "Next": "WorkflowSucceeded"
+          },
         }
       },
       "ResultPath": "$.payload.pobit",
@@ -472,39 +503,9 @@
           "MaxAttempts": 1
         }
       ],
-      "Next": "SaveCNMMessage"
+      "End": "True"
     },
-    "SaveCNMMessage": {
-      "Type": "Task",
-      "Resource": "${SaveCNMMessageLambda}",
-      "Parameters": {
-        "cma": {
-          "event.$": "$",
-          "task_config": {
-            "collection": "{$.collection_name}",
-            "granule_ur": "{$.granule_ur}",
-            "pobit_audit_bucket": "${PobitAuditBucket}",
-            "cumulus_message": {
-              "input": "{$.payload.pobit}"
-            }
-          }
-        }
-      },
-      "Retry": [
-        {
-          "ErrorEquals": [
-            "Lambda.ServiceException",
-            "Lambda.AWSLambdaException",
-            "Lambda.SdkClientException",
-            "Lambda.TooManyRequestsException"
-          ],
-          "IntervalSeconds": 2,
-          "MaxAttempts": 6,
-          "BackoffRate": 2
-        }
-      ],
-      "Next": "WorkflowSucceeded"
-    },
+    
     "WorkflowSucceeded": {
       "Type": "Succeed"
     },
