@@ -481,7 +481,7 @@
                 }
               ],
             "Next": "WorkflowSucceeded"
-          },
+          }
         }
       },
       "ResultPath": "$.payload.pobit",
