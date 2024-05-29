@@ -38,7 +38,7 @@ class CNM(Process):
         print(granule_ur)
         print(self.input)
 
-        cnm_content = self.input['cnm']
+        cnm_content = self.input.get('cnm_sent')
 
         print(cnm_content)
         print(cnm_content['submissionTime'])
