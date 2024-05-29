@@ -34,10 +34,13 @@ class CNM(Process):
         collection_name = self.config['collection']
         granule_ur = self.config['granule_ur']
 
-        cnm_content = self.input['cnm']
-
         print(collection_name)
         print(granule_ur)
+        print(self.input)
+        
+        cnm_content = self.input['cnm']
+
+        
         print(cnm_content)
         print(cnm_content['submissionTime'])
         cnm_key_name = collection_name + "/" + granule_ur + "." + cnm_content['submissionTime'] + "." + "cnm.json"
