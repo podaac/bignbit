@@ -28,6 +28,14 @@
           "IntervalSeconds":2,
           "MaxAttempts":6,
           "BackoffRate":2
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.Unknown"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2
         }
       ],
       "Next":"Get Granule umm_json"
@@ -52,11 +60,21 @@
             "Lambda.ServiceException",
             "Lambda.AWSLambdaException",
             "Lambda.SdkClientException",
-            "Lambda.TooManyRequestsException"
+            "Lambda.TooManyRequestsException",
+            "ReadTimeout",
+            "HTTPError"
           ],
           "IntervalSeconds":2,
-          "MaxAttempts":6,
+          "MaxAttempts":16,
           "BackoffRate":2
+        },
+        {
+          "ErrorEquals": [
+             "Lambda.Unknown"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2
         }
       ],
       "Next":"Send to Harmony?"
@@ -105,7 +123,15 @@
           "IntervalSeconds":2,
           "MaxAttempts":6,
           "BackoffRate":2
-        }
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.Unknown"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2
+       }
       ],
       "Next":"Apply OPERA HLS Treatment?"
     },
@@ -153,6 +179,14 @@
           "IntervalSeconds":2,
           "MaxAttempts":6,
           "BackoffRate":2
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.Unknown"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2
         }
       ],
       "Next":"Generate Image Metadata"
@@ -179,11 +213,21 @@
             "Lambda.ServiceException",
             "Lambda.AWSLambdaException",
             "Lambda.SdkClientException",
-            "Lambda.TooManyRequestsException"
+            "Lambda.TooManyRequestsException",
+            "ReadTimeout",
+            "HTTPError"
           ],
           "IntervalSeconds":2,
           "MaxAttempts":6,
           "BackoffRate":2
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.Unknown"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2
         }
       ],
       "Next":"Convert Variables To PNG"
@@ -258,6 +302,14 @@
                 "IntervalSeconds":2,
                 "MaxAttempts":6,
                 "BackoffRate":2
+              },
+              {
+                "ErrorEquals": [
+                  "Lambda.Unknown"
+               ],
+                "BackoffRate": 2,
+                "IntervalSeconds": 2,
+                "MaxAttempts": 2
               }
             ],
             "Next":"Job Complete?"
@@ -319,6 +371,14 @@
                 "IntervalSeconds":2,
                 "MaxAttempts":6,
                 "BackoffRate":2
+              },
+              {
+                "ErrorEquals": [
+                  "Lambda.Unknown"
+                ],
+                "BackoffRate": 2,
+                "IntervalSeconds": 2,
+                "MaxAttempts": 2
               }
             ],
             "End":true
@@ -356,6 +416,14 @@
           "IntervalSeconds":2,
           "MaxAttempts":6,
           "BackoffRate":2
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.Unknown"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2
         }
       ],
       "Next":"Clean Output"
@@ -364,18 +432,13 @@
       "Type":"Pass",
       "Next":"BuildImageSets",
       "Parameters":{
-        "cumulus_meta.$":"$.cumulus_meta",
-        "meta":{
-          "buckets.$":"$.meta.buckets",
-          "cmr.$":"$.meta.cmr",
-          "collection.$":"$.meta.collection",
-          "distribution_endpoint.$":"$.meta.distribution_endpoint",
-          "launchpad.$":"$.meta.launchpad",
-          "provider.$":"$.meta.provider",
-          "stack.$":"$.meta.stack",
-          "template.$":"$.meta.template",
-          "retries.$":"$.meta.retries",
-          "visibilityTimeout.$":"$.meta.visibilityTimeout"
+        "cumulus_meta.$": "$.cumulus_meta",
+        "meta": {
+          "buckets.$": "$.meta.buckets",
+          "cmr.$": "$.meta.cmr",
+          "collection.$": "$.meta.collection",
+          "provider.$": "$.meta.provider",
+          "stack.$": "$.meta.stack"
         },
         "payload":{
           "granules.$":"$.payload.granules",
@@ -416,7 +479,7 @@
             "States.ALL"
           ],
           "IntervalSeconds": 2,
-          "MaxAttempts": 1
+          "MaxAttempts": 3
         }
       ],
       "Next": "TransferImageSets"
@@ -425,7 +488,7 @@
       "Type": "Map",
       "InputPath": "$",
       "ItemsPath": "$.payload.pobit",
-      "MaxConcurrency": 3,
+      "MaxConcurrency": 20,
       "Iterator": {
         "StartAt": "SendToGITC",
         "States": {
@@ -484,7 +547,7 @@
             "States.ALL"
           ],
           "IntervalSeconds": 2,
-          "MaxAttempts": 1
+          "MaxAttempts": 3
         }
       ],
       "Next": "Save CMA Message"
@@ -515,6 +578,14 @@
           "IntervalSeconds": 2,
           "MaxAttempts": 6,
           "BackoffRate": 2
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.Unknown"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2
         }
       ],
       "Next": "WorkflowSucceeded"
