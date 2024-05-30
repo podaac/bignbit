@@ -5,7 +5,7 @@ from os.path import dirname, realpath
 
 import pytest
 
-from bignbit.apply_opera_treatment import the_opera_treatment
+from bignbit.apply_opera_hls_treatment import the_opera_hls_treatment
 
 
 @pytest.fixture()
@@ -15,10 +15,10 @@ def cnm_v151_schema():
     return cnm_schema
 
 
-def test_the_opera_treatment(tmp_path):
+def test_the_opera_hls_treatment(tmp_path):
     test_data_input = pathlib.Path(dirname(realpath(__file__))).joinpath('data').joinpath(
         'OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_BROWSE.tiff')
 
-    result = the_opera_treatment(test_data_input, tmp_path, 'T48SUE')
+    result = the_opera_hls_treatment(test_data_input, tmp_path, 'T48SUE')
 
     assert result

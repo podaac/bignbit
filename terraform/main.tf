@@ -19,7 +19,7 @@ data "template_file" "workflow_definition" {
     ConfigDir                     = var.config_dir,
     GetGranuleUmmJsonLambda       = aws_lambda_function.get_granule_umm_json.arn,
     IdentifyImageFileLambda       = aws_lambda_function.identify_image_file.arn,
-    ApplyOperaTreatmentLambda     = aws_lambda_function.apply_opera_treatment.arn,
+    ApplyOperaHLSTreatmentLambda  = aws_lambda_function.apply_opera_hls_treatment.arn,
     GetCollectionConceptIdLambda  = aws_lambda_function.get_collection_concept_id.arn,
     SubmitHarmonyJobLambda        = aws_lambda_function.submit_harmony_job.arn,
     GetHarmonyJobStatusLambda     = aws_lambda_function.get_harmony_job_status.arn,
