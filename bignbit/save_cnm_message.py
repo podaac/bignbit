@@ -40,7 +40,7 @@ class CNM(Process):
         print(granule_ur)
 
         cnm_content = self.config['cnm']
-        #cnm_content = self.input['cnm']
+
         print(cnm_content)
 
         print(cnm_content)
