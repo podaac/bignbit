@@ -432,7 +432,7 @@ resource "aws_lambda_function" "handle_gitc_response" {
   }
   function_name    = "${local.lambda_resources_name}-handle_gitc_response-lambda"
   role             = var.lambda_role.arn
-  timeout          = 5
+  timeout          = 15
   memory_size      = 128
 
   environment {
