@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 ### Deprecated 
 ### Removed
+- [issues/7](https://github.com/podaac/bignbit/issues/15): Remove the wait for GITC response
 ### Fixed
 ### Security
 
