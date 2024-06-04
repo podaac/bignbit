@@ -479,7 +479,7 @@
                 "BackoffRate": 2
               }
             ],
-            "End": "true"
+            "End": true
           }
         }
       },
