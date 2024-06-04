@@ -48,4 +48,4 @@ COPY --chown=dockeruser docker/docker-entrypoint.sh /home/dockeruser/.local/bin/
 RUN chmod 755 /home/dockeruser/.local/bin/aws-lambda-rie /home/dockeruser/.local/bin/docker-entrypoint.sh && \
     touch bignbit/__init__.py
 ENTRYPOINT [ "/home/dockeruser/.local/bin/docker-entrypoint.sh" ]
-CMD [ "bignbit.apply_opera_treatment.lambda_handler" ]
+CMD [ "bignbit.apply_opera_hls_treatment.lambda_handler" ]
