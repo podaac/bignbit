@@ -39,7 +39,8 @@ class CNM(Process):
         print(collection_name)
         print(granule_ur)
 
-        cnm_content = self.input['cma']['event']['cnm']
+        cnm_content = self.config['cnm']
+        #cnm_content = self.input['cnm']
         print(cnm_content)
 
         print(cnm_content)
