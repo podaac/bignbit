@@ -481,27 +481,27 @@
             ],
             "End": "true"
           }
-        },
-        "ResultPath": "$.payload.pobit",
-        "Catch": [
-          {
-            "ErrorEquals": [
-              "States.ALL"
-            ],
-            "ResultPath": "$.exception",
-            "Next": "WorkflowFailed"
-          }
-        ],
-        "Retry": [
-          {
-            "ErrorEquals": [
-              "States.ALL"
-            ],
-            "IntervalSeconds": 2,
-            "MaxAttempts": 1
-          }
-        ],
-      }
+        }
+      },
+      "ResultPath": "$.payload.pobit",
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "ResultPath": "$.exception",
+          "Next": "WorkflowFailed"
+        }
+      ],
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.ALL"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 1
+        }
+      ],
       "Next": "WorkflowSucceeded"
     },
     "WorkflowSucceeded": {
