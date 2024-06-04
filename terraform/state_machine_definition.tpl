@@ -448,40 +448,39 @@
             "Type": "Task",
             "Resource": "arn:aws:states:::lambda:invoke",
             "TimeoutSeconds": 86400,
-            "End": "true",
-            "ResultPath": "$.gitc_response"
+            "Next": "SaveCNMMessage"
           },
           "SaveCNMMessage": {
-          "Type": "Task",
-          "Resource": "${SaveCNMMessageLambda}",
-          "Parameters": {
-            "cma": {
-              "event.$": "$",
-              "task_config": {
-                "collection": "{$.collection_name}",
-                "granule_ur": "{$.granule_ur}",
-                "pobit_audit_bucket": "${PobitAuditBucket}",
-                "cumulus_message": {
-                  "input": "{$.gitc_response}"
+            "Type": "Task",
+            "Resource": "${SaveCNMMessageLambda}",
+            "Parameters": {
+              "cma": {
+                "event.$": "$",
+                "task_config": {
+                  "collection": "{$.collection_name}",
+                  "granule_ur": "{$.granule_ur}",
+                  "pobit_audit_bucket": "${PobitAuditBucket}",
+                  "cumulus_message": {
+                    "input": "{$}"
+                  }
                 }
               }
-            }
-          },
-          "Retry": [
-            {
-              "ErrorEquals": [
-                "Lambda.ServiceException",
-                "Lambda.AWSLambdaException",
-                "Lambda.SdkClientException",
-                "Lambda.TooManyRequestsException"
-                ],
-              "IntervalSeconds": 2,
-              "MaxAttempts": 6,
-              "BackoffRate": 2
-            }
-          ],
-          "Next": "WorkflowSucceeded"
-        }
+            },
+            "Retry": [
+              {
+                "ErrorEquals": [
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException",
+                  "Lambda.TooManyRequestsException"
+                  ],
+                "IntervalSeconds": 2,
+                "MaxAttempts": 6,
+                "BackoffRate": 2
+              }
+            ],
+            "End": "true"
+          }
         },
         "ResultPath": "$.payload.pobit",
         "Catch": [
@@ -502,10 +501,9 @@
             "MaxAttempts": 1
           }
         ],
-        "Next": "SaveCNMMessage"
       }
+      "Next": "WorkflowSucceeded"
     },
-    
     "WorkflowSucceeded": {
       "Type": "Succeed"
     },
