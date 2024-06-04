@@ -40,7 +40,7 @@ def handler(event, _):
         umm_json = utils.get_umm_json(granule_concept_id, cmr_env)
         granule_ur = umm_json['GranuleUR']
 
-        cnm_key_name = collection_name + "/" + granule_ur + "." + message_body['submission_time'] + "." + "cnm-r.json"
+        cnm_key_name = os.environ['POBIT_AUDIT_PATH_NAME'] + "/" + collection_name + "/" + granule_ur + "." + message_body['submissionTime'] + "." + "cnm-r.json"
 
         utils.upload_cnm(os.environ['POBIT_AUDIT_BUCKET_NAME'], cnm_key_name, json.dumps(message_body))
 

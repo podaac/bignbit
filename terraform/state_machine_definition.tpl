@@ -462,6 +462,7 @@
                   "granule_ur": "{$.granule_ur}",
                   "cnm": "{$.cnm.Payload.payload}",
                   "pobit_audit_bucket": "${PobitAuditBucket}",
+                  "pobit_audit_path": "${PobitAuditPath}",
                   "cumulus_message": {
                     "input": "{$}"
                   }
