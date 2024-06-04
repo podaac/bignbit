@@ -450,61 +450,62 @@
             "TimeoutSeconds": 86400,
             "End": "true",
             "ResultPath": "$.gitc_response"
-          }
-      },
-      "ResultPath": "$.payload.pobit",
-      "Catch": [
-        {
-          "ErrorEquals": [
-            "States.ALL"
-          ],
-          "ResultPath": "$.exception",
-          "Next": "WorkflowFailed"
-        }
-      ],
-      "Retry": [
-        {
-          "ErrorEquals": [
-            "States.ALL"
-          ],
-          "IntervalSeconds": 2,
-          "MaxAttempts": 1
-        }
-      ],
-      "Next": "SaveCNMMessage"
-    },
-    "SaveCNMMessage": {
-      "Type": "Task",
-      "Resource": "${SaveCNMMessageLambda}",
-      "Parameters": {
-        "cma": {
-          "event.$": "$",
-          "task_config": {
-            "collection": "{$.collection_name}",
-            "granule_ur": "{$.granule_ur}",
-            "pobit_audit_bucket": "${PobitAuditBucket}",
-            "cumulus_message": {
-              "input": "{$.gitc_response}"
+          },
+          "SaveCNMMessage": {
+          "Type": "Task",
+          "Resource": "${SaveCNMMessageLambda}",
+          "Parameters": {
+            "cma": {
+              "event.$": "$",
+              "task_config": {
+                "collection": "{$.collection_name}",
+                "granule_ur": "{$.granule_ur}",
+                "pobit_audit_bucket": "${PobitAuditBucket}",
+                "cumulus_message": {
+                  "input": "{$.gitc_response}"
+                }
+              }
             }
-          }
+          },
+          "Retry": [
+            {
+              "ErrorEquals": [
+                "Lambda.ServiceException",
+                "Lambda.AWSLambdaException",
+                "Lambda.SdkClientException",
+                "Lambda.TooManyRequestsException"
+                ],
+              "IntervalSeconds": 2,
+              "MaxAttempts": 6,
+              "BackoffRate": 2
+            }
+          ],
+          "Next": "WorkflowSucceeded"
         }
-      },
-      "Retry": [
-        {
-          "ErrorEquals": [
-            "Lambda.ServiceException",
-            "Lambda.AWSLambdaException",
-            "Lambda.SdkClientException",
-            "Lambda.TooManyRequestsException"
+        },
+        "ResultPath": "$.payload.pobit",
+        "Catch": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
             ],
-          "IntervalSeconds": 2,
-          "MaxAttempts": 6,
-          "BackoffRate": 2
-        }
-      ],
-      "Next": "WorkflowSucceeded"
+            "ResultPath": "$.exception",
+            "Next": "WorkflowFailed"
+          }
+        ],
+        "Retry": [
+          {
+            "ErrorEquals": [
+              "States.ALL"
+            ],
+            "IntervalSeconds": 2,
+            "MaxAttempts": 1
+          }
+        ],
+        "Next": "SaveCNMMessage"
       }
     },
+    
     "WorkflowSucceeded": {
       "Type": "Succeed"
     },
