@@ -31,7 +31,7 @@ class CNM(Process):
         """
         pobit_audit_bucket = self.config['pobit_audit_bucket']
         print(pobit_audit_bucket)
-        print(self.input.get('cnm_sent'))
+        print(self.input)
 
         collection_name = self.config['collection']
         granule_ur = self.config['granule_ur']
@@ -39,7 +39,7 @@ class CNM(Process):
         print(collection_name)
         print(granule_ur)
 
-        cnm_content = self.input
+        cnm_content = self.input['cnm']
         print(cnm_content)
 
         print(cnm_content)

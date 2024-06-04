@@ -448,6 +448,7 @@
             "Type": "Task",
             "Resource": "arn:aws:states:::lambda:invoke",
             "TimeoutSeconds": 86400,
+            "ResultPath": "$.cnm",
             "Next": "SaveCNMMessage"
           },
           "SaveCNMMessage": {
@@ -461,7 +462,7 @@
                   "granule_ur": "{$.granule_ur}",
                   "pobit_audit_bucket": "${PobitAuditBucket}",
                   "cumulus_message": {
-                    "input": "{$}"
+                    "input": "{$.payload}"
                   }
                 }
               }

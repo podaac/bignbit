@@ -51,13 +51,9 @@ class NotifyGitc(Process):
             image_set = ImageSet(**self.input['image_set'])
             gitc_id = image_set.name
 
-            response_payload = {}
-            response_payload = self.input.copy()
-
             cnm_message = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
-            response_payload['cnm_sent'] = cnm_message
 
-        return response_payload
+        return cnm_message
 
 
 def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str):
