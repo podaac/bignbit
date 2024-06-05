@@ -33,7 +33,7 @@ def handler(event, _):
     for message in event["Records"]:
         message_body = loads(message["body"])
         gitc_id = message_body["identifier"]
-        collection_name = message_body["shortname"]
+        collection_name = message_body["collection"]
         cmr_env = os.environ['CMR_ENVIRONMENT']
 
         granule_concept_id = gitc_id[-19:]

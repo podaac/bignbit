@@ -129,7 +129,6 @@ def construct_cnm(image_set: ImageSet, cmr_provider: str, gitc_id: str, collecti
         "version": "1.5.1",
         "duplicationid": image_set.name,
         "collection": new_collection,
-        "shortname": collection_name,
         "submissionTime": submission_time,
         "identifier": gitc_id,
         "product": product,

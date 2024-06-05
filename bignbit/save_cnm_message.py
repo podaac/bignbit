@@ -32,10 +32,10 @@ class CNM(Process):
         pobit_audit_bucket = self.config['pobit_audit_bucket']
         pobit_audit_path = self.config['pobit_audit_path']
 
-        collection_name = self.config['collection']
         granule_ur = self.config['granule_ur']
 
         cnm_content = self.config['cnm']
+        collection_name = cnm_content['collection']
 
         cnm_key_name = pobit_audit_path + "/" + collection_name + "/" + granule_ur + "." + cnm_content['submissionTime'] + "." + "cnm.json"
 
