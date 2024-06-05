@@ -406,8 +406,6 @@ resource "aws_lambda_function" "send_to_gitc" {
       REGION                      = var.region
       GIBS_REGION                 = var.gibs_region
       GIBS_SQS_URL                = "https://sqs.${var.gibs_region}.amazonaws.com/${var.gibs_account_id}/${var.gibs_queue_name}"
-      EDL_USER_SSM                = var.edl_user_ssm
-      EDL_PASS_SSM                = var.edl_pass_ssm
     }
   }
 
