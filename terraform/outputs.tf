@@ -74,8 +74,8 @@ output "pobit_send_to_gitc_arn" {
   value = aws_lambda_function.send_to_gitc.arn
 }
 
-output "pobit_save_cma_message_arn" {
-  value = aws_lambda_function.save_cma_message.arn
+output "pobit_save_cnm_message_arn" {
+  value = aws_lambda_function.save_cnm_message.arn
 }
 
 output "workflow_definition" {

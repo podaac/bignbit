@@ -11,7 +11,6 @@ from cumulus_process import Process
 
 from bignbit.image_set import ImageSet, to_cnm_product_dict
 
-REGION_NAME = 'us-west-2'
 CUMULUS_LOGGER = CumulusLogger('send_to_gitc')
 
 GIBS_REGION_ENV_NAME = "GIBS_REGION"
@@ -45,20 +44,19 @@ class NotifyGitc(Process):
             list of granules
         """
 
-        notification_id = ""
-        token = self.config.get('token')
-
         if self.input is not None:
             # Send ImageSet(s) to GITC for processing
             collection_name = self.input.get('collection_name')
             cmr_provider = self.input.get('cmr_provider')
             image_set = ImageSet(**self.input['image_set'])
-            notification_id = notify_gitc(image_set, cmr_provider, token, collection_name)
+            gitc_id = image_set.name
 
-        return notification_id
+            cnm_message = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
+
+        return cnm_message
 
 
-def notify_gitc(image_set: ImageSet, cmr_provider: str, token: str, collection_name: str):
+def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str):
     """
     Builds and sends a CNM message to GITC
 
@@ -68,8 +66,8 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, token: str, collection_n
       The image set to send
     cmr_provider: str
       The provider sent in the CNM message
-    token: str
-      The token identifying this particular request to GITC
+    gitc_id: str
+      The unique identifier for this particular request to GITC
     collection_name: str
       Collection that this image set belongs to
 
@@ -82,7 +80,7 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, token: str, collection_n
     queue_url = os.environ.get(GIBS_SQS_URL_ENV_NAME)
     CUMULUS_LOGGER.info(f'Sending SQS message to GITC for image {image_set.name}')
 
-    cnm = construct_cnm(image_set, cmr_provider, token, collection_name)
+    cnm = construct_cnm(image_set, cmr_provider, gitc_id, collection_name)
 
     cnm_json = json.dumps(cnm)
     sqs_message_params = {
@@ -99,10 +97,11 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, token: str, collection_n
     response = sqs.send_message(**sqs_message_params)
 
     CUMULUS_LOGGER.debug(f'SQS send_message output: {response}')
-    return cnm['identifier']
+
+    return cnm
 
 
-def construct_cnm(image_set: ImageSet, cmr_provider: str, token: str, collection_name: str):
+def construct_cnm(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str):
     """
     Construct the CNM message for GITC
 
@@ -112,8 +111,8 @@ def construct_cnm(image_set: ImageSet, cmr_provider: str, token: str, collection
         ImageSet for one image to be sent to gibs
     cmr_provider: str
       The provider sent in the CNM message
-    token: str
-      The token identifying this particular request to GITC
+    gitc_id: str
+      The unique identifier for this particular request to GITC
     collection_name: str
       Collection that this image set belongs to
 
@@ -131,7 +130,7 @@ def construct_cnm(image_set: ImageSet, cmr_provider: str, token: str, collection
         "duplicationid": image_set.name,
         "collection": new_collection,
         "submissionTime": submission_time,
-        "identifier": token,
+        "identifier": gitc_id,
         "product": product,
         'provider': cmr_provider
     }
