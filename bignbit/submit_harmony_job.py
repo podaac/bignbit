@@ -46,8 +46,15 @@ def create_harmony_job(config):
     variable = current_item.get('id')
     big_config = config.get('big_config')
 
+    files = granule.get('files')
+    bucket_name = None
+    for file in files:
+        if file.get('type') == 'data':
+            file_path = os.path.dirname(file.get('key'))
+            destination_bucket_url = f's3://{file.get('bucket')}/{file_path}'
+
     harmony_client = utils.get_harmony_client(cmr_env)
-    harmony_request = generate_harmony_request(collection_concept_id, granule_concept_id, variable, big_config)
+    harmony_request = generate_harmony_request(collection_concept_id, granule_concept_id, variable, big_config, destination_bucket_url)
 
     job = harmony_client.submit(harmony_request)
     harmony_job = {
@@ -60,7 +67,7 @@ def create_harmony_job(config):
     return harmony_job
 
 
-def generate_harmony_request(collection_concept_id, granule_concept_id, variable, big_config):
+def generate_harmony_request(collection_concept_id, granule_concept_id, variable, big_config, destination_bucket_url):
     """Generate the harmony request to be made and return request object"""
 
     request = Request(
@@ -70,7 +77,8 @@ def generate_harmony_request(collection_concept_id, granule_concept_id, variable
         spatial=BBox(-180, -90, 180, 90),
         width=big_config['config']['width'],
         height=big_config['config']['height'],
-        format="image/png"
+        format="image/png",
+        destination_url=destination_bucket_url
     )
     return request
 
