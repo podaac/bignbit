@@ -47,11 +47,12 @@ def create_harmony_job(config):
     big_config = config.get('big_config')
 
     files = granule.get('files')
-    bucket_name = None
+    destination_bucket_url = None
     for file in files:
         if file.get('type') == 'data':
             file_path = os.path.dirname(file.get('key'))
-            destination_bucket_url = f's3://{file.get('bucket')}/{file_path}'
+            bucket_name = file.get('bucket')
+            destination_bucket_url = f's3://{bucket_name}/{file_path}'
 
     harmony_client = utils.get_harmony_client(cmr_env)
     harmony_request = generate_harmony_request(collection_concept_id, granule_concept_id, variable, big_config, destination_bucket_url)
