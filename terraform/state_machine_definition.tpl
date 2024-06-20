@@ -320,7 +320,7 @@
               {
                 "Variable":"$.payload.harmony_job_status",
                 "StringMatches":"successful",
-                "Next":"JobSuccessful",
+                "Next":"Job Successful",
                 "Comment":"Job successful"
               },
               {
@@ -344,7 +344,7 @@
             ],
             "Default":"Wait 20 Seconds"
           },
-          "JobSuccessful":{
+          "Job Successful":{
             "Type":"Succeed"
           },
           "Fail":{

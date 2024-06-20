@@ -20,4 +20,5 @@ resource "aws_sfn_state_machine" "sfn_state_machine" {
   role_arn = aws_iam_role.step.arn
 
   definition = module.bignbit_module.workflow_definition
+  #tags = var.tags
 }
