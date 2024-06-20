@@ -62,8 +62,8 @@ output "copy_harmony_output_to_s3_arn"{
   value = aws_lambda_function.copy_harmony_output_to_s3.arn
 }
 
-output "apply_opera_treatment_arn"{
-  value = aws_lambda_function.apply_opera_treatment.arn
+output "apply_opera_hls_treatment_arn"{
+  value = aws_lambda_function.apply_opera_hls_treatment.arn
 }
 
 output "pobit_build_image_sets_arn" {
@@ -74,8 +74,8 @@ output "pobit_send_to_gitc_arn" {
   value = aws_lambda_function.send_to_gitc.arn
 }
 
-output "pobit_save_cma_message_arn" {
-  value = aws_lambda_function.save_cma_message.arn
+output "pobit_save_cnm_message_arn" {
+  value = aws_lambda_function.save_cnm_message.arn
 }
 
 output "workflow_definition" {

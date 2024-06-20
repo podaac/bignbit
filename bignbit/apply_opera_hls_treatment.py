@@ -16,7 +16,7 @@ from osgeo import gdal
 
 from bignbit import utils
 
-CUMULUS_LOGGER = CumulusLogger('apply_opera_treatment')
+CUMULUS_LOGGER = CumulusLogger('apply_opera_hls_treatment')
 
 
 def load_mgrs_gibs_intersection():
@@ -61,7 +61,7 @@ class CMA(Process):
 
 def transform_images(cma_file_list: List[Dict], temp_dir: pathlib.Path, mgrs_grid_code: str) -> List[Dict]:
     """
-    Applies special OPERA processing to each input image. Each input image will result in multiple output transformed
+    Applies special OPERA HLS processing to each input image. Each input image will result in multiple output transformed
     images.
 
     Parameters
@@ -91,8 +91,8 @@ def transform_images(cma_file_list: List[Dict], temp_dir: pathlib.Path, mgrs_gri
         # Reproject and resample image to sub-tiles
         transformed_images_dirpath = temp_dir.joinpath(source_image_local_filepath.stem)
         transformed_images_dirpath.mkdir(parents=True)
-        transformed_images_filepaths = the_opera_treatment(source_image_local_filepath, transformed_images_dirpath,
-                                                           mgrs_grid_code)
+        transformed_images_filepaths = the_opera_hls_treatment(source_image_local_filepath, transformed_images_dirpath,
+                                                               mgrs_grid_code)
         CUMULUS_LOGGER.info(f'Created new images: {[str(t) for t in transformed_images_filepaths]}')
 
         # Create new file metadata for each new image
@@ -138,8 +138,8 @@ def get_file(bucket: str, key: str, local_filepath: pathlib.Path) -> pathlib.Pat
     return local_filepath
 
 
-def the_opera_treatment(source_image_filepath: pathlib.Path, working_dirpath: pathlib.Path,
-                        mgrs_grid_code: str) -> List[pathlib.Path]:
+def the_opera_hls_treatment(source_image_filepath: pathlib.Path, working_dirpath: pathlib.Path,
+                            mgrs_grid_code: str) -> List[pathlib.Path]:
     """
     What is the OPERA treatment? Well, it is special.
 

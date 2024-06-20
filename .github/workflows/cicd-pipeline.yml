@@ -121,8 +121,14 @@ jobs:
           startsWith(github.ref, 'refs/heads/main') &&
           steps.manual.conclusion == 'skipped'
         id: release
+        env:
+          CURRENT_VERSION: ${{ steps.get-version.outputs.current_version }}
+        # Remove rc* from end of version string
+        # The ${string%%substring} syntax below deletes the longest match of $substring from back of $string.
         run: |
-          poetry version major
+          poetry version ${CURRENT_VERSION%%rc*}
+          echo "software_version=$(poetry version | awk '{print $2}')" >> $GITHUB_ENV
+          echo "venue=ops" >> $GITHUB_ENV
           echo "TARGET_ENV_UPPERCASE=OPS" >> $GITHUB_ENV
       - name: Get install version
         # Get the version of the software being installed and save it as an ENV var
@@ -272,6 +278,7 @@ jobs:
       THE_VERSION: ${{ needs.build.outputs.version }}
       CONTAINER_IMAGE_URI: ${{ needs.docker.outputs.container_image_uri }}
       TF_MODULE_ARTIFACT_NAME: ${{ needs.build.outputs.tf_module_artifact_name }}
+      TF_VAR_gibs_account_id: ${{ secrets.GIBS_ACCOUNT_ID }}
     if: |
       github.ref == 'refs/heads/develop' ||
       github.ref == 'refs/heads/main'    ||

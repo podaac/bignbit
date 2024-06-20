@@ -28,6 +28,14 @@
           "IntervalSeconds":2,
           "MaxAttempts":6,
           "BackoffRate":2
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.Unknown"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2
         }
       ],
       "Next":"Get Granule umm_json"
@@ -52,11 +60,21 @@
             "Lambda.ServiceException",
             "Lambda.AWSLambdaException",
             "Lambda.SdkClientException",
-            "Lambda.TooManyRequestsException"
+            "Lambda.TooManyRequestsException",
+            "ReadTimeout",
+            "HTTPError"
           ],
           "IntervalSeconds":2,
-          "MaxAttempts":6,
+          "MaxAttempts":16,
           "BackoffRate":2
+        },
+        {
+          "ErrorEquals": [
+             "Lambda.Unknown"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2
         }
       ],
       "Next":"Send to Harmony?"
@@ -105,33 +123,41 @@
           "IntervalSeconds":2,
           "MaxAttempts":6,
           "BackoffRate":2
-        }
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.Unknown"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2
+       }
       ],
-      "Next":"Apply OPERA Treatment?"
+      "Next":"Apply OPERA HLS Treatment?"
     },
-    "Apply OPERA Treatment?":{
+    "Apply OPERA HLS Treatment?":{
       "Type":"Choice",
       "Choices":[
         {
           "And":[
             {
-              "Variable":"$.payload.datasetConfigurationForBIG.config.operaTreatment",
+              "Variable":"$.payload.datasetConfigurationForBIG.config.operaHLSTreatment",
               "IsPresent":true
             },
             {
-              "Variable":"$.payload.datasetConfigurationForBIG.config.operaTreatment",
+              "Variable":"$.payload.datasetConfigurationForBIG.config.operaHLSTreatment",
               "BooleanEquals":true
             }
           ],
-          "Comment":"If operaTreatment is true",
-          "Next":"Apply OPERA Treatment"
+          "Comment":"If operaHLSTreatment is true",
+          "Next":"Apply OPERA HLS Treatment"
         }
       ],
       "Default":"Generate Image Metadata"
     },
-    "Apply OPERA Treatment":{
+    "Apply OPERA HLS Treatment":{
       "Type":"Task",
-      "Resource":"${ApplyOperaTreatmentLambda}",
+      "Resource":"${ApplyOperaHLSTreatmentLambda}",
       "Parameters":{
         "cma":{
           "event.$":"$",
@@ -153,6 +179,14 @@
           "IntervalSeconds":2,
           "MaxAttempts":6,
           "BackoffRate":2
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.Unknown"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2
         }
       ],
       "Next":"Generate Image Metadata"
@@ -179,11 +213,21 @@
             "Lambda.ServiceException",
             "Lambda.AWSLambdaException",
             "Lambda.SdkClientException",
-            "Lambda.TooManyRequestsException"
+            "Lambda.TooManyRequestsException",
+            "ReadTimeout",
+            "HTTPError"
           ],
           "IntervalSeconds":2,
           "MaxAttempts":6,
           "BackoffRate":2
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.Unknown"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2
         }
       ],
       "Next":"Convert Variables To PNG"
@@ -258,6 +302,14 @@
                 "IntervalSeconds":2,
                 "MaxAttempts":6,
                 "BackoffRate":2
+              },
+              {
+                "ErrorEquals": [
+                  "Lambda.Unknown"
+               ],
+                "BackoffRate": 2,
+                "IntervalSeconds": 2,
+                "MaxAttempts": 2
               }
             ],
             "Next":"Job Complete?"
@@ -292,8 +344,49 @@
             ],
             "Default":"Wait 20 Seconds"
           },
+<<<<<<< HEAD
           "Job Successful":{
             "Type":"Succeed"
+=======
+          "Copy Harmony Results to S3":{
+            "Type":"Task",
+            "Resource":"${CopyHarmonyOutputToS3Lambda}",
+            "Parameters":{
+              "cma":{
+                "event.$":"$",
+                "task_config":{
+                  "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
+                  "harmony_job":"{$.payload.harmony_job.job}",
+                  "current_item":"{$.current_item}",
+                  "cumulus_message":{
+                    "input":"{$.payload}"
+                  }
+                }
+              }
+            },
+            "Retry":[
+              {
+                "ErrorEquals":[
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException",
+                  "Lambda.TooManyRequestsException"
+                ],
+                "IntervalSeconds":2,
+                "MaxAttempts":6,
+                "BackoffRate":2
+              },
+              {
+                "ErrorEquals": [
+                  "Lambda.Unknown"
+                ],
+                "BackoffRate": 2,
+                "IntervalSeconds": 2,
+                "MaxAttempts": 2
+              }
+            ],
+            "End":true
+>>>>>>> develop
           },
           "Fail":{
             "Type":"Fail"
@@ -328,6 +421,14 @@
           "IntervalSeconds":2,
           "MaxAttempts":6,
           "BackoffRate":2
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.Unknown"
+          ],
+          "BackoffRate": 2,
+          "IntervalSeconds": 2,
+          "MaxAttempts": 2
         }
       ],
       "Next":"Clean Output"
@@ -336,18 +437,13 @@
       "Type":"Pass",
       "Next":"BuildImageSets",
       "Parameters":{
-        "cumulus_meta.$":"$.cumulus_meta",
-        "meta":{
-          "buckets.$":"$.meta.buckets",
-          "cmr.$":"$.meta.cmr",
-          "collection.$":"$.meta.collection",
-          "distribution_endpoint.$":"$.meta.distribution_endpoint",
-          "launchpad.$":"$.meta.launchpad",
-          "provider.$":"$.meta.provider",
-          "stack.$":"$.meta.stack",
-          "template.$":"$.meta.template",
-          "retries.$":"$.meta.retries",
-          "visibilityTimeout.$":"$.meta.visibilityTimeout"
+        "cumulus_meta.$": "$.cumulus_meta",
+        "meta": {
+          "buckets.$": "$.meta.buckets",
+          "cmr.$": "$.meta.cmr",
+          "collection.$": "$.meta.collection",
+          "provider.$": "$.meta.provider",
+          "stack.$": "$.meta.stack"
         },
         "payload":{
           "granules.$":"$.payload.granules",
@@ -388,7 +484,7 @@
             "States.ALL"
           ],
           "IntervalSeconds": 2,
-          "MaxAttempts": 1
+          "MaxAttempts": 3
         }
       ],
       "Next": "TransferImageSets"
@@ -397,7 +493,7 @@
       "Type": "Map",
       "InputPath": "$",
       "ItemsPath": "$.payload.pobit",
-      "MaxConcurrency": 3,
+      "MaxConcurrency": 20,
       "Iterator": {
         "StartAt": "SendToGITC",
         "States": {
@@ -410,7 +506,6 @@
                   "task_config": {
                     "collection": "{$.collection}",
                     "cmr_provider": "{$.cmr_provider}",
-                    "token.$": "$$.Task.Token",
                     "cumulus_message": {
                       "input": "{$}"
                     }
@@ -419,24 +514,43 @@
               }
             },
             "Type": "Task",
-            "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+            "Resource": "arn:aws:states:::lambda:invoke",
             "TimeoutSeconds": 86400,
-            "End": true,
-            "ResultPath": "$.gitc_response",
-            "Catch": [
+            "ResultPath": "$.cnm",
+            "Next": "SaveCNMMessage"
+          },
+          "SaveCNMMessage": {
+            "Type": "Task",
+            "Resource": "${SaveCNMMessageLambda}",
+            "Parameters": {
+              "cma": {
+                "event.$": "$",
+                "task_config": {
+                  "collection": "{$.collection_name}",
+                  "granule_ur": "{$.granule_ur}",
+                  "cnm": "{$.cnm.Payload.payload}",
+                  "pobit_audit_bucket": "${PobitAuditBucket}",
+                  "pobit_audit_path": "${PobitAuditPath}",
+                  "cumulus_message": {
+                    "input": "{$}"
+                  }
+                }
+              }
+            },
+            "Retry": [
               {
                 "ErrorEquals": [
-                  "States.Timeout"
-                ],
-                "ResultPath": "$.gitc_response",
-                "Next": "GITC Timeout"
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException",
+                  "Lambda.TooManyRequestsException"
+                  ],
+                "IntervalSeconds": 2,
+                "MaxAttempts": 6,
+                "BackoffRate": 2
               }
-            ]
-          },
-          "GITC Timeout": {
-            "Type": "Pass",
-            "End": true,
-            "Comment": "No response was received from GITC within the configured timeout"
+            ],
+            "End": true
           }
         }
       },
@@ -456,37 +570,7 @@
             "States.ALL"
           ],
           "IntervalSeconds": 2,
-          "MaxAttempts": 1
-        }
-      ],
-      "Next": "Save CMA Message"
-    },
-    "Save CMA Message": {
-      "Type": "Task",
-      "Resource": "${SaveCMAMessageLambda}",
-      "Parameters": {
-        "cma": {
-          "event.$": "$",
-          "task_config": {
-            "pobit_audit_bucket": "${PobitAuditBucket}",
-            "cma_key_name.$": "States.Format('${PobitAuditPath}/{}/{}.{}.cma.json', $.meta.collection.name, $.payload.granules[0].granuleId, $$.State.EnteredTime)",
-            "cumulus_message": {
-              "input": "{$.payload}"
-            }
-          }
-        }
-      },
-      "Retry": [
-        {
-          "ErrorEquals": [
-            "Lambda.ServiceException",
-            "Lambda.AWSLambdaException",
-            "Lambda.SdkClientException",
-            "Lambda.TooManyRequestsException"
-          ],
-          "IntervalSeconds": 2,
-          "MaxAttempts": 6,
-          "BackoffRate": 2
+          "MaxAttempts": 3
         }
       ],
       "Next": "WorkflowSucceeded"
