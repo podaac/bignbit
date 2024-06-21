@@ -23,17 +23,9 @@ variable "app_name" {
 
 variable "default_tags" {
   type = map(string)
-  #default = {
-  #  bignbit-version = "2.0.1"
-  #}
+  default = {}
 }
-#variable "tags" {
-#  type    = map(string)
-#  default = {
-#    Name        = "StateMachine"
-#    Environment = "SIT"
-#  }
-#}
+
 variable "stage" {}
 variable "app_version" {}
 
