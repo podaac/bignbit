@@ -344,49 +344,8 @@
             ],
             "Default":"Wait 20 Seconds"
           },
-<<<<<<< HEAD
           "Job Successful":{
             "Type":"Succeed"
-=======
-          "Copy Harmony Results to S3":{
-            "Type":"Task",
-            "Resource":"${CopyHarmonyOutputToS3Lambda}",
-            "Parameters":{
-              "cma":{
-                "event.$":"$",
-                "task_config":{
-                  "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
-                  "harmony_job":"{$.payload.harmony_job.job}",
-                  "current_item":"{$.current_item}",
-                  "cumulus_message":{
-                    "input":"{$.payload}"
-                  }
-                }
-              }
-            },
-            "Retry":[
-              {
-                "ErrorEquals":[
-                  "Lambda.ServiceException",
-                  "Lambda.AWSLambdaException",
-                  "Lambda.SdkClientException",
-                  "Lambda.TooManyRequestsException"
-                ],
-                "IntervalSeconds":2,
-                "MaxAttempts":6,
-                "BackoffRate":2
-              },
-              {
-                "ErrorEquals": [
-                  "Lambda.Unknown"
-                ],
-                "BackoffRate": 2,
-                "IntervalSeconds": 2,
-                "MaxAttempts": 2
-              }
-            ],
-            "End":true
->>>>>>> develop
           },
           "Fail":{
             "Type":"Fail"
