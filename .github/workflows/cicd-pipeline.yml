@@ -283,6 +283,7 @@ jobs:
       github.ref == 'refs/heads/develop' ||
       github.ref == 'refs/heads/main'    ||
       startsWith(github.ref, 'refs/heads/release') ||
+      startsWith(github.ref, 'refs/heads/feature') ||
       github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4
