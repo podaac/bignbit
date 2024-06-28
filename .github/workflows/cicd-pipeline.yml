@@ -315,4 +315,4 @@ jobs:
         env:
           AWS_DEFAULT_REGION: us-west-2
         run: |
-          ./bin/deploy.sh --app-version ${{ env.THE_VERSION }} --tf-venue ${{ vars.TF_VENUE }} --lambda_container_image_uri ${{ env.CONTAINER_IMAGE_URI }}
+          ./bin/deploy.sh --app-version ${{ env.THE_VERSION }} --tf-venue uat --lambda_container_image_uri ${{ env.CONTAINER_IMAGE_URI }}
