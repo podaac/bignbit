@@ -5,7 +5,7 @@ bignbit is a Cumulus module that can be installed as a post-ingest workflow to g
 See an example of how to use this cumulus module in [browse_image_workflow.tf](/examples/cumulus-tf/browse_image_workflow.tf).
 
 _Visual representation of the bignbit step function state machine:_  
-![image](https://github.com/podaac/bignbit/assets/89428916/8ce1556f-821a-41a6-9d7a-fbd7161a23fd)
+![image](https://github.com/podaac/bignbit/assets/89428916/4db5ae4b-ca74-4bee-bee7-2d7d1a342bd7)
 
 # Assumptions
  - Using `ContentBasedDeduplication` strategy for GITC input queue
