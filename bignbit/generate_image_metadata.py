@@ -284,6 +284,19 @@ def extract_granule_dates(granule_umm_json: dict) -> (str, str, str, str):
 
 
 def parse_datetime(datetime_str: str) -> datetime:
+    """
+    Parses a datetime string into a datetime object.
+
+    Parameters
+    ----------
+    datetime_str
+      Datetime in str format to parse
+
+    Returns
+    -------
+    datetime
+      a datetime object
+    """
     try:
         return datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S.%fZ")
     except ValueError:
