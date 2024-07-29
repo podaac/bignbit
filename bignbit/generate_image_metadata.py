@@ -268,8 +268,8 @@ def extract_granule_dates(granule_umm_json: dict) -> (str, str, str, str):
     """
     time_range_dict = granule_umm_json['TemporalExtent']['RangeDateTime']
 
-    beginning_time_dt = datetime.strptime(time_range_dict["BeginningDateTime"], "%Y-%m-%dT%H:%M:%S.%fZ")
-    ending_time_dt = datetime.strptime(time_range_dict["EndingDateTime"], "%Y-%m-%dT%H:%M:%S.%fZ")
+    beginning_time_dt = parse_datetime(time_range_dict["BeginningDateTime"])
+    ending_time_dt = parse_datetime(time_range_dict["EndingDateTime"])
     middle_time_dt = beginning_time_dt + (ending_time_dt - beginning_time_dt) / 2
 
     begin = beginning_time_dt.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
@@ -281,6 +281,13 @@ def extract_granule_dates(granule_umm_json: dict) -> (str, str, str, str):
     dataday = middle_year + day_of_year
 
     return begin, mid, end, dataday
+
+
+def parse_datetime(datetime_str: str) -> datetime:
+    try:
+        return datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+    except ValueError:
+        return datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%SZ")
 
 
 def create_metadata_xml(beginning_time: str, middle_time: str, ending_time: str, dataday: str,
