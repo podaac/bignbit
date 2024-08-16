@@ -18,3 +18,4 @@ _Visual representation of the bignbit step function state machine:_
 3. Activate the bignbit conda environment `conda activate bignbit`
 4. Install python package and dependencies `poetry install`
 5. Verify tests pass `poetry run pytest tests/`
+...
