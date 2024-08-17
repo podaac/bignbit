@@ -283,7 +283,6 @@ jobs:
       github.ref == 'refs/heads/develop' ||
       github.ref == 'refs/heads/main'    ||
       startsWith(github.ref, 'refs/heads/release') ||
-      startsWith(github.ref, 'refs/heads/feature') ||
       github.event_name == 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4
@@ -315,4 +314,4 @@ jobs:
         env:
           AWS_DEFAULT_REGION: us-west-2
         run: |
-          ./bin/deploy.sh --app-version ${{ env.THE_VERSION }} --tf-venue uat --lambda_container_image_uri ${{ env.CONTAINER_IMAGE_URI }}
+          ./bin/deploy.sh --app-version ${{ env.THE_VERSION }} --tf-venue ${{ vars.TF_VENUE }} --lambda_container_image_uri ${{ env.CONTAINER_IMAGE_URI }}
