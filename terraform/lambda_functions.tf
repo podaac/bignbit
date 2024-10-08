@@ -48,14 +48,13 @@ resource null_resource upload_ecr_image {
 # This doesn't work in terraform 0.13.x because it tries to resolve the image during the plan phase instead of the
 # apply phase. Once IA updates to a newer terraform version, this can be used instead of having every lambda
 # function depend on the null_resource.upload_ecr_image resource.
-#data aws_ecr_image lambda_image {
-#  depends_on = [
-#    null_resource.upload_ecr_image
-#  ]
-#  repository_name = aws_ecr_repository.lambda-image-repo.name
-#  image_tag       = local.ecr_image_tag
-#
-#}
+data "aws_ecr_image" "lambda_image" {
+  depends_on = [
+    null_resource.upload_ecr_image
+  ]
+  repository_name = aws_ecr_repository.lambda-image-repo.name
+  image_tag       = local.ecr_image_tag
+}
 
 resource "aws_lambda_function" "get_dataset_configuration" {
   depends_on = [

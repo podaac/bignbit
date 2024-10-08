@@ -320,7 +320,7 @@
               {
                 "Variable":"$.payload.harmony_job_status",
                 "StringMatches":"successful",
-                "Next":"Copy Harmony Results to S3",
+                "Next":"Copy Harmony Output to S3",
                 "Comment":"Job successful"
               },
               {
@@ -344,7 +344,7 @@
             ],
             "Default":"Wait 20 Seconds"
           },
-          "Copy Harmony Results to S3":{
+          "Copy Harmony Output to S3":{
             "Type":"Task",
             "Resource":"${CopyHarmonyOutputToS3Lambda}",
             "Parameters":{
