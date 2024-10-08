@@ -150,6 +150,7 @@ jobs:
       - name: Validate Terraform
         working-directory: terraform
         run: |
+          terraform --version
           terraform init -backend=false -upgrade
           terraform validate -no-color
       - name: SonarCloud Scan
@@ -299,6 +300,7 @@ jobs:
       - name: Validate Terraform
         working-directory: examples/cumulus-tf
         run: |
+          terraform --version
           terraform init -backend=false -upgrade
           terraform validate -no-color
 

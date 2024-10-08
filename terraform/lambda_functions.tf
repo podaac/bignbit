@@ -292,7 +292,7 @@ resource "aws_lambda_function" "copy_harmony_output_to_s3" {
   image_config {
     command = ["bignbit.copy_harmony_output_to_s3.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-copy_harmony_output_to_s3-lambda"
+  function_name = "${local.lambda_resources_name}-copy_harmony_output_to_s3"
   role          = var.lambda_role.arn
   timeout       = 30
   memory_size   = 256
@@ -325,7 +325,7 @@ resource "aws_lambda_function" "apply_opera_treatment" {
   image_config {
     command = ["bignbit.apply_opera_treatment.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-apply_opera_treatment-lambda"
+  function_name = "${local.lambda_resources_name}-apply_opera_treatment"
   role          = var.lambda_role.arn
   timeout       = 30
   memory_size   = 512

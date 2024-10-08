@@ -9,7 +9,7 @@ from cumulus_process import Process, s3
 
 from bignbit import utils
 
-CUMULUS_LOGGER = CumulusLogger('copy_harmony_output_to_s3')
+CUMULUS_LOGGER = CumulusLogger('harmony_output_to_s3')
 
 
 class CMA(Process):
