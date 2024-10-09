@@ -5,9 +5,9 @@ locals {
   ecr_image_name_and_tag           = split(":", element(local.lambda_container_image_uri_split, length(local.lambda_container_image_uri_split) - 1))
   ecr_image_name                   = "${local.environment}-${element(local.ecr_image_name_and_tag, 0)}"
   ecr_image_tag                    = element(local.ecr_image_name_and_tag, 1)
-  build_image_sets_function_name = "${local.lambda_resources_name}-build_image_sets-lambda"
-  send_to_gitc_function_name = "${local.lambda_resources_name}-send_to_gitc-lambda"
-  handle_gitc_response_function_name = "${local.lambda_resources_name}-handle_gitc_response-lambda"
+  build_image_sets_function_name = "${local.lambda_resources_name}-build_image_sets"
+  send_to_gitc_function_name = "${local.lambda_resources_name}-send_to_gitc"
+  handle_gitc_response_function_name = "${local.lambda_resources_name}-handle_gitc_response"
 }
 
 resource aws_ecr_repository "lambda-image-repo" {
@@ -48,13 +48,14 @@ resource null_resource upload_ecr_image {
 # This doesn't work in terraform 0.13.x because it tries to resolve the image during the plan phase instead of the
 # apply phase. Once IA updates to a newer terraform version, this can be used instead of having every lambda
 # function depend on the null_resource.upload_ecr_image resource.
-data "aws_ecr_image" "lambda_image" {
-  depends_on = [
-    null_resource.upload_ecr_image
-  ]
-  repository_name = aws_ecr_repository.lambda-image-repo.name
-  image_tag       = local.ecr_image_tag
-}
+#data aws_ecr_image lambda_image {
+#  depends_on = [
+#    null_resource.upload_ecr_image
+#  ]
+#  repository_name = aws_ecr_repository.lambda-image-repo.name
+#  image_tag       = local.ecr_image_tag
+#
+#}
 
 resource "aws_lambda_function" "get_dataset_configuration" {
   depends_on = [
@@ -66,7 +67,7 @@ resource "aws_lambda_function" "get_dataset_configuration" {
   image_config {
     command = ["bignbit.get_dataset_configuration.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-get_dataset_configuration-lambda"
+  function_name = "${local.lambda_resources_name}-get_dataset_configuration"
   role          = var.lambda_role.arn
   timeout       = 30
   memory_size   = 256
@@ -97,7 +98,7 @@ resource "aws_lambda_function" "get_granule_umm_json" {
   image_config {
     command = ["bignbit.get_granule_umm_json.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-get_granule_umm_json-lambda"
+  function_name = "${local.lambda_resources_name}-get_granule_umm_json"
   role          = var.lambda_role.arn
   timeout       = 30
   memory_size   = 256
@@ -130,7 +131,7 @@ resource "aws_lambda_function" "get_collection_concept_id" {
   image_config {
     command = ["bignbit.get_collection_concept_id.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-get_collection_concept_id-lambda"
+  function_name = "${local.lambda_resources_name}-get_collection_concept_id"
   role          = var.lambda_role.arn
   timeout       = 30
   memory_size   = 256
@@ -163,7 +164,7 @@ resource "aws_lambda_function" "identify_image_file" {
   image_config {
     command = ["bignbit.identify_image_file.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-identify_image_file-lambda"
+  function_name = "${local.lambda_resources_name}-identify_image_file"
   role          = var.lambda_role.arn
   timeout       = 30
   memory_size   = 256
@@ -194,7 +195,7 @@ resource "aws_lambda_function" "submit_harmony_job" {
   image_config {
     command = ["bignbit.submit_harmony_job.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-submit_harmony_job-lambda"
+  function_name = "${local.lambda_resources_name}-submit_harmony_job"
   role          = var.lambda_role.arn
   timeout       = 30
   memory_size   = 256
@@ -227,7 +228,7 @@ resource "aws_lambda_function" "generate_image_metadata" {
   image_config {
     command = ["bignbit.generate_image_metadata.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-generate_image_metadata-lambda"
+  function_name = "${local.lambda_resources_name}-generate_image_metadata"
   role          = var.lambda_role.arn
   timeout       = 30
   memory_size   = 256
@@ -258,7 +259,7 @@ resource "aws_lambda_function" "get_harmony_job_status" {
   image_config {
     command = ["bignbit.get_harmony_job_status.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-get_harmony_job_status-lambda"
+  function_name = "${local.lambda_resources_name}-get_harmony_job_status"
   role          = var.lambda_role.arn
   timeout       = 30
   memory_size   = 256
@@ -393,7 +394,7 @@ resource "aws_lambda_function" "send_to_gitc" {
   image_config {
     command = ["bignbit.send_to_gitc.lambda_handler"]
   }
-  function_name    = "${local.lambda_resources_name}-send_to_gitc-lambda"
+  function_name    = "${local.lambda_resources_name}-send_to_gitc"
   role             = var.lambda_role.arn
   timeout          = 15
   memory_size      = 128
@@ -427,7 +428,7 @@ resource "aws_lambda_function" "handle_gitc_response" {
   image_config {
     command = ["bignbit.handle_gitc_response.handler"]
   }
-  function_name    = "${local.lambda_resources_name}-handle_gitc_response-lambda"
+  function_name    = "${local.lambda_resources_name}-handle_gitc_response"
   role             = var.lambda_role.arn
   timeout          = 5
   memory_size      = 128
@@ -458,7 +459,7 @@ resource "aws_lambda_function" "save_cma_message" {
   image_config {
     command = ["bignbit.save_cma_message.lambda_handler"]
   }
-  function_name    = "${local.lambda_resources_name}-save_cma_message-lambda"
+  function_name    = "${local.lambda_resources_name}-save_cma_message"
   role             = var.lambda_role.arn
   timeout          = 15
   memory_size      = 128
