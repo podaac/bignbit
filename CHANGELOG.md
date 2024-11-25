@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.2]
 ### Added
 ### Changed
-- BIG terraform failing in SWOT venues due to long function(lambda) names
+- BIG terraform failing in SWOT venues due to long function(lambda) names 
 ### Deprecated
 ### Removed
 ### Fixed
