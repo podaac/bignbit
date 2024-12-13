@@ -1,48 +1,24 @@
 {
   "meta": {
     "buckets": {
-      "documentation": {
-        "name": "podaac-uat-cumulus-docs",
-        "type": "public"
-      },
-      "ecco-staging": {
-        "name": "podaac-ecco-v4r4",
-        "type": "internal"
-      },
-      "glacier": {
-        "name": "podaac-uat-cumulus-glacier",
-        "type": "orca"
-      },
       "internal": {
-        "name": "svc-uat-big-internal",
-        "type": "internal"
-      },
-      "opera-dev-rs-fwd": {
-        "name": "opera-dev-rs-fwd*",
-        "type": "internal"
-      },
-      "opera-int-rs-fwd": {
-        "name": "opera-int-rs-fwd*",
-        "type": "internal"
-      },
-      "podaac-dev": {
-        "name": "podaac-dev-*",
+        "name": "podaac-uat-svc-internal",
         "type": "internal"
       },
       "private": {
-        "name": "svc-uat-big-private",
+        "name": "podaac-uat-svc-private",
         "type": "private"
       },
       "protected": {
-        "name": "svc-uat-big-protected",
+        "name": "podaac-uat-svc-protected",
         "type": "protected"
       },
       "public": {
-        "name": "svc-uat-big-public",
+        "name": "podaac-uat-svc-public",
         "type": "public"
       },
       "staging": {
-        "name": "svc-uat-big-staging",
+        "name": "podaac-uat-svc-staging",
         "type": "internal"
       }
     },
@@ -55,191 +31,8 @@
       "username": "podaaccumulus"
     },
     "collection": {
-      "createdAt": 1675991668650,
-      "updatedAt": 1676017294040,
       "name": "OPERA_L3_DSWX-HLS_V1.0",
-      "version": "1.0",
-      "url_path": "{cmrMetadata.CollectionReference.ShortName}",
-      "duplicateHandling": "replace",
-      "granuleId": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*$",
-      "granuleIdExtraction": "^(OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*)((_.*_.*\\.tif)|(.*\\.md5)|(\\.context\\.json)|(\\.dataset\\.json)|(\\.cmr\\.json)|(\\.log)|(\\.catalog\\.json)|(\\.iso\\.xml)|(\\.png)|(BROWSE\\.tif)|(\\.met\\.json)|(\\.rc\\.yaml))?$",
-      "files": [
-        {
-          "type": "data",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*_.*_.*\\.tif$",
-          "bucket": "protected",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0__.tif"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.context\\.json$",
-          "bucket": "public",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.context.json"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.dataset\\.json$",
-          "bucket": "public",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.dataset.json"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.cmr\\.json$",
-          "bucket": "private",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.cmr.json"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.log$",
-          "bucket": "private",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.log"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.catalog\\.json$",
-          "bucket": "private",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.catalog.json"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.iso\\.xml$",
-          "bucket": "public",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.iso.xml"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.png$",
-          "bucket": "protected",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.png"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*BROWSE\\.tif$",
-          "bucket": "private",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0BROWSE.tif"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.met\\.json$",
-          "bucket": "public",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.met.json"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.rc\\.yaml$",
-          "bucket": "public",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.rc.yaml"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*_.*_.*\\.tif\\.md5$",
-          "bucket": "public",
-          "checksumFor": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*_.*_.*\\.tif$",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0__.tif.md5"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.context\\.json\\.md5$",
-          "bucket": "public",
-          "checksumFor": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.context\\.json$",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.context.json.md5"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.dataset\\.json\\.md5$",
-          "bucket": "public",
-          "checksumFor": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.dataset\\.json$",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.dataset.json.md5"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.log\\.md5$",
-          "bucket": "public",
-          "checksumFor": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.log$",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.log.md5"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.catalog\\.json\\.md5$",
-          "bucket": "public",
-          "checksumFor": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.catalog\\.json$",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.catalog.json.md5"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.iso\\.xml\\.md5$",
-          "bucket": "public",
-          "checksumFor": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.iso\\.xml$",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.iso.xml.md5"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.png\\.md5$",
-          "bucket": "public",
-          "checksumFor": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.png$",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.png.md5"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*BROWSE\\.tif\\.md5$",
-          "bucket": "public",
-          "checksumFor": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*BROWSE\\.tif$",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0BROWSE.tif.md5"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.met\\.json\\.md5$",
-          "bucket": "public",
-          "checksumFor": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.met\\.json$",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.met.json.md5"
-        },
-        {
-          "type": "metadata",
-          "regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.rc\\.yaml\\.md5$",
-          "bucket": "public",
-          "checksumFor": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.rc\\.yaml$",
-          "reportToEms": true,
-          "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0.rc.yaml.md5"
-        }
-      ],
-      "reportToEms": true,
-      "sampleFileName": "OPERA_L3_DSWx-HLS_LANDSAT-8_T22VEQ_20210905T143156_v1.0__.tif",
-      "meta": {
-        "iso-regex": "^OPERA_L3_DSWx-HLS_.*v([0-9]*)\\.([0-9]*).*\\.iso\\.xml$",
-        "glacier-bucket": "podaac-uat-cumulus-glacier",
-        "workflowChoice": {
-          "dmrpp": false,
-          "glacier": false,
-          "compressed": false,
-          "convertNetCDF": false,
-          "readDataFileForMetadata": false
-        },
-        "response-endpoint": [
-          "arn:aws:sns:us-west-2:123456789012:podaac-uat-cumulus-provider-response-sns"
-        ],
-        "granuleRecoveryWorkflow": "OrcaRecoveryWorkflow",
-        "granuleMetadataFileExtension": "cmr.json"
-      }
+      "version": "1.0"
     }
   },
   "payload": {
@@ -251,7 +44,7 @@
         "sync_granule_duration": 2055,
         "files": [
           {
-            "bucket": "podaac-uat-cumulus-protected",
+            "bucket": "podaac-uat-svc-protected",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B01_WTR.tif",
             "size": 247009,
             "checksumType": "md5",
@@ -261,7 +54,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B01_WTR.tif"
           },
           {
-            "bucket": "podaac-uat-cumulus-protected",
+            "bucket": "podaac-uat-svc-protected",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B02_BWTR.tif",
             "size": 244564,
             "checksumType": "md5",
@@ -271,7 +64,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B02_BWTR.tif"
           },
           {
-            "bucket": "podaac-uat-cumulus-protected",
+            "bucket": "podaac-uat-svc-protected",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B03_CONF.tif",
             "size": 252298,
             "checksumType": "md5",
@@ -281,7 +74,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B03_CONF.tif"
           },
           {
-            "bucket": "podaac-uat-cumulus-protected",
+            "bucket": "podaac-uat-svc-protected",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B04_DIAG.tif",
             "size": 2039842,
             "checksumType": "md5",
@@ -291,7 +84,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B04_DIAG.tif"
           },
           {
-            "bucket": "podaac-uat-cumulus-protected",
+            "bucket": "podaac-uat-svc-protected",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B05_WTR-1.tif",
             "size": 1168161,
             "checksumType": "md5",
@@ -301,7 +94,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B05_WTR-1.tif"
           },
           {
-            "bucket": "podaac-uat-cumulus-protected",
+            "bucket": "podaac-uat-svc-protected",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B06_WTR-2.tif",
             "size": 983771,
             "checksumType": "md5",
@@ -311,7 +104,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B06_WTR-2.tif"
           },
           {
-            "bucket": "podaac-uat-cumulus-protected",
+            "bucket": "podaac-uat-svc-protected",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B07_LAND.tif",
             "size": 752053,
             "checksumType": "md5",
@@ -321,7 +114,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B07_LAND.tif"
           },
           {
-            "bucket": "podaac-uat-cumulus-protected",
+            "bucket": "podaac-uat-svc-protected",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B08_SHAD.tif",
             "size": 1373226,
             "checksumType": "md5",
@@ -331,7 +124,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B08_SHAD.tif"
           },
           {
-            "bucket": "podaac-uat-cumulus-protected",
+            "bucket": "podaac-uat-svc-protected",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B09_CLOUD.tif",
             "size": 456847,
             "checksumType": "md5",
@@ -341,7 +134,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B09_CLOUD.tif"
           },
           {
-            "bucket": "podaac-uat-cumulus-protected",
+            "bucket": "podaac-uat-svc-protected",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B10_DEM.tif",
             "size": 34081413,
             "checksumType": "md5",
@@ -351,7 +144,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B10_DEM.tif"
           },
           {
-            "bucket": "svc-uat-big-private",
+            "bucket": "podaac-uat-svc-protected",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_BROWSE.tif",
             "size": 246919,
             "checksumType": "md5",
@@ -361,7 +154,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_BROWSE.tif"
           },
           {
-            "bucket": "podaac-uat-cumulus-protected",
+            "bucket": "podaac-uat-svc-protected",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_BROWSE.png",
             "size": 30588,
             "checksumType": "md5",
@@ -371,7 +164,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_BROWSE.png"
           },
           {
-            "bucket": "podaac-uat-cumulus-private",
+            "bucket": "podaac-uat-svc-private",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0.log",
             "size": 38455,
             "checksumType": "md5",
@@ -381,7 +174,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0.log"
           },
           {
-            "bucket": "podaac-uat-cumulus-private",
+            "bucket": "podaac-uat-svc-private",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0.catalog.json",
             "size": 2585,
             "checksumType": "md5",
@@ -391,7 +184,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0.catalog.json"
           },
           {
-            "bucket": "podaac-uat-cumulus-public",
+            "bucket": "podaac-uat-svc-public",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0.iso.xml",
             "size": 77014,
             "checksumType": "md5",
@@ -401,7 +194,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0.iso.xml"
           },
           {
-            "bucket": "podaac-uat-cumulus-public",
+            "bucket": "podaac-uat-svc-public",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B01_WTR.tif.md5",
             "size": 32,
             "checksumType": "md5",
@@ -411,7 +204,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B01_WTR.tif.md5"
           },
           {
-            "bucket": "podaac-uat-cumulus-public",
+            "bucket": "podaac-uat-svc-public",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B02_BWTR.tif.md5",
             "size": 32,
             "checksumType": "md5",
@@ -421,7 +214,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B02_BWTR.tif.md5"
           },
           {
-            "bucket": "podaac-uat-cumulus-public",
+            "bucket": "podaac-uat-svc-public",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B03_CONF.tif.md5",
             "size": 32,
             "checksumType": "md5",
@@ -431,7 +224,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B03_CONF.tif.md5"
           },
           {
-            "bucket": "podaac-uat-cumulus-public",
+            "bucket": "podaac-uat-svc-public",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B04_DIAG.tif.md5",
             "size": 32,
             "checksumType": "md5",
@@ -441,7 +234,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B04_DIAG.tif.md5"
           },
           {
-            "bucket": "podaac-uat-cumulus-public",
+            "bucket": "podaac-uat-svc-public",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B05_WTR-1.tif.md5",
             "size": 32,
             "checksumType": "md5",
@@ -451,7 +244,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B05_WTR-1.tif.md5"
           },
           {
-            "bucket": "podaac-uat-cumulus-public",
+            "bucket": "podaac-uat-svc-public",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B06_WTR-2.tif.md5",
             "size": 32,
             "checksumType": "md5",
@@ -461,7 +254,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B06_WTR-2.tif.md5"
           },
           {
-            "bucket": "podaac-uat-cumulus-public",
+            "bucket": "podaac-uat-svc-public",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B07_LAND.tif.md5",
             "size": 32,
             "checksumType": "md5",
@@ -471,7 +264,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B07_LAND.tif.md5"
           },
           {
-            "bucket": "podaac-uat-cumulus-public",
+            "bucket": "podaac-uat-svc-public",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B08_SHAD.tif.md5",
             "size": 32,
             "checksumType": "md5",
@@ -481,7 +274,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B08_SHAD.tif.md5"
           },
           {
-            "bucket": "podaac-uat-cumulus-public",
+            "bucket": "podaac-uat-svc-public",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B09_CLOUD.tif.md5",
             "size": 32,
             "checksumType": "md5",
@@ -491,7 +284,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B09_CLOUD.tif.md5"
           },
           {
-            "bucket": "podaac-uat-cumulus-public",
+            "bucket": "podaac-uat-svc-public",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B10_DEM.tif.md5",
             "size": 32,
             "checksumType": "md5",
@@ -501,7 +294,7 @@
             "key": "OPERA_L3_DSWX-HLS_V1.0/OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0_B10_DEM.tif.md5"
           },
           {
-            "bucket": "podaac-uat-cumulus-private",
+            "bucket": "podaac-uat-svc-private",
             "fileName": "OPERA_L3_DSWx-HLS_T48SUE_20190302T034350Z_20230131T222341Z_L8_30_v0.0.cmr.json",
             "size": 7965,
             "type": "metadata",
@@ -516,30 +309,5 @@
         "post_to_cmr_duration": 427
       }
     ]
-  },
-  "task_config": {
-    "OriginalCNM": "{$.meta.cnm}",
-    "distribution_endpoint": "{$.meta.distribution_endpoint}",
-    "type": "sns",
-    "response-endpoint": "{$.meta.collection.meta.response-endpoint}",
-    "region": "us-west-2",
-    "WorkflowException": "{$.exception}",
-    "cumulus_message": {
-      "outputs": [
-        {
-          "source": "{$.cnm}",
-          "destination": "{$.meta.granule.queryFields.cnm}"
-        },
-        {
-          "source": "{$.cnm}",
-          "destination": "{$.meta.cnmResponse}"
-        },
-        {
-          "source": "{$.input.input}",
-          "destination": "{$.payload}"
-        }
-      ]
-    }
-  },
-  "exception": "None"
+  }
 }

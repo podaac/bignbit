@@ -94,7 +94,7 @@ def generate_metadata(cma_file_list: List[Dict], granule_umm_json: dict, temp_di
         granule_type = "browse" if granule_extension in BROWSE_IMAGE_EXTENSION_SUBTYPES else "metadata"
         if granule_type == "browse":
             granule_subtype = BROWSE_IMAGE_EXTENSION_SUBTYPES.get(granule_extension, None)
-        elif granule_extension.lower() == '.wld':
+        elif granule_extension.lower() == '.wld' or granule_extension.lower() == '.pgw' :
             granule_subtype = "world file"
         else:
             granule_subtype = None

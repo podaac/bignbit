@@ -236,7 +236,6 @@
       "Type":"Map",
       "ItemsPath":"$.payload.datasetConfigurationForBIG.config.imgVariables",
       "ItemSelector":{
-        "cumulus_meta.$":"$.cumulus_meta",
         "meta.$":"$.meta",
         "payload.$":"$.payload",
         "task_config.$":"$.task_config",
@@ -261,6 +260,8 @@
                   "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
                   "cmr_clientid":"{$.meta.cmr.clientId}",
                   "current_item":"{$.current_item}",
+                  "harmony_staging_bucket": "${HarmonyStagingBucket}",
+                  "harmony_staging_path": "${HarmonyStagingPath}",
                   "big_config":"{$.payload.datasetConfigurationForBIG}",
                   "cumulus_message":{
                     "input":"{$.payload}"
@@ -320,7 +321,7 @@
               {
                 "Variable":"$.payload.harmony_job_status",
                 "StringMatches":"successful",
-                "Next":"Job Successful",
+                "Next":"Process Harmony Job Output",
                 "Comment":"Job successful"
               },
               {
@@ -344,8 +345,45 @@
             ],
             "Default":"Wait 20 Seconds"
           },
-          "Job Successful":{
-            "Type":"Succeed"
+          "Process Harmony Job Output":{
+            "Type":"Task",
+            "Resource":"${ProcessHarmonyJobOutputLambda}",
+            "OutputPath": "$.payload",
+            "Parameters":{
+              "cma":{
+                "event.$":"$",
+                "task_config":{
+                  "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
+                  "harmony_job":"{$.payload.harmony_job.job}",
+                  "variable":"{$.current_item.id}",
+                  "cumulus_message":{
+                    "input":"{$.payload}"
+                  }
+                }
+              }
+            },
+            "Retry":[
+              {
+                "ErrorEquals":[
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException",
+                  "Lambda.TooManyRequestsException"
+                ],
+                "IntervalSeconds":2,
+                "MaxAttempts":6,
+                "BackoffRate":2
+              },
+              {
+                "ErrorEquals": [
+                  "Lambda.Unknown"
+               ],
+                "BackoffRate": 2,
+                "IntervalSeconds": 2,
+                "MaxAttempts": 2
+              }
+            ],
+            "End":true
           },
           "Fail":{
             "Type":"Fail"
@@ -396,7 +434,6 @@
       "Type":"Pass",
       "Next":"BuildImageSets",
       "Parameters":{
-        "cumulus_meta.$": "$.cumulus_meta",
         "meta": {
           "buckets.$": "$.meta.buckets",
           "cmr.$": "$.meta.cmr",
@@ -408,8 +445,7 @@
           "granules.$":"$.payload.granules",
           "big.$":"$.payload.big"
         },
-        "exception.$":"$.exception",
-        "task_config.$":"$.task_config"
+        "exception.$":"$.exception"
       },
       "Comment":"Removes extra data from payload that is no longer necessary"
     },

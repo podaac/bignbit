@@ -1,11 +1,11 @@
 """Cumulus lambda class to create harmony job"""
-
+import datetime
 import logging
 import os
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 
-from harmony import BBox, Collection, Request
+from harmony import Collection, Request
 from bignbit import utils
 
 CUMULUS_LOGGER = CumulusLogger('submit_harmony_job')
@@ -29,34 +29,34 @@ class CMA(Process):
         CMA message
         """
 
-        harmony_job = create_harmony_job(self.config)
+        cmr_env = self.config.get('cmr_environment')
+        collection_concept_id = self.config.get('collection_concept_id')
+        collection_name = self.config.get('collection').get('name')
+        granule = self.config.get('granule')
+        granule_concept_id = granule.get('cmrConceptId')
+        granule_id = granule.get('granuleId')
+        current_item = self.config.get('current_item')
+        variable = current_item.get('id')
+        big_config = self.config.get('big_config')
+        harmony_staging_bucket = self.config.get('harmony_staging_bucket')
+        harmony_staging_path = self.config.get('harmony_staging_path')
+
+        harmony_job = submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_concept_id,
+                                         granule_id, variable, big_config, harmony_staging_bucket, harmony_staging_path)
         self.input['harmony_job'] = harmony_job
         return self.input
 
 
-def create_harmony_job(config):
+def submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_concept_id, granule_id, variable,
+                       big_config, harmony_staging_bucket, harmony_staging_path):
     """Generate harmony job and returns harmony job id"""
 
-    cmr_env = config.get('cmr_environment')
-    collection_concept_id = config.get('collection_concept_id')
-    granule = config.get('granule')
-    granule_concept_id = granule.get('cmrConceptId')
-    granule_id = granule.get('granuleId')
-    current_item = config.get('current_item')
-    variable = current_item.get('id')
-    big_config = config.get('big_config')
-
-    files = granule.get('files')
-    destination_bucket_url = None
-    for file in files:
-        if file.get('type') == 'data':
-            file_path = os.path.dirname(file.get('key'))
-            bucket_name = file.get('bucket')
-            destination_bucket_url = f's3://{bucket_name}/{file_path}'
-
+    destination_bucket_url = f's3://{harmony_staging_bucket}/{harmony_staging_path}/{collection_name}/{datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d")}'.lower()
     harmony_client = utils.get_harmony_client(cmr_env)
-    harmony_request = generate_harmony_request(collection_concept_id, granule_concept_id, variable, big_config, destination_bucket_url)
+    harmony_request = generate_harmony_request(collection_concept_id, granule_concept_id, variable, big_config,
+                                               destination_bucket_url)
 
+    CUMULUS_LOGGER.info("Submitting Harmony request: {}", harmony_client.request_as_url(harmony_request))
     job = harmony_client.submit(harmony_request)
     harmony_job = {
         'job': job,
@@ -75,7 +75,6 @@ def generate_harmony_request(collection_concept_id, granule_concept_id, variable
         collection=Collection(id=collection_concept_id),
         granule_id=[granule_concept_id],
         variables=[variable],
-        spatial=BBox(-180, -90, 180, 90),
         width=big_config['config']['width'],
         height=big_config['config']['height'],
         format="image/png",
@@ -111,7 +110,6 @@ def lambda_handler(event, context):
     CUMULUS_LOGGER.logger.level = levels.get(logging_level, 'info')
     CUMULUS_LOGGER.setMetadata(event, context)
 
-    CUMULUS_LOGGER.info(event)
     return CMA.cumulus_handler(event, context=context)
 
 
