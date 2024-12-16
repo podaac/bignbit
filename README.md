@@ -122,28 +122,28 @@ See `bignbit.submit_harmony_job.generate_harmony_request` for details on how the
 
 This module uses the following input variables:
 
-| Name                       | Type         | Description                                                                                                                      | Default Value                                                |
-|----------------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
-| stage                      | string       | Environment used for resource tagging (dev, int, ops, etc...)                                                                    |                                                              |
-| prefix                     | string       | Prefix used for resource naming (project name, env name, etc...)                                                                 |                                                              |
-| data_buckets               | list(string) | List of buckets where data is stored. Lambdas will be given read/write access to these buckets.                                  | []                                                           |
-| config_bucket              | string       | Bucket where dataset configuration is stored                                                                                     |                                                              |
-| config_dir                 | string       | Path relative to `config_bucket` where dataset configuration is stored                                                           | "datset-config"                                              |
-| pobit_audit_bucket         | string       | S3 bucket where messages exchanged with GITC will be saved. Typically the cumulus internal bucket                                |                                                              |
-| pobit_audit_path           | string       | Path relative to `pobit_audit_bucket` where messages exchanged with GITC will be saved.                                          | "pobit-cma-output"                                           |
-| bignbit_staging_bucket     | string       | S3 bucket where generated images will be saved. Leave blank to use bucket managed by this module.                                | _create new bucket named {app_name}-{stage}-harmony-staging_ |
-| harmony_staging_path       | string       | Path relative to `bignbit_staging_bucket` where harmony results will be saved.                                                   | "bignbit-harmony-output"                                     |
-| gibs_region                | string       | Region where GIBS resources are deployed                                                                                         |                                                              |
-| gibs_queue_name            | string       | Name of the GIBS SQS queue where outgoing CNM messages will be sent                                                              |                                                              |
-| gibs_account_id            | string       | AWS account ID for GIBS                                                                                                          |                                                              |
-| edl_user_ssm               | string       | Name of SSM parameter containing EDL username for querying CMR                                                                   |                                                              |
-| edl_pass_ssm               | string       | Name of SSM parameter containing EDL password for querying CMR                                                                   |                                                              |
-| permissions_boundary_arn   | string       | Permissions boundary ARN to apply to the roles created by this module. If not provided, no permissions boundary will be applied. |                                                              |
-| security_group_ids         | list(string) |                                                                                                                                  |                                                              |
-| subnet_ids                 | list(string) |                                                                                                                                  |                                                              |
-| app_name                   | string       |                                                                                                                                  | "bignbit"                                                    |
-| default_tags               | map(string)  |                                                                                                                                  | {}                                                           |
-| lambda_container_image_uri | string       |                                                                                                                                  | ""                                                           |
+| Name                       | Type         | Description                                                                                                                      | Default Value                                                       |
+|----------------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|
+| stage                      | string       | Environment used for resource tagging (dev, int, ops, etc...)                                                                    |                                                                     |
+| prefix                     | string       | Prefix used for resource naming (project name, env name, etc...)                                                                 |                                                                     |
+| data_buckets               | list(string) | List of buckets where data is stored. Lambdas will be given read/write access to these buckets.                                  | []                                                                  |
+| config_bucket              | string       | Bucket where dataset configuration is stored                                                                                     |                                                                     |
+| config_dir                 | string       | Path relative to `config_bucket` where dataset configuration is stored                                                           | "datset-config"                                                     |
+| pobit_audit_bucket         | string       | S3 bucket where messages exchanged with GITC will be saved. Typically the cumulus internal bucket                                |                                                                     |
+| pobit_audit_path           | string       | Path relative to `pobit_audit_bucket` where messages exchanged with GITC will be saved.                                          | "pobit-cma-output"                                                  |
+| bignbit_staging_bucket     | string       | S3 bucket where generated images will be saved. Leave blank to use bucket managed by this module.                                | _create new bucket named svc-${var.app_name}-${var.prefix}-staging_ |
+| harmony_staging_path       | string       | Path relative to `bignbit_staging_bucket` where harmony results will be saved.                                                   | "bignbit-harmony-output"                                            |
+| gibs_region                | string       | Region where GIBS resources are deployed                                                                                         |                                                                     |
+| gibs_queue_name            | string       | Name of the GIBS SQS queue where outgoing CNM messages will be sent                                                              |                                                                     |
+| gibs_account_id            | string       | AWS account ID for GIBS                                                                                                          |                                                                     |
+| edl_user_ssm               | string       | Name of SSM parameter containing EDL username for querying CMR                                                                   |                                                                     |
+| edl_pass_ssm               | string       | Name of SSM parameter containing EDL password for querying CMR                                                                   |                                                                     |
+| permissions_boundary_arn   | string       | Permissions boundary ARN to apply to the roles created by this module. If not provided, no permissions boundary will be applied. |                                                                     |
+| security_group_ids         | list(string) |                                                                                                                                  |                                                                     |
+| subnet_ids                 | list(string) |                                                                                                                                  |                                                                     |
+| app_name                   | string       |                                                                                                                                  | "bignbit"                                                           |
+| default_tags               | map(string)  |                                                                                                                                  | {}                                                                  |
+| lambda_container_image_uri | string       |                                                                                                                                  | ""                                                                  |
 
 
 # Module Outputs
@@ -183,7 +183,7 @@ This module supplies the following outputs:
 # Step Function
 
 _Visual representation of the bignbit step function state machine:_  
-![image](https://github.com/podaac/bignbit/assets/89428916/4db5ae4b-ca74-4bee-bee7-2d7d1a342bd7)
+![image](stepfunctions_graph.png)
 
 # Local Development
 ## MacOS
