@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- [issues/9](https://github.com/podaac/bignbit/issues/9): Added some documentation for installing as cumulus module
 ### Changed
 - [issues/15](https://github.com/podaac/bignbit/issues/15): Change 'convertToPNG' choice to a generic send to harmony choice
 - [issues/16](https://github.com/podaac/bignbit/issues/16): Change apply opera treatment choice and lambda to be specific to HLS
+- [issues/23](https://github.com/podaac/bignbit/issues/23): Harmony requests now include `destinationUrl` parameter to place output 
+  directly in s3 bucket instead of requiring data to be copied.
+- [issues/41](https://github.com/podaac/bignbit/issues/41): Module no longer depends on deprecated hashicorp/template provider
+- [issues/42](https://github.com/podaac/bignbit/issues/42): Terraform version upgraded to v1.5.3
 ### Deprecated 
 ### Removed
 - [issues/7](https://github.com/podaac/bignbit/issues/15): Remove the wait for GITC response
