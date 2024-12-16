@@ -50,14 +50,16 @@ def lambda_handler(event, context):
         cma_messages = get_cma_paths(granuleUR)
         cnm_paths = get_cnm_paths(granule)
 
+
         for cnm in cnm_paths:
             cnm_path = cnm[0]
             cnm_identifier = cnm[1]
 
             cnm_r_path = cnm_path[:-5] + "-r.json"
 
+            # check if we've received the response from GIBS
             try:
-                s3_client.head_object(Bucket=pobit_audit_bucket_name, Key='file_path')
+                s3_client.head_object(Bucket=pobit_audit_bucket_name, Key='cnm_r_path')
             except botocore.exceptions.ClientError as e:
                 if e.response['Error']['Code'] == "404":
                     # The key does not exist.
@@ -69,7 +71,8 @@ def lambda_handler(event, context):
                     # Something else has gone wrong.
                 raise 
 
-            report_row = 
+            # compile info
+            report_row = ""
 
 
 def query_for_granules(collection_shortname, start_time, end_time, cmr_env):
@@ -141,9 +144,12 @@ def get_browse_executions(granule):
     pass
 
 
-def get_cma_message(granule):
+def get_cma_paths(granule):
     """
     """
     pass
 
-def get_
+def get_cnm_paths():
+    """
+    """
+    pass
