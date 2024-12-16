@@ -406,6 +406,7 @@ resource "aws_lambda_function" "send_to_gitc" {
       REGION                      = var.region
       GIBS_REGION                 = var.gibs_region
       GIBS_SQS_URL                = "https://sqs.${var.gibs_region}.amazonaws.com/${var.gibs_account_id}/${var.gibs_queue_name}"
+      GIBS_RESPONSE_TOPIC_ARN     = aws_sns_topic.gibs_response_topic.arn
     }
   }
 
