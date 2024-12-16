@@ -36,15 +36,15 @@ variable "pobit_audit_path" {
   default = "pobit-cma-output"
 }
 
-variable "harmony_staging_bucket" {
+variable "bignbit_staging_bucket" {
   type = string
-  description = "S3 bucket where Harmony results will be saved. Leave blank to use bucket managed by this module."
+  description = "S3 bucket where generated images will be saved. Leave blank to use bucket managed by this module."
   default = ""
 }
 
 variable "harmony_staging_path" {
   type = string
-  description = "Path relative to harmony_staging_bucket where harmony results will be saved."
+  description = "Path relative to bignbit_staging_bucket where harmony results will be saved."
   default = "bignbit-harmony-output"
 }
 

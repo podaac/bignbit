@@ -96,15 +96,19 @@ output "workflow_definition" {
     SaveCNMMessageLambda          = aws_lambda_function.save_cnm_message.arn,
     PobitAuditBucket              = var.pobit_audit_bucket,
     PobitAuditPath                = var.pobit_audit_path,
-    HarmonyStagingBucket          = local.harmony_bucket_name,
+    StagingBucket                 = local.staging_bucket_name,
     HarmonyStagingPath            = var.harmony_staging_path
   })
 }
 
-output "harmony_staging_bucket" {
-  value = local.harmony_bucket_name
+output "bignbit_staging_bucket" {
+  value = local.staging_bucket_name
 }
 
 output "harmony_staging_path" {
   value = var.harmony_staging_path
+}
+
+output "bignbit_lambda_role" {
+  value = aws_iam_role.bignbit_lambda_role
 }

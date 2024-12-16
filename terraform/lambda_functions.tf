@@ -571,10 +571,10 @@ data "aws_iam_policy_document" "bignbit_lambda_policy" {
       "s3:DeleteObjectVersion",
     ]
     resources = [
-      "arn:aws:s3:::${local.harmony_bucket_name}",
+      "arn:aws:s3:::${local.staging_bucket_name}",
       "arn:aws:s3:::${var.config_bucket}",
       "arn:aws:s3:::${var.pobit_audit_bucket}",
-      "arn:aws:s3:::${local.harmony_bucket_name}/*",
+      "arn:aws:s3:::${local.staging_bucket_name}/*",
       "arn:aws:s3:::${var.config_bucket}/*",
       "arn:aws:s3:::${var.pobit_audit_bucket}/*"
     ]

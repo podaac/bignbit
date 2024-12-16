@@ -137,9 +137,12 @@ jobs:
       - name: Install conda
         uses: conda-incubator/setup-miniconda@v3
         with:
+          channels: conda-forge
           activate-environment: bignbit
           environment-file: conda-environment.yaml
           auto-activate-base: false
+          conda-remove-defaults: "true"
+          miniforge-version: latest
       - name: Install package
         run: poetry install
       - name: Lint

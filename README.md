@@ -107,10 +107,10 @@ should define the bignbit module and the bignbit step function state machine. Se
 
 > [!IMPORTANT]  
 > bignbit uses the [user owned bucket](https://harmony.earthdata.nasa.gov/docs#user-owned-buckets-for-harmony-output) parameter
-> when making Harmony requests. If an existing bucket is configured for the `harmony_staging_bucket` parameter, it must
-> have a bucket policy that allows Harmony to write objects to it. If `harmony_staging_bucket` is left blank, bignbit will
-> create a new S3 bucket (named `{app_name}-{stage}-harmony-staging`) and apply the correct permissions automatically. This bucket will also automatically expire objects
-> older than 30 days.
+> when making Harmony requests. If an existing bucket is configured for the `bignbit_staging_bucket` parameter, it must
+> have a bucket policy that allows Harmony write permission and GIBS read permission. If `bignbit_staging_bucket` is left blank, bignbit will
+> create a new S3 bucket (named `svc-${var.app_name}-${var.prefix}-staging`) and apply the correct permissions automatically. 
+> This bucket will also automatically expire objects older than 30 days.
 
 bignbit uses the harmony-py library to construct the Harmony requests for generating images. Most of the parameters
 are extracted from the CMA message as a granule is being processed but the `width` and `height` parameters
@@ -131,8 +131,8 @@ This module uses the following input variables:
 | config_dir                 | string       | Path relative to `config_bucket` where dataset configuration is stored                                                           | "datset-config"                                              |
 | pobit_audit_bucket         | string       | S3 bucket where messages exchanged with GITC will be saved. Typically the cumulus internal bucket                                |                                                              |
 | pobit_audit_path           | string       | Path relative to `pobit_audit_bucket` where messages exchanged with GITC will be saved.                                          | "pobit-cma-output"                                           |
-| harmony_staging_bucket     | string       | S3 bucket where Harmony results will be saved. Leave blank to use bucket managed by this module.                                 | _create new bucket named {app_name}-{stage}-harmony-staging_ |
-| harmony_staging_path       | string       | Path relative to `harmony_staging_bucket` where harmony results will be saved.                                                   | "bignbit-harmony-output"                                     |
+| bignbit_staging_bucket     | string       | S3 bucket where generated images will be saved. Leave blank to use bucket managed by this module.                                | _create new bucket named {app_name}-{stage}-harmony-staging_ |
+| harmony_staging_path       | string       | Path relative to `bignbit_staging_bucket` where harmony results will be saved.                                                   | "bignbit-harmony-output"                                     |
 | gibs_region                | string       | Region where GIBS resources are deployed                                                                                         |                                                              |
 | gibs_queue_name            | string       | Name of the GIBS SQS queue where outgoing CNM messages will be sent                                                              |                                                              |
 | gibs_account_id            | string       | AWS account ID for GIBS                                                                                                          |                                                              |
@@ -173,8 +173,9 @@ This module supplies the following outputs:
 | pobit_send_to_gitc_arn           | ARN of the lambda function                                        | aws_lambda_function.send_to_gitc.arn                 |
 | pobit_save_cnm_message_arn       | ARN of the lambda function                                        | aws_lambda_function.save_cnm_message.arn             |
 | workflow_definition              | Rendered state machine definition                                 | rendered version of state_machine_definition.tpl     |
-| harmony_staging_bucket           | Name of harmony staging bucket                                    | var.harmony_staging_bucket                           |
+| bignbit_staging_bucket           | Name of bignbit staging bucket                                    | var.bignbit_staging_bucket                           |
 | harmony_staging_path             | Path to harmony requests relative to harmony staging bucket       | var.harmony_staging_path                             |
+| bignbit_lambda_role              | Role created by the module applied to lambda functions            | aws_iam_role.bignbit_lambda_role                     |
 
 # Assumptions
  - Using `ContentBasedDeduplication` strategy for GITC input queue

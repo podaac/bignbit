@@ -38,20 +38,20 @@ class CMA(Process):
         current_item = self.config.get('current_item')
         variable = current_item.get('id')
         big_config = self.config.get('big_config')
-        harmony_staging_bucket = self.config.get('harmony_staging_bucket')
+        bignbit_staging_bucket = self.config.get('bignbit_staging_bucket')
         harmony_staging_path = self.config.get('harmony_staging_path')
 
         harmony_job = submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_concept_id,
-                                         granule_id, variable, big_config, harmony_staging_bucket, harmony_staging_path)
+                                         granule_id, variable, big_config, bignbit_staging_bucket, harmony_staging_path)
         self.input['harmony_job'] = harmony_job
         return self.input
 
 
 def submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_concept_id, granule_id, variable,
-                       big_config, harmony_staging_bucket, harmony_staging_path):
+                       big_config, bignbit_staging_bucket, harmony_staging_path):
     """Generate harmony job and returns harmony job id"""
 
-    destination_bucket_url = f's3://{harmony_staging_bucket}/{harmony_staging_path}/{collection_name}/{datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d")}'.lower()
+    destination_bucket_url = f's3://{bignbit_staging_bucket}/{harmony_staging_path}/{collection_name}/{datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d")}'.lower()
     harmony_client = utils.get_harmony_client(cmr_env)
     harmony_request = generate_harmony_request(collection_concept_id, granule_concept_id, variable, big_config,
                                                destination_bucket_url)

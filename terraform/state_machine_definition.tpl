@@ -162,6 +162,7 @@
         "cma":{
           "event.$":"$",
           "task_config":{
+            "bignbit_staging_bucket": "${StagingBucket}",
             "cumulus_message":{
               "input":"{$.payload}"
             }
@@ -260,7 +261,7 @@
                   "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
                   "cmr_clientid":"{$.meta.cmr.clientId}",
                   "current_item":"{$.current_item}",
-                  "harmony_staging_bucket": "${HarmonyStagingBucket}",
+                  "bignbit_staging_bucket": "${StagingBucket}",
                   "harmony_staging_path": "${HarmonyStagingPath}",
                   "big_config":"{$.payload.datasetConfigurationForBIG}",
                   "cumulus_message":{
