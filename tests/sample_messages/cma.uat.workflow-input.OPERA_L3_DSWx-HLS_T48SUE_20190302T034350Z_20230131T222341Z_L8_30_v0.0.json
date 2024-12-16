@@ -1,5 +1,7 @@
 {
   "meta": {
+    "provider": {},
+    "stack": {},
     "buckets": {
       "internal": {
         "name": "podaac-uat-svc-internal",

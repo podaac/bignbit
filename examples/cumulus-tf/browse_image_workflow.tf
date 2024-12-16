@@ -8,6 +8,8 @@ module "bignbit_module" {
     stage = var.bignbit_stage
     prefix = var.prefix
 
+    data_buckets = [aws_s3_bucket.protected.id, aws_s3_bucket.public.id, aws_s3_bucket.private.id]
+
     config_bucket = aws_s3_bucket.internal.bucket
     config_dir = "dataset-config"
 

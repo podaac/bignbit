@@ -2,9 +2,9 @@ data "aws_ecr_authorization_token" "token" {}
 
 locals {
   lambda_container_image_uri_split = split("/", var.lambda_container_image_uri)
-  ecr_image_name_and_tag           = split(":", element(local.lambda_container_image_uri_split, length(local.lambda_container_image_uri_split) - 1))
-  ecr_image_name                   = "${local.environment}-${element(local.ecr_image_name_and_tag, 0)}"
-  ecr_image_tag                    = element(local.ecr_image_name_and_tag, 1)
+  ecr_image_name_and_tag = split(":", element(local.lambda_container_image_uri_split, length(local.lambda_container_image_uri_split) - 1))
+  ecr_image_name = "${local.environment}-${element(local.ecr_image_name_and_tag, 0)}"
+  ecr_image_tag = element(local.ecr_image_name_and_tag, 1)
 
   # Truncate all function names to max 64 characters for AWS Lambda
   get_dataset_configuration_function_name = substr("${local.aws_resources_name}-get_dataset_configuration", 0, 64)
@@ -365,10 +365,10 @@ resource "aws_lambda_function" "build_image_sets" {
     command = ["bignbit.build_image_sets.lambda_handler"]
   }
 
-  function_name    = local.build_image_sets_function_name
-  role             = aws_iam_role.bignbit_lambda_role.arn
-  timeout          = 15
-  memory_size      = 128
+  function_name = local.build_image_sets_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
+  timeout       = 15
+  memory_size   = 128
 
   environment {
     variables = {
@@ -397,10 +397,10 @@ resource "aws_lambda_function" "send_to_gitc" {
   image_config {
     command = ["bignbit.send_to_gitc.lambda_handler"]
   }
-  function_name    = local.send_to_gitc_function_name
-  role             = aws_iam_role.bignbit_lambda_role.arn
-  timeout          = 15
-  memory_size      = 128
+  function_name = local.send_to_gitc_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
+  timeout       = 15
+  memory_size   = 128
 
   environment {
     variables = {
@@ -430,19 +430,19 @@ resource "aws_lambda_function" "handle_gitc_response" {
   image_config {
     command = ["bignbit.handle_gitc_response.handler"]
   }
-  function_name    = local.handle_gitc_response_function_name
-  role             = aws_iam_role.bignbit_lambda_role.arn
-  timeout          = 15
-  memory_size      = 128
+  function_name = local.handle_gitc_response_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
+  timeout       = 15
+  memory_size   = 128
 
   environment {
     variables = {
       STACK_NAME                  = local.aws_resources_name
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
       REGION                      = data.aws_region.current.name
-      POBIT_AUDIT_BUCKET_NAME = var.pobit_audit_bucket
-      POBIT_AUDIT_PATH_NAME = var.pobit_audit_path
-      CMR_ENVIRONMENT = local.environment != "OPS" ? "UAT" : ""
+      POBIT_AUDIT_BUCKET_NAME     = var.pobit_audit_bucket
+      POBIT_AUDIT_PATH_NAME       = var.pobit_audit_path
+      CMR_ENVIRONMENT             = local.environment != "OPS" ? "UAT" : ""
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
     }
@@ -465,10 +465,10 @@ resource "aws_lambda_function" "save_cnm_message" {
   image_config {
     command = ["bignbit.save_cnm_message.lambda_handler"]
   }
-  function_name    = local.save_cnm_message_function_name
-  role             = aws_iam_role.bignbit_lambda_role.arn
-  timeout          = 15
-  memory_size      = 128
+  function_name = local.save_cnm_message_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
+  timeout       = 15
+  memory_size   = 128
 
   environment {
     variables = {
@@ -492,7 +492,7 @@ data "aws_iam_policy_document" "bignbit_lambda_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
     principals {
-      type        = "Service"
+      type = "Service"
       identifiers = ["lambda.amazonaws.com"]
     }
   }
@@ -577,9 +577,6 @@ data "aws_iam_policy_document" "bignbit_lambda_policy" {
       "arn:aws:s3:::${local.harmony_bucket_name}/*",
       "arn:aws:s3:::${var.config_bucket}/*",
       "arn:aws:s3:::${var.pobit_audit_bucket}/*"
-
-      !!!!!!also need permission for buckets where data lives!!!!!
-
     ]
   }
 
@@ -595,10 +592,37 @@ data "aws_iam_policy_document" "bignbit_lambda_policy" {
   }
 }
 
+data "aws_iam_policy_document" "allow_data_buckets_access" {
+  statement {
+    sid = "AllowAccessToDataBuckets"
+    actions = [
+      "s3:PutObject*",
+      "s3:GetObject*",
+      "s3:ListBucket*",
+    ]
+    resources = concat([
+      for bucket in var.data_buckets :
+      "arn:aws:s3:::${bucket}"
+    ],
+      [
+        for bucket in var.data_buckets :
+        "arn:aws:s3:::${bucket}/*"
+      ]
+    )
+  }
+}
+
+data "aws_iam_policy_document" "all_bignbit" {
+  source_policy_documents = [
+    data.aws_iam_policy_document.bignbit_lambda_policy.json,
+    data.aws_iam_policy_document.allow_data_buckets_access.json
+  ]
+}
+
 resource "aws_iam_role_policy" "bignbit_policy_attach" {
   name   = "${local.aws_resources_name}_bignbit_policy_attach"
   role   = aws_iam_role.bignbit_lambda_role.id
-  policy = data.aws_iam_policy_document.bignbit_lambda_policy.json
+  policy = data.aws_iam_policy_document.all_bignbit.json
 }
 
 

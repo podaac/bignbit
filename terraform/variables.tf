@@ -8,6 +8,12 @@ variable "prefix" {
   description = "Prefix used for resource naming (project name, env name, etc...)"
 }
 
+variable "data_buckets" {
+  type = set(string)
+  description = "Buckets where data to be imaged is stored (cumulus-public, cumulus-protected, etc...)"
+  default = []
+}
+
 variable "config_bucket" {
   type = string
   description = "Bucket where dataset configuration is stored"
