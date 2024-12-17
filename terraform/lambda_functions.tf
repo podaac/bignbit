@@ -49,7 +49,7 @@ resource null_resource upload_ecr_image {
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-e", "-c"]
     command = <<EOF
-      if ! docker images -q ${var.lambda_container_image_uri} > /dev/null; then
+      if [ -z "$(docker images -q ${var.lambda_container_image_uri} 2> /dev/null)" ]; then
         docker pull ${var.lambda_container_image_uri}
       fi
       docker tag ${var.lambda_container_image_uri} ${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}
