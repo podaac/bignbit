@@ -2,7 +2,7 @@
 ARG FUNCTION_DIR="/home/dockeruser/app"
 ARG GDAL_VERSION="3.6.3"
 
-FROM osgeo/gdal:ubuntu-small-${GDAL_VERSION} as build-image
+FROM osgeo/gdal:ubuntu-small-${GDAL_VERSION} AS build-image
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
@@ -38,7 +38,7 @@ FROM osgeo/gdal:ubuntu-small-${GDAL_VERSION}
 ARG FUNCTION_DIR
 RUN adduser --quiet --disabled-password --shell /bin/sh --home /home/dockeruser --gecos "" --uid 993 dockeruser
 USER dockeruser
-ENV HOME /home/dockeruser
+ENV HOME=/home/dockeruser
 WORKDIR ${FUNCTION_DIR}
 
 COPY --chown=dockeruser --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}

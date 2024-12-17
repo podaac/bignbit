@@ -51,7 +51,7 @@ def from_big_output(big_output: List[typing.Dict]) -> List[ImageSet]:
         try:
             image_metadata = next(iter([g for g in big_output
                                         if g['type'] == 'metadata'
-                                        and g['subtype'] == 'ImageMetadata-v1.2'
+                                        and g.get('subtype', None) == 'ImageMetadata-v1.2'
                                         and pathlib.Path(g['fileName']).stem == image_name]))
         except StopIteration as ex:
             raise IncompleteImageSet(f"Missing image metadata for {image}") from ex
@@ -59,7 +59,7 @@ def from_big_output(big_output: List[typing.Dict]) -> List[ImageSet]:
         try:
             world_file = next(iter([g for g in big_output
                                     if g['type'] == 'metadata'
-                                    and g['subtype'] == 'world file'
+                                    and g.get('subtype', None) == 'world file'
                                     and pathlib.Path(g['fileName']).stem == image_name]))
         except StopIteration:
             # World files are not always required

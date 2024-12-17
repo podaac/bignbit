@@ -2,17 +2,28 @@ data "aws_ecr_authorization_token" "token" {}
 
 locals {
   lambda_container_image_uri_split = split("/", var.lambda_container_image_uri)
-  ecr_image_name_and_tag           = split(":", element(local.lambda_container_image_uri_split, length(local.lambda_container_image_uri_split) - 1))
-  ecr_image_name                   = "${local.environment}-${element(local.ecr_image_name_and_tag, 0)}"
-  ecr_image_tag                    = element(local.ecr_image_name_and_tag, 1)
-  build_image_sets_function_name = "${local.lambda_resources_name}-build_image_sets"
-  send_to_gitc_function_name = "${local.lambda_resources_name}-send_to_gitc"
-  handle_gitc_response_function_name = "${local.lambda_resources_name}-handle_gitc_response"
+  ecr_image_name_and_tag = split(":", element(local.lambda_container_image_uri_split, length(local.lambda_container_image_uri_split) - 1))
+  ecr_image_name = "${local.environment}-${element(local.ecr_image_name_and_tag, 0)}"
+  ecr_image_tag = element(local.ecr_image_name_and_tag, 1)
+
+  # Truncate all function names to max 64 characters for AWS Lambda
+  get_dataset_configuration_function_name = substr("${local.aws_resources_name}-get_dataset_configuration", 0, 64)
+  get_granule_umm_json_function_name = substr("${local.aws_resources_name}-get_granule_umm_json", 0, 64)
+  get_collection_concept_id_function_name = substr("${local.aws_resources_name}-get_collection_concept_id", 0, 64)
+  identify_image_file_function_name = substr("${local.aws_resources_name}-identify_image_file", 0, 64)
+  submit_harmony_job_function_name = substr("${local.aws_resources_name}-submit_harmony_job", 0, 64)
+  generate_image_metadata_function_name = substr("${local.aws_resources_name}-generate_image_metadata", 0, 64)
+  get_harmony_job_status_function_name = substr("${local.aws_resources_name}-get_harmony_job_status", 0, 64)
+  process_harmony_results_function_name = substr("${local.aws_resources_name}-process_harmony_output", 0, 64)
+  apply_opera_hls_treatment_function_name = substr("${local.aws_resources_name}-apply_opera_hls_treatment", 0, 64)
+  build_image_sets_function_name = substr("${local.aws_resources_name}-build_image_sets", 0, 64)
+  send_to_gitc_function_name = substr("${local.aws_resources_name}-send_to_gitc", 0, 64)
+  handle_gitc_response_function_name = substr("${local.aws_resources_name}-handle_gitc_response", 0, 64)
+  save_cnm_message_function_name = substr("${local.aws_resources_name}-save_cnm_message", 0, 64)
 }
 
 resource aws_ecr_repository "lambda-image-repo" {
   name = local.ecr_image_name
-  tags = var.default_tags
 }
 
 
@@ -38,7 +49,9 @@ resource null_resource upload_ecr_image {
   provisioner "local-exec" {
     interpreter = ["/bin/bash", "-e", "-c"]
     command = <<EOF
-      docker pull ${var.lambda_container_image_uri}
+      if [ -z "$(docker images -q ${var.lambda_container_image_uri} 2> /dev/null)" ]; then
+        docker pull ${var.lambda_container_image_uri}
+      fi
       docker tag ${var.lambda_container_image_uri} ${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}
       docker push ${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}
       EOF
@@ -67,8 +80,8 @@ resource "aws_lambda_function" "get_dataset_configuration" {
   image_config {
     command = ["bignbit.get_dataset_configuration.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-get_dataset_configuration"
-  role          = var.lambda_role.arn
+  function_name = local.get_dataset_configuration_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
   timeout       = 30
   memory_size   = 256
 
@@ -76,7 +89,7 @@ resource "aws_lambda_function" "get_dataset_configuration" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = var.region
+      REGION                      = data.aws_region.current.name
     }
   }
 
@@ -85,7 +98,6 @@ resource "aws_lambda_function" "get_dataset_configuration" {
     security_group_ids = var.security_group_ids
   }
 
-  tags = var.default_tags
 }
 
 resource "aws_lambda_function" "get_granule_umm_json" {
@@ -98,8 +110,8 @@ resource "aws_lambda_function" "get_granule_umm_json" {
   image_config {
     command = ["bignbit.get_granule_umm_json.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-get_granule_umm_json"
-  role          = var.lambda_role.arn
+  function_name = local.get_granule_umm_json_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
   timeout       = 30
   memory_size   = 256
 
@@ -109,7 +121,7 @@ resource "aws_lambda_function" "get_granule_umm_json" {
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = var.region
+      REGION                      = data.aws_region.current.name
     }
   }
 
@@ -118,7 +130,6 @@ resource "aws_lambda_function" "get_granule_umm_json" {
     security_group_ids = var.security_group_ids
   }
 
-  tags = var.default_tags
 }
 
 resource "aws_lambda_function" "get_collection_concept_id" {
@@ -131,8 +142,8 @@ resource "aws_lambda_function" "get_collection_concept_id" {
   image_config {
     command = ["bignbit.get_collection_concept_id.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-get_collection_concept_id"
-  role          = var.lambda_role.arn
+  function_name = local.get_collection_concept_id_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
   timeout       = 30
   memory_size   = 256
 
@@ -142,7 +153,7 @@ resource "aws_lambda_function" "get_collection_concept_id" {
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = var.region
+      REGION                      = data.aws_region.current.name
     }
   }
 
@@ -151,7 +162,6 @@ resource "aws_lambda_function" "get_collection_concept_id" {
     security_group_ids = var.security_group_ids
   }
 
-  tags = var.default_tags
 }
 
 resource "aws_lambda_function" "identify_image_file" {
@@ -164,8 +174,8 @@ resource "aws_lambda_function" "identify_image_file" {
   image_config {
     command = ["bignbit.identify_image_file.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-identify_image_file"
-  role          = var.lambda_role.arn
+  function_name = local.identify_image_file_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
   timeout       = 30
   memory_size   = 256
 
@@ -173,7 +183,7 @@ resource "aws_lambda_function" "identify_image_file" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = var.region
+      REGION                      = data.aws_region.current.name
     }
   }
 
@@ -182,7 +192,6 @@ resource "aws_lambda_function" "identify_image_file" {
     security_group_ids = var.security_group_ids
   }
 
-  tags = var.default_tags
 }
 
 resource "aws_lambda_function" "submit_harmony_job" {
@@ -195,8 +204,8 @@ resource "aws_lambda_function" "submit_harmony_job" {
   image_config {
     command = ["bignbit.submit_harmony_job.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-submit_harmony_job"
-  role          = var.lambda_role.arn
+  function_name = local.submit_harmony_job_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
   timeout       = 30
   memory_size   = 256
 
@@ -204,7 +213,7 @@ resource "aws_lambda_function" "submit_harmony_job" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = var.region
+      REGION                      = data.aws_region.current.name
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
     }
@@ -215,7 +224,6 @@ resource "aws_lambda_function" "submit_harmony_job" {
     security_group_ids = var.security_group_ids
   }
 
-  tags = var.default_tags
 }
 
 resource "aws_lambda_function" "generate_image_metadata" {
@@ -228,8 +236,8 @@ resource "aws_lambda_function" "generate_image_metadata" {
   image_config {
     command = ["bignbit.generate_image_metadata.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-generate_image_metadata"
-  role          = var.lambda_role.arn
+  function_name = local.generate_image_metadata_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
   timeout       = 30
   memory_size   = 256
 
@@ -237,7 +245,7 @@ resource "aws_lambda_function" "generate_image_metadata" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = var.region
+      REGION                      = data.aws_region.current.name
     }
   }
 
@@ -246,7 +254,6 @@ resource "aws_lambda_function" "generate_image_metadata" {
     security_group_ids = var.security_group_ids
   }
 
-  tags = var.default_tags
 }
 
 resource "aws_lambda_function" "get_harmony_job_status" {
@@ -259,8 +266,8 @@ resource "aws_lambda_function" "get_harmony_job_status" {
   image_config {
     command = ["bignbit.get_harmony_job_status.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-get_harmony_job_status"
-  role          = var.lambda_role.arn
+  function_name = local.get_harmony_job_status_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
   timeout       = 30
   memory_size   = 256
 
@@ -268,7 +275,7 @@ resource "aws_lambda_function" "get_harmony_job_status" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = var.region
+      REGION                      = data.aws_region.current.name
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
     }
@@ -279,10 +286,9 @@ resource "aws_lambda_function" "get_harmony_job_status" {
     security_group_ids = var.security_group_ids
   }
 
-  tags = var.default_tags
 }
 
-resource "aws_lambda_function" "copy_harmony_output_to_s3" {
+resource "aws_lambda_function" "process_harmony_results" {
   depends_on = [
     null_resource.upload_ecr_image
   ]
@@ -290,10 +296,10 @@ resource "aws_lambda_function" "copy_harmony_output_to_s3" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["bignbit.copy_harmony_output_to_s3.lambda_handler"]
+    command = ["bignbit.process_harmony_results.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-copy_harmony_output_to_s3"
-  role          = var.lambda_role.arn
+  function_name = local.process_harmony_results_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
   timeout       = 30
   memory_size   = 256
 
@@ -301,7 +307,7 @@ resource "aws_lambda_function" "copy_harmony_output_to_s3" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = var.region
+      REGION                      = data.aws_region.current.name
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
     }
@@ -312,7 +318,6 @@ resource "aws_lambda_function" "copy_harmony_output_to_s3" {
     security_group_ids = var.security_group_ids
   }
 
-  tags = var.default_tags
 }
 
 resource "aws_lambda_function" "apply_opera_hls_treatment" {
@@ -325,8 +330,8 @@ resource "aws_lambda_function" "apply_opera_hls_treatment" {
   image_config {
     command = ["bignbit.apply_opera_hls_treatment.lambda_handler"]
   }
-  function_name = "${local.lambda_resources_name}-apply_opera_hls_treatment"
-  role          = var.lambda_role.arn
+  function_name = local.apply_opera_hls_treatment_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
   timeout       = 30
   memory_size   = 512
 
@@ -334,7 +339,7 @@ resource "aws_lambda_function" "apply_opera_hls_treatment" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = var.region
+      REGION                      = data.aws_region.current.name
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
     }
@@ -345,7 +350,6 @@ resource "aws_lambda_function" "apply_opera_hls_treatment" {
     security_group_ids = var.security_group_ids
   }
 
-  tags = var.default_tags
 }
 
 
@@ -361,16 +365,16 @@ resource "aws_lambda_function" "build_image_sets" {
     command = ["bignbit.build_image_sets.lambda_handler"]
   }
 
-  function_name    = local.build_image_sets_function_name
-  role             = var.lambda_role.arn
-  timeout          = 15
-  memory_size      = 128
+  function_name = local.build_image_sets_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
+  timeout       = 15
+  memory_size   = 128
 
   environment {
     variables = {
-      STACK_NAME                  = local.lambda_resources_name
+      STACK_NAME                  = local.aws_resources_name
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = var.region
+      REGION                      = data.aws_region.current.name
       GIBS_REGION                 = var.gibs_region
       GIBS_SQS_URL                = "https://sqs.${var.gibs_region}.amazonaws.com/${var.gibs_account_id}/${var.gibs_queue_name}"
     }
@@ -381,7 +385,6 @@ resource "aws_lambda_function" "build_image_sets" {
     security_group_ids = var.security_group_ids
   }
 
-  tags = local.tags
 }
 
 resource "aws_lambda_function" "send_to_gitc" {
@@ -394,16 +397,16 @@ resource "aws_lambda_function" "send_to_gitc" {
   image_config {
     command = ["bignbit.send_to_gitc.lambda_handler"]
   }
-  function_name    = "${local.lambda_resources_name}-send_to_gitc"
-  role             = var.lambda_role.arn
-  timeout          = 15
-  memory_size      = 128
+  function_name = local.send_to_gitc_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
+  timeout       = 15
+  memory_size   = 128
 
   environment {
     variables = {
-      STACK_NAME                  = local.lambda_resources_name
+      STACK_NAME                  = local.aws_resources_name
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = var.region
+      REGION                      = data.aws_region.current.name
       GIBS_REGION                 = var.gibs_region
       GIBS_SQS_URL                = "https://sqs.${var.gibs_region}.amazonaws.com/${var.gibs_account_id}/${var.gibs_queue_name}"
       GIBS_RESPONSE_TOPIC_ARN     = aws_sns_topic.gibs_response_topic.arn
@@ -415,7 +418,6 @@ resource "aws_lambda_function" "send_to_gitc" {
     security_group_ids = var.security_group_ids
   }
 
-  tags = local.tags
 }
 
 
@@ -429,19 +431,19 @@ resource "aws_lambda_function" "handle_gitc_response" {
   image_config {
     command = ["bignbit.handle_gitc_response.handler"]
   }
-  function_name    = "${local.lambda_resources_name}-handle_gitc_response"
-  role             = var.lambda_role.arn
-  timeout          = 15
-  memory_size      = 128
+  function_name = local.handle_gitc_response_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
+  timeout       = 15
+  memory_size   = 128
 
   environment {
     variables = {
-      STACK_NAME                  = local.lambda_resources_name
+      STACK_NAME                  = local.aws_resources_name
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = var.region
-      POBIT_AUDIT_BUCKET_NAME = var.pobit_audit_bucket
-      POBIT_AUDIT_PATH_NAME = var.pobit_audit_path
-      CMR_ENVIRONMENT = local.environment != "OPS" ? "UAT" : ""
+      REGION                      = data.aws_region.current.name
+      POBIT_AUDIT_BUCKET_NAME     = var.pobit_audit_bucket
+      POBIT_AUDIT_PATH_NAME       = var.pobit_audit_path
+      CMR_ENVIRONMENT             = local.environment != "OPS" ? "UAT" : ""
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
     }
@@ -452,7 +454,6 @@ resource "aws_lambda_function" "handle_gitc_response" {
     security_group_ids = var.security_group_ids
   }
 
-  tags = local.tags
 }
 
 resource "aws_lambda_function" "save_cnm_message" {
@@ -465,16 +466,16 @@ resource "aws_lambda_function" "save_cnm_message" {
   image_config {
     command = ["bignbit.save_cnm_message.lambda_handler"]
   }
-  function_name    = "${local.lambda_resources_name}-save_cma_message"
-  role             = var.lambda_role.arn
-  timeout          = 15
-  memory_size      = 128
+  function_name = local.save_cnm_message_function_name
+  role          = aws_iam_role.bignbit_lambda_role.arn
+  timeout       = 15
+  memory_size   = 128
 
   environment {
     variables = {
-      STACK_NAME                  = local.lambda_resources_name
+      STACK_NAME                  = local.aws_resources_name
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = var.region
+      REGION                      = data.aws_region.current.name
     }
   }
 
@@ -483,132 +484,147 @@ resource "aws_lambda_function" "save_cnm_message" {
     security_group_ids = var.security_group_ids
   }
 
-  tags = local.tags
 }
 
-data "aws_iam_policy_document" "gibs_response_topic_policy" {
+# Lambda IAM setup below
+
+
+data "aws_iam_policy_document" "bignbit_lambda_assume_role_policy" {
   statement {
-    sid       = "${local.lambda_resources_name}-grant-gitc-publish-sns"
-    effect    = "Allow"
+    actions = ["sts:AssumeRole"]
     principals {
-      identifiers = compact([
-        var.gibs_account_id,
-        data.aws_caller_identity.current.account_id
-      ])
-      type        = "AWS"
-    }
-    actions   = ["sns:Publish"]
-    resources = [aws_sns_topic.gibs_response_topic.arn]
-  }
-}
-
-resource "aws_sns_topic_policy" "default" {
-  arn = aws_sns_topic.gibs_response_topic.arn
-  policy = data.aws_iam_policy_document.gibs_response_topic_policy.json
-}
-
-resource "aws_sns_topic" "gibs_response_topic" {
-  name   = "${local.lambda_resources_name}-gibs-response-topic"
-  tags   = local.tags
-}
-
-resource "aws_sqs_queue" "gibs_response_queue" {
-  name = "${local.lambda_resources_name}-gibs-response-queue"
-  tags = local.tags
-  redrive_policy = jsonencode({
-    deadLetterTargetArn = aws_sqs_queue.gibs_response_deadletter.arn
-    maxReceiveCount     = 4
-  })
-}
-
-resource "aws_sqs_queue" "gibs_response_deadletter" {
-  name = "${local.lambda_resources_name}-gibs-response-dlq"
-  redrive_allow_policy = jsonencode({
-    redrivePermission = "byQueue",
-    # Cannot use reference to aws_sqs_queue.gibs_response_queue.arn because it causes a cycle https://github.com/hashicorp/terraform-provider-aws/issues/22577
-    sourceQueueArns   = ["arn:aws:sqs:${var.region}:${local.account_id}:${local.lambda_resources_name}-gibs-response-queue"]
-  })
-}
-
-data "aws_iam_policy_document" "gibs_response_queue_policy" {
-  statement {
-    sid       = "${local.lambda_resources_name}-grant-topic-send-sqs"
-    effect    = "Allow"
-    principals {
-      identifiers = [
-        data.aws_caller_identity.current.account_id
-      ]
-      type        = "AWS"
-    }
-    principals {
-      identifiers = ["sns.amazonaws.com"]
-      type        = "Service"
-    }
-    actions   = ["sqs:SendMessage"]
-    resources = [aws_sqs_queue.gibs_response_queue.arn]
-    condition {
-      test     = "ArnEquals"
-      values   = [aws_sns_topic.gibs_response_topic.arn]
-      variable = "aws:SourceArn"
+      type = "Service"
+      identifiers = ["lambda.amazonaws.com"]
     }
   }
 }
 
-resource "aws_sqs_queue_policy" "gibs_response_queue_policy" {
-  queue_url = aws_sqs_queue.gibs_response_queue.id
-  policy    = data.aws_iam_policy_document.gibs_response_queue_policy.json
+data "aws_ssm_parameter" "ed-user" {
+  name = var.edl_user_ssm
+}
+data "aws_ssm_parameter" "ed-pass" {
+  name = var.edl_pass_ssm
 }
 
-resource "aws_sns_topic_subscription" "gibs_topic_subscription" {
-  topic_arn            = aws_sns_topic.gibs_response_topic.arn
-  protocol             = "sqs"
-  endpoint             = aws_sqs_queue.gibs_response_queue.arn
-  raw_message_delivery = true
+resource "aws_iam_role" "bignbit_lambda_role" {
+  name                 = "${local.aws_resources_name}-lambda-role"
+  assume_role_policy   = data.aws_iam_policy_document.bignbit_lambda_assume_role_policy.json
+  permissions_boundary = var.permissions_boundary_arn
 }
 
-data "aws_iam_policy_document" "gibs_response_role_policy" {
+data "aws_iam_policy_document" "bignbit_lambda_policy" {
   statement {
-    sid       = "${replace(title(replace(local.lambda_resources_name, "-", " ")), " ", "")}GrantReadGitcResponse"
-    effect    = "Allow"
-    actions   = ["sqs:GetQueueAttributes",
-      "sqs:GetQueueUrl",
-      "sqs:DeleteMessage",
-      "sqs:ChangeMessageVisibility",
-      "sqs:PurgeQueue",
-      "sqs:ReceiveMessage"
+    actions = [
+      "ec2:CreateNetworkInterface",
+      "sns:publish",
+      "cloudformation:DescribeStacks",
+      "dynamodb:ListTables",
+      "ec2:DeleteNetworkInterface",
+      "ec2:DescribeNetworkInterfaces",
+      "events:DeleteRule",
+      "events:DescribeRule",
+      "events:DisableRule",
+      "events:EnableRule",
+      "events:ListRules",
+      "events:PutRule",
+      "kinesis:DescribeStream",
+      "kinesis:GetRecords",
+      "kinesis:GetShardIterator",
+      "kinesis:ListStreams",
+      "kinesis:PutRecord",
+      "lambda:GetFunction",
+      "lambda:invokeFunction",
+      "logs:CreateLogGroup",
+      "logs:CreateLogStream",
+      "logs:DescribeLogStreams",
+      "logs:PutLogEvents",
+      "s3:ListAllMyBuckets",
+      "sns:List*",
+      "states:DescribeActivity",
+      "states:DescribeExecution",
+      "states:GetActivityTask",
+      "states:GetExecutionHistory",
+      "states:ListStateMachines",
+      "states:SendTaskFailure",
+      "states:SendTaskSuccess",
+      "states:StartExecution",
+      "states:StopExecution"
     ]
-    resources = [aws_sqs_queue.gibs_response_queue.arn]
+    resources = ["*"]
   }
+
   statement {
-    sid       = "${replace(title(replace(local.lambda_resources_name, "-", " ")), " ", "")}GrantReadGitcResponse2"
-    effect    = "Allow"
-    actions   = ["sqs:ListQueues"]
-    resources = ["arn:aws:sqs:*:${local.account_id}:*"]
+    actions = [
+      "s3:GetAccelerateConfiguration",
+      "s3:GetLifecycleConfiguration",
+      "s3:GetReplicationConfiguration",
+      "s3:GetBucket*",
+      "s3:PutAccelerateConfiguration",
+      "s3:PutLifecycleConfiguration",
+      "s3:PutReplicationConfiguration",
+      "s3:PutBucket*",
+      "s3:ListBucket*",
+      "s3:AbortMultipartUpload",
+      "s3:GetObject*",
+      "s3:PutObject*",
+      "s3:ListMultipartUploadParts",
+      "s3:DeleteObject",
+      "s3:DeleteObjectVersion",
+    ]
+    resources = [
+      "arn:aws:s3:::${local.staging_bucket_name}",
+      "arn:aws:s3:::${var.config_bucket}",
+      "arn:aws:s3:::${var.pobit_audit_bucket}",
+      "arn:aws:s3:::${local.staging_bucket_name}/*",
+      "arn:aws:s3:::${var.config_bucket}/*",
+      "arn:aws:s3:::${var.pobit_audit_bucket}/*"
+    ]
   }
-}
 
-resource "aws_iam_role_policy" "allow_lambda_role_to_read_sqs_messages" {
-  name_prefix   = local.lambda_resources_name
-  role   = var.lambda_role.id
-  policy = data.aws_iam_policy_document.gibs_response_role_policy.json
-}
-
-resource "aws_lambda_event_source_mapping" "gibs_response_event_trigger" {
-  event_source_arn = aws_sqs_queue.gibs_response_queue.arn
-  function_name    = aws_lambda_function.handle_gitc_response.arn
-}
-
-data "aws_iam_policy_document" "gibs_request_queue_policy" {
   statement {
-    sid       = "${replace(title(replace(local.lambda_resources_name, "-", " ")), " ", "")}GrantSendToGitc"
-    effect    = "Allow"
-    actions   = ["sqs:SendMessage"]
-    resources = ["arn:aws:sqs:*:${var.gibs_account_id}:${var.gibs_queue_name}"]
+    actions = [
+      "ssm:GetParameters",
+      "ssm:GetParameter"
+    ]
+    resources = [
+      data.aws_ssm_parameter.ed-user.arn,
+      data.aws_ssm_parameter.ed-pass.arn
+    ]
   }
 }
 
-resource "aws_iam_role_policy" "allow_lambda_role_to_send_to_gitc" {
-  name_prefix   = local.lambda_resources_name
-  role   = var.lambda_role.id
-  policy = data.aws_iam_policy_document.gibs_request_queue_policy.json
+data "aws_iam_policy_document" "allow_data_buckets_access" {
+  statement {
+    sid = "AllowAccessToDataBuckets"
+    actions = [
+      "s3:PutObject*",
+      "s3:GetObject*",
+      "s3:ListBucket*",
+    ]
+    resources = concat([
+      for bucket in var.data_buckets :
+      "arn:aws:s3:::${bucket}"
+    ],
+      [
+        for bucket in var.data_buckets :
+        "arn:aws:s3:::${bucket}/*"
+      ]
+    )
+  }
 }
+
+data "aws_iam_policy_document" "all_bignbit" {
+  source_policy_documents = [
+    data.aws_iam_policy_document.bignbit_lambda_policy.json,
+    data.aws_iam_policy_document.allow_data_buckets_access.json
+  ]
+}
+
+resource "aws_iam_role_policy" "bignbit_policy_attach" {
+  name   = "${local.aws_resources_name}_bignbit_policy_attach"
+  role   = aws_iam_role.bignbit_lambda_role.id
+  policy = data.aws_iam_policy_document.all_bignbit.json
+}
+
+
+

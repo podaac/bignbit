@@ -137,11 +137,11 @@ dmypy.json
 # Generated samples
 tests/2021*
 /terraform/big-lambda.zip
-/terraform_deploy/tfplan
+/examples/cumulus-tf/tfplan
 .terraform.d
 .terraform
 /.bash_history
-/terraform_deploy/cumulus-message-adapter.zip
-/terraform_deploy/.terraform.lock.hcl
+/examples/cumulus-tf/cumulus-message-adapter.zip
 bignbit-lambda.zip
-terraform_deploy/bignbit_module/
+/examples/cumulus-tf/bignbit_module/
+!/examples/cumulus-tf/.terraform.lock.hcl
