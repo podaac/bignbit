@@ -72,7 +72,7 @@ def fake_response_sqs_queue(monkeypatch):
 
 
 @pytest.fixture()
-def fake_response_sns_topic(fake_response_sqs_queue):
+def fake_response_sns_topic(fake_response_sqs_queue, monkeypatch):
     mock_sns_resource = boto3.resource('sns', region_name='us-west-2')
     topic = mock_sns_resource.create_topic(Name='gitcresponses')
     topic.subscribe(
@@ -82,6 +82,7 @@ def fake_response_sns_topic(fake_response_sqs_queue):
             'RawMessageDelivery': 'true'
         }
     )
+    monkeypatch.setenv(bignbit.send_to_gitc.GIBS_RESPONSE_TOPIC_ARN_ENV_NAME, topic.arn)
     return topic
 
 
@@ -110,8 +111,9 @@ def test_process_sends_message(fake_response_sqs_queue, mock_gitc_success, cnm_v
     sent_messages = mock_gitc_success.wait_for_messages(count=1)
 
     assert len(sent_messages) == 1
+    assert 'response_topic_arn' in sent_messages[0].message_attributes
 
-    gibs_cnm = sent_messages[0]
+    gibs_cnm = json.loads(sent_messages[0].body)
     jsonschema.validate(gibs_cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
 
     response_messages = fake_response_sqs_queue.receive_messages(MaxNumberOfMessages=1, WaitTimeSeconds=5)

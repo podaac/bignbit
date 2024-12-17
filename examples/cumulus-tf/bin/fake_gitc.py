@@ -14,6 +14,7 @@ def handler(event, context):
     logger.info(f"Received event {json.dumps(event)}")
 
     for message in event["Records"]:
+        response_topic_arn = message['messageAttributes']['response_topic_arn']
         message_body = loads(message["body"])
         logger.info(f"Processing message {json.dumps(message_body)}")
 
@@ -31,7 +32,7 @@ def handler(event, context):
 
         client = boto3.client('sns')
         publish_response = client.publish(
-            TargetArn=os.environ.get("GITC_RESPONSE_TOPIC_ARN"),
+            TargetArn=response_topic_arn,
             Message=json.dumps({'default': json.dumps(response)}),
             MessageStructure='json'
         )

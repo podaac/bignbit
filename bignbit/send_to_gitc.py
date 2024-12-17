@@ -15,6 +15,7 @@ CUMULUS_LOGGER = CumulusLogger('send_to_gitc')
 
 GIBS_REGION_ENV_NAME = "GIBS_REGION"
 GIBS_SQS_URL_ENV_NAME = "GIBS_SQS_URL"
+GIBS_RESPONSE_TOPIC_ARN_ENV_NAME = "GIBS_RESPONSE_TOPIC_ARN"
 
 
 class NotifyGitc(Process):
@@ -78,6 +79,7 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection
     """
 
     queue_url = os.environ.get(GIBS_SQS_URL_ENV_NAME)
+    gibs_response_topic_arn = os.environ.get(GIBS_RESPONSE_TOPIC_ARN_ENV_NAME)
     CUMULUS_LOGGER.info(f'Sending SQS message to GITC for image {image_set.name}')
 
     cnm = construct_cnm(image_set, cmr_provider, gitc_id, collection_name)
@@ -86,7 +88,13 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection
     sqs_message_params = {
         "QueueUrl": queue_url,
         "MessageBody": cnm_json,
-        "MessageGroupId": cnm['collection']
+        "MessageGroupId": cnm['collection'],
+        "MessageAttributes": {
+            'response_topic_arn': {
+                'StringValue': gibs_response_topic_arn,
+                'DataType': 'String'
+            }
+        }
     }
     CUMULUS_LOGGER.debug(f'CNM message for GIBS: {sqs_message_params}')
 
