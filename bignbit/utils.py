@@ -261,7 +261,7 @@ def get_harmony_client(environment_str: str) -> harmony.Client:
 
     harmony_environ = Environment.UAT
     if environment_str.upper() in ("SIT", "SANDBOX", "SBX"):
-        harmony_environ = Environment.SIT
+        harmony_environ = Environment.UAT
     elif environment_str.upper() == "UAT":
         harmony_environ = Environment.UAT
     elif environment_str.upper() in ("OPS", "PROD"):
