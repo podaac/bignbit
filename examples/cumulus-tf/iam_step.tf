@@ -1,4 +1,3 @@
-data "aws_region" "current" {}
 
 data "aws_iam_policy_document" "states_assume_role_policy" {
   statement {
