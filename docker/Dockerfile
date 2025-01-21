@@ -25,7 +25,7 @@ WORKDIR /home/dockeruser
 COPY ./bignbit ./bignbit
 
 COPY --chown=dockeruser poetry.lock pyproject.toml README.md ./
-RUN /home/dockeruser/.local/bin/poetry lock --no-update
+RUN /home/dockeruser/.local/bin/poetry lock
 RUN mkdir -p "${FUNCTION_DIR}" && \
     /home/dockeruser/.local/bin/poetry install --only main --sync && \
     cp -r $(/home/dockeruser/.local/bin/poetry env list --full-path | awk '{print $1}')/lib/python*/site-packages/* ${FUNCTION_DIR} && \
