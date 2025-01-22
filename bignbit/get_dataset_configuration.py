@@ -66,7 +66,7 @@ def get_collection_config(config_bucket_name: str, config_key_name: str) -> dict
 
     try:
         object_result = s3_client.get_object(Bucket=config_bucket_name, Key=config_key_name)
-    except s3_client.client.exceptions.NoSuchKey as ex:
+    except s3_client.exceptions.NoSuchKey as ex:
         raise MissingDatasetConfiguration(
             f"Dataset configuration not found s3://{config_bucket_name}/{config_key_name}") from ex
 
