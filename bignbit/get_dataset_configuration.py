@@ -12,6 +12,12 @@ from cumulus_process import Process
 CUMULUS_LOGGER = CumulusLogger('get_dataset_configuration')
 
 
+class MissingDatasetConfiguration(Exception):
+    """
+    Exception for missing dataset configuration
+    """
+
+
 class CMA(Process):
     """
     A cumulus message adapter
@@ -58,7 +64,12 @@ def get_collection_config(config_bucket_name: str, config_key_name: str) -> dict
     """
     s3_client = boto3.client('s3')
 
-    object_result = s3_client.get_object(Bucket=config_bucket_name, Key=config_key_name)
+    try:
+        object_result = s3_client.get_object(Bucket=config_bucket_name, Key=config_key_name)
+    except s3_client.client.exceptions.NoSuchKey as ex:
+        raise MissingDatasetConfiguration(
+            f"Dataset configuration not found s3://{config_bucket_name}/{config_key_name}") from ex
+
     return json.load(object_result['Body'])
 
 
