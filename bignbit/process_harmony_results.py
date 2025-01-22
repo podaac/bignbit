@@ -1,8 +1,10 @@
 """Cumulus lambda class to extract details about the results from the Harmony job"""
+import hashlib
 import logging
 import os
 from urllib.parse import urlparse
 
+import boto3
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 from harmony import LinkType
@@ -55,6 +57,7 @@ def process_results(harmony_job_id: str, cmr_env: str, variable: str):
         dict
             A list of CMA file dictionaries pointing to the transformed image(s)
     """
+    s3 = boto3.client('s3')
     harmony_client = utils.get_harmony_client(cmr_env)
     result_urls = list(harmony_client.result_urls(harmony_job_id, link_type=LinkType.s3))
 
@@ -64,11 +67,19 @@ def process_results(harmony_job_id: str, cmr_env: str, variable: str):
     file_dicts = []
     for url in result_urls:
         bucket, key = urlparse(url).netloc, urlparse(url).path.lstrip("/")
+
+        response = s3.get_object(Bucket=bucket, Key=key)
+        md5_hash = hashlib.new('md5')
+        for chunk in response['Body'].iter_chunks(chunk_size=1024 * 1024):
+            md5_hash.update(chunk)
+
         filename = key.split("/")[-1]
         file_dict = {
             "fileName": filename,
             "bucket": bucket,
-            "key": key
+            "key": key,
+            "checksum": md5_hash.hexdigest(),
+            "checksumType": 'md5'
         }
         # Weird quirk where if we are working with a collection that doesn't define variables, the Harmony request
         # should specify 'all' as the variable value but the GIBS message should be sent with the variable set to 'none'
