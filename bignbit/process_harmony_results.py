@@ -57,7 +57,7 @@ def process_results(harmony_job_id: str, cmr_env: str, variable: str):
         dict
             A list of CMA file dictionaries pointing to the transformed image(s)
     """
-    s3 = boto3.client('s3')
+    s3_client = boto3.client('s3')
     harmony_client = utils.get_harmony_client(cmr_env)
     result_urls = list(harmony_client.result_urls(harmony_job_id, link_type=LinkType.s3))
 
@@ -68,7 +68,7 @@ def process_results(harmony_job_id: str, cmr_env: str, variable: str):
     for url in result_urls:
         bucket, key = urlparse(url).netloc, urlparse(url).path.lstrip("/")
 
-        response = s3.get_object(Bucket=bucket, Key=key)
+        response = s3_client.get_object(Bucket=bucket, Key=key)
         md5_hash = hashlib.new('md5')
         for chunk in response['Body'].iter_chunks(chunk_size=1024 * 1024):
             md5_hash.update(chunk)
