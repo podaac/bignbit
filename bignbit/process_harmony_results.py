@@ -70,7 +70,7 @@ def process_results(harmony_job_id: str, cmr_env: str, variable: str):
 
         response = s3_client.get_object(Bucket=bucket, Key=key)
         md5_hash = hashlib.new('md5')
-        for chunk in response['Body'].iter_chunks(chunk_size=1024 * 1024):
+        for chunk in response['Body'].iter_chunks(chunk_size=100 * 1024 * 1024):  # 100 MB chunk size
             md5_hash.update(chunk)
 
         filename = key.split("/")[-1]
