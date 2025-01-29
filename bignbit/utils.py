@@ -160,7 +160,7 @@ def sha512sum(filepath: pathlib.Path):
     return hash512.hexdigest()
 
 
-def upload_cnm(bucket_name: str, key_name: str, cnm_content: dict):
+def upload_cnm(bucket_name: str, key_name: str, cnm_content: str) -> str:
     """
     Upload CNM message into a s3 bucket
 
@@ -172,12 +172,12 @@ def upload_cnm(bucket_name: str, key_name: str, cnm_content: dict):
     key_name: str
       Key to object location in bucket
 
-    cnm_content: dict
+    cnm_content: str
       The CNM message to upload
 
     Returns
     -------
-    None
+    S3 URI of new object
     """
     s3_client = boto3.client('s3')
     s3_client.put_object(

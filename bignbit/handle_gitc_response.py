@@ -42,8 +42,8 @@ def handler(event, _):
 
         cnm_key_name = os.environ['POBIT_AUDIT_PATH_NAME'] + "/" + collection_name + "/" + granule_ur + "." + message_body['submissionTime'] + "." + "cnm-r.json"
 
-        utils.upload_cnm(os.environ['POBIT_AUDIT_BUCKET_NAME'], cnm_key_name, json.dumps(message_body))
+        s3_path = utils.upload_cnm(os.environ['POBIT_AUDIT_BUCKET_NAME'], cnm_key_name, json.dumps(message_body))
 
-        logging.debug('CNM-R uploaded to s3 audit bucket for id %s', gitc_id)
+        logging.info('CNM-R uploaded to %s for id %s',s3_path, gitc_id)
 
     return {"statusCode": 200, "body": "All good"}

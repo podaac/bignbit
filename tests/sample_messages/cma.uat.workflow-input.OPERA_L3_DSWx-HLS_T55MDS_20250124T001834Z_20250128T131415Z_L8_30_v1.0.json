@@ -1,0 +1,69 @@
+{
+  "meta": {
+    "provider": {},
+    "stack": {},
+    "buckets": {
+      "internal": {
+        "name": "podaac-uat-svc-internal",
+        "type": "internal"
+      },
+      "private": {
+        "name": "podaac-uat-svc-private",
+        "type": "private"
+      },
+      "protected": {
+        "name": "podaac-uat-svc-protected",
+        "type": "protected"
+      },
+      "public": {
+        "name": "podaac-uat-svc-public",
+        "type": "public"
+      },
+      "staging": {
+        "name": "podaac-uat-svc-staging",
+        "type": "internal"
+      }
+    },
+    "cmr": {
+      "clientId": "POCLOUD",
+      "cmrEnvironment": "UAT",
+      "cmrLimit": 100,
+      "cmrPageSize": 50,
+      "provider": "POCLOUD",
+      "username": "podaaccumulus"
+    },
+    "collection": {
+      "name": "OPERA_L3_DSWX-HLS_V1",
+      "version": "1.0"
+    }
+  },
+  "payload": {
+    "granules": [
+      {
+        "createdAt": 1738070208473,
+        "granuleId": "OPERA_L3_DSWx-HLS_T43RDH_20241122T054141Z_20241206T215709Z_S2A_30_v1.0",
+        "provider": "opera",
+        "dataType": "OPERA_L3_DSWX-HLS_V1",
+        "sync_granule_duration": 2241,
+        "files": [
+          {
+            "bucket": "podaac-uat-svc-private",
+            "fileName": "OPERA_L3_DSWx-HLS_T43RDH_20241122T054141Z_20241206T215709Z_S2A_30_v1.0_BROWSE.tif",
+            "size": 371570,
+            "checksumType": "md5",
+            "checksum": "2db6fa202615746701663c06220ecee5",
+            "source": "products/DSWx_HLS/OPERA_L3_DSWx-HLS_T43RDH_20241122T054141Z_20241206T215709Z_S2A_30_v1.0/OPERA_L3_DSWx-HLS_T43RDH_20241122T054141Z_20241206T215709Z_S2A_30_v1.0_BROWSE.tif",
+            "type": "data",
+            "key": "OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T43RDH_20241122T054141Z_20241206T215709Z_S2A_30_v1.0_BROWSE.tif"
+          }
+        ],
+        "version": "1.0",
+        "cmrLink": "https://cmr.uat.earthdata.nasa.gov/search/concepts/G1272632743-POCLOUD.umm_json",
+        "cmrConceptId": "G1272632743-POCLOUD",
+        "published": true,
+        "cmrMetadataFormat": "umm_json_v1_6_6",
+        "post_to_cmr_duration": 309
+      }
+    ]
+  }
+}
