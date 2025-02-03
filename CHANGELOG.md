@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   directly in s3 bucket instead of requiring data to be copied.
 - [issues/41](https://github.com/podaac/bignbit/issues/41): Module no longer depends on deprecated hashicorp/template provider
 - [issues/42](https://github.com/podaac/bignbit/issues/42): Terraform version upgraded to v1.5.3
+- Default values for `config_dir` and `bignbit_audit_path` have changed to `big-config` and `bignbit-cnm-output` respectively
 ### Deprecated 
 ### Removed
 - [issues/7](https://github.com/podaac/bignbit/issues/15): Remove the wait for GITC response
