@@ -29,28 +29,28 @@ class CNM(Process):
           Same input sent to this function
 
         """
-        pobit_audit_bucket = self.config['pobit_audit_bucket']
-        pobit_audit_path = self.config['pobit_audit_path']
+        bignbit_audit_bucket = self.config['bignbit_audit_bucket']
+        bignbit_audit_path = self.config['bignbit_audit_path']
 
         granule_ur = self.config['granule_ur']
 
         cnm_content = self.config['cnm']
         collection_name = cnm_content['collection']
 
-        cnm_key_name = pobit_audit_path + "/" + collection_name + "/" + granule_ur + "." + cnm_content['submissionTime'] + "." + "cnm.json"
+        cnm_key_name = bignbit_audit_path + "/" + collection_name + "/" + granule_ur + "." + cnm_content['submissionTime'] + "." + "cnm.json"
 
-        upload_cnm(pobit_audit_bucket, cnm_key_name, cnm_content)
+        upload_cnm(bignbit_audit_bucket, cnm_key_name, cnm_content)
 
         return self.input
 
 
-def upload_cnm(pobit_audit_bucket: str, cnm_key_name: str, cnm_content: dict):
+def upload_cnm(bignbit_audit_bucket: str, cnm_key_name: str, cnm_content: dict):
     """
     Upload CNM message into a s3 bucket
 
     Parameters
     ----------
-    pobit_audit_bucket: str
+    bignbit_audit_bucket: str
       Bucket name containing where CNM should be uploaded
 
     cnm_key_name: str
@@ -66,7 +66,7 @@ def upload_cnm(pobit_audit_bucket: str, cnm_key_name: str, cnm_content: dict):
     s3_client = boto3.client('s3')
     s3_client.put_object(
         Body=json.dumps(cnm_content, default=str).encode("utf-8"),
-        Bucket=pobit_audit_bucket,
+        Bucket=bignbit_audit_bucket,
         Key=cnm_key_name
     )
 

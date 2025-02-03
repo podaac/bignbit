@@ -525,8 +525,8 @@
                   "collection": "{$.collection_name}",
                   "granule_ur": "{$.granule_ur}",
                   "cnm": "{$.cnm.Payload.payload}",
-                  "pobit_audit_bucket": "${PobitAuditBucket}",
-                  "pobit_audit_path": "${PobitAuditPath}",
+                  "bignbit_audit_bucket": "${BignbitAuditBucket}",
+                  "bignbit_audit_path": "${BignbitAuditPath}",
                   "cumulus_message": {
                     "input": "{$}"
                   }

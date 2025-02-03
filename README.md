@@ -129,8 +129,8 @@ This module uses the following input variables:
 | data_buckets               | list(string) | List of buckets where data is stored. Lambdas will be given read/write access to these buckets.                                  | []                                                                  |
 | config_bucket              | string       | Bucket where dataset configuration is stored                                                                                     |                                                                     |
 | config_dir                 | string       | Path relative to `config_bucket` where dataset configuration is stored                                                           | "datset-config"                                                     |
-| pobit_audit_bucket         | string       | S3 bucket where messages exchanged with GITC will be saved. Typically the cumulus internal bucket                                |                                                                     |
-| pobit_audit_path           | string       | Path relative to `pobit_audit_bucket` where messages exchanged with GITC will be saved.                                          | "pobit-cma-output"                                                  |
+| bignbit_audit_bucket         | string       | S3 bucket where messages exchanged with GITC will be saved. Typically the cumulus internal bucket                                |                                                                     |
+| bignbit_audit_path           | string       | Path relative to `bignbit_audit_bucket` where messages exchanged with GITC will be saved.                                          | "pobit-cma-output"                                                  |
 | bignbit_staging_bucket     | string       | S3 bucket where generated images will be saved. Leave blank to use bucket managed by this module.                                | _create new bucket named svc-${var.app_name}-${var.prefix}-staging_ |
 | harmony_staging_path       | string       | Path relative to `bignbit_staging_bucket` where harmony results will be saved.                                                   | "bignbit-harmony-output"                                            |
 | gibs_region                | string       | Region where GIBS resources are deployed                                                                                         |                                                                     |
@@ -157,8 +157,8 @@ This module supplies the following outputs:
 | pobit_handle_gitc_response_arn   | ARN of the lambda function                                        | aws_lambda_function.handle_gitc_response.arn         |
 | pobit_gibs_topic                 | ARN of SNS topic GIBS replies to                                  | aws_sns_topic.gibs_response_topic.arn                |
 | pobit_gibs_queue                 | ARN of SQS queue GIBS replies are published to                    | aws_sqs_queue.gibs_response_queue.arn                |
-| pobit_audit_bucket               | Name of bucket where messages exchanged with GIBS are stored      | var.pobit_audit_bucket                               |
-| pobit_audit_path                 | Path relative to audit bucket where messages with GIBS are stored | var.pobit_audit_path                                 |
+| bignbit_audit_bucket               | Name of bucket where messages exchanged with GIBS are stored      | var.bignbit_audit_bucket                               |
+| bignbit_audit_path                 | Path relative to audit bucket where messages with GIBS are stored | var.bignbit_audit_path                                 |
 | get_dataset_configuration_arn    | ARN of the lambda function                                        | aws_lambda_function.get_dataset_configuration.arn    |
 | get_granule_umm_json_arn         | ARN of the lambda function                                        | aws_lambda_function.get_granule_umm_json.arn         |
 | get_collection_concept_id_arn    | ARN of the lambda function                                        | aws_lambda_function.get_collection_concept_id.arn    |

@@ -22,18 +22,18 @@ variable "config_bucket" {
 variable "config_dir" {
   type = string
   description = "Path relative to config_bucket where dataset configuration is stored"
-  default = "datset-config"
+  default = "big-config"
 }
 
-variable "pobit_audit_bucket" {
+variable "bignbit_audit_bucket" {
   type = string
-  description = "S3 bucket where messages exchanged with GITC will be saved. Typically the cumulus internal bucket"
+  description = "S3 bucket where messages exchanged with GIBS will be saved. Typically the cumulus internal bucket"
 }
 
-variable "pobit_audit_path" {
+variable "bignbit_audit_path" {
   type = string
-  description = "Path relative to pobit_audit_bucket where messages exchanged with GITC will be saved."
-  default = "pobit-cma-output"
+  description = "Path relative to bignbit_audit_bucket where messages exchanged with GIBS will be saved."
+  default = "bignbit-cnm-output"
 }
 
 variable "bignbit_staging_bucket" {

@@ -11,9 +11,9 @@ module "bignbit_module" {
     data_buckets = [aws_s3_bucket.protected.id, aws_s3_bucket.public.id, aws_s3_bucket.private.id]
 
     config_bucket = aws_s3_bucket.internal.bucket
-    config_dir = "dataset-config"
+    config_dir = "big-config"
 
-    pobit_audit_bucket = aws_s3_bucket.internal.bucket
+    bignbit_audit_bucket = aws_s3_bucket.internal.bucket
 
     gibs_region = var.gibs_region == "mocked" ? "us-west-2" : var.gibs_region
     gibs_queue_name = var.gibs_queue_name == "mocked" ? aws_sqs_queue.gitc_input_queue[0].name : var.gibs_queue_name
