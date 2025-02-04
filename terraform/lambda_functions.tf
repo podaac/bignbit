@@ -441,8 +441,8 @@ resource "aws_lambda_function" "handle_gitc_response" {
       STACK_NAME                  = local.aws_resources_name
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
       REGION                      = data.aws_region.current.name
-      POBIT_AUDIT_BUCKET_NAME     = var.pobit_audit_bucket
-      POBIT_AUDIT_PATH_NAME       = var.pobit_audit_path
+      BIGNBIT_AUDIT_BUCKET_NAME   = var.bignbit_audit_bucket
+      BIGNBIT_AUDIT_PATH_NAME     = var.bignbit_audit_path
       CMR_ENVIRONMENT             = local.environment != "OPS" ? "UAT" : ""
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
@@ -574,10 +574,10 @@ data "aws_iam_policy_document" "bignbit_lambda_policy" {
     resources = [
       "arn:aws:s3:::${local.staging_bucket_name}",
       "arn:aws:s3:::${var.config_bucket}",
-      "arn:aws:s3:::${var.pobit_audit_bucket}",
+      "arn:aws:s3:::${var.bignbit_audit_bucket}",
       "arn:aws:s3:::${local.staging_bucket_name}/*",
       "arn:aws:s3:::${var.config_bucket}/*",
-      "arn:aws:s3:::${var.pobit_audit_bucket}/*"
+      "arn:aws:s3:::${var.bignbit_audit_bucket}/*"
     ]
   }
 

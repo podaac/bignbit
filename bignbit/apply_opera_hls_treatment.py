@@ -237,7 +237,9 @@ def create_file_metadata(transformed_images_filepaths: List[pathlib.Path], stagi
             "fileName": transformed_image.name,
             "bucket": staging_bucket,
             "key": f'opera_hls_processing/{datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d")}/{transformed_image.name}',
-            "local_filepath": str(transformed_image.resolve())
+            "local_filepath": str(transformed_image.resolve()),
+            "checksum": utils.sha512sum(transformed_image),
+            "checksumType": "SHA512"
         }
 
         new_cma_file_meta_list.append(file_dict)

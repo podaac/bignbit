@@ -24,7 +24,7 @@ resource "aws_sns_topic" "gibs_response_topic" {
   name   = "${local.aws_resources_name}-gibs-response-topic"
   lifecycle {
     # GIBS publishes to this topic, so we want to avoid destroying it unless coordinating the change with GIBS
-    # prevent_destroy = true
+    prevent_destroy = true
   }
 }
 

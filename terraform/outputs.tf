@@ -18,12 +18,12 @@ output "pobit_gibs_queue" {
   value = aws_sqs_queue.gibs_response_queue.arn
 }
 
-output "pobit_audit_bucket"{
-  value = var.pobit_audit_bucket
+output "bignbit_audit_bucket"{
+  value = var.bignbit_audit_bucket
 }
 
-output "pobit_audit_path"{
-  value = var.pobit_audit_path
+output "bignbit_audit_path"{
+  value = var.bignbit_audit_path
 }
 
 output "get_dataset_configuration_arn" {
@@ -94,8 +94,8 @@ output "workflow_definition" {
     BuildImageSetsLambda          = aws_lambda_function.build_image_sets.arn,
     SendToGITCLambda              = aws_lambda_function.send_to_gitc.arn,
     SaveCNMMessageLambda          = aws_lambda_function.save_cnm_message.arn,
-    PobitAuditBucket              = var.pobit_audit_bucket,
-    PobitAuditPath                = var.pobit_audit_path,
+    BignbitAuditBucket            = var.bignbit_audit_bucket,
+    BignbitAuditPath              = var.bignbit_audit_path,
     StagingBucket                 = local.staging_bucket_name,
     HarmonyStagingPath            = var.harmony_staging_path
   })
