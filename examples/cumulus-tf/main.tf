@@ -40,6 +40,5 @@ locals {
     team: "TVA",
     application: local.ec2_resources_name,
     Environment = var.bignbit_stage
-    Version = var.app_version
   }
 }
