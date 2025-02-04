@@ -39,6 +39,7 @@ locals {
   default_tags = {
     team: "TVA",
     application: local.ec2_resources_name,
-    Environment = var.bignbit_stage
+    Environment = var.bignbit_stage,
+    Provider = "aws"
   }
 }

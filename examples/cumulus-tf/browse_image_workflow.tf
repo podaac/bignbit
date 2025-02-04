@@ -7,7 +7,8 @@ provider "aws" {
   default_tags {
     tags = merge(local.default_tags, {
       application = local.bignbit_appname,
-      Version     = var.app_version
+      Version     = var.app_version,
+      Provider = "bignbit-aws"
     })
   }
 }
