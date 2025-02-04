@@ -11,18 +11,6 @@ terraform {
   }
 }
 
-provider "aws" {
-  region = "us-west-2"
-
-  ignore_tags {
-    key_prefixes = ["gsfc-ngap"]
-  }
-
-  default_tags {
-    tags = local.default_tags
-  }
-}
-
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 

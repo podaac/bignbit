@@ -39,7 +39,6 @@ locals {
   default_tags = {
     team: "TVA",
     application: local.ec2_resources_name,
-    Environment = var.bignbit_stage
-    Version = var.app_version
+    Environment = var.bignbit_stage,
   }
 }
