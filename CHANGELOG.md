@@ -13,6 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.2.1]
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- [issues/50](https://github.com/podaac/bignbit/issues/50): Fixed bug where `count` is unsupported for bignbit by inheriting the AWS provider config from the root module
+### Security
+
 ## [0.2.0]
 ### Added
 - [issues/40](https://github.com/podaac/bignbit/issues/40): New message attribute `response_topic_arn` will be added to every message sent to GIBS
