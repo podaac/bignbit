@@ -2,7 +2,7 @@
 ARG FUNCTION_DIR="/home/dockeruser/app"
 ARG GDAL_VERSION="3.6.3"
 
-FROM osgeo/gdal:ubuntu-small-${GDAL_VERSION} as build-image
+FROM osgeo/gdal:ubuntu-small-${GDAL_VERSION} AS build-image
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
@@ -25,7 +25,7 @@ WORKDIR /home/dockeruser
 COPY ./bignbit ./bignbit
 
 COPY --chown=dockeruser poetry.lock pyproject.toml README.md ./
-RUN /home/dockeruser/.local/bin/poetry lock --no-update
+RUN /home/dockeruser/.local/bin/poetry lock
 RUN mkdir -p "${FUNCTION_DIR}" && \
     /home/dockeruser/.local/bin/poetry install --only main --sync && \
     cp -r $(/home/dockeruser/.local/bin/poetry env list --full-path | awk '{print $1}')/lib/python*/site-packages/* ${FUNCTION_DIR} && \
@@ -38,7 +38,7 @@ FROM osgeo/gdal:ubuntu-small-${GDAL_VERSION}
 ARG FUNCTION_DIR
 RUN adduser --quiet --disabled-password --shell /bin/sh --home /home/dockeruser --gecos "" --uid 993 dockeruser
 USER dockeruser
-ENV HOME /home/dockeruser
+ENV HOME=/home/dockeruser
 WORKDIR ${FUNCTION_DIR}
 
 COPY --chown=dockeruser --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
@@ -48,4 +48,4 @@ COPY --chown=dockeruser docker/docker-entrypoint.sh /home/dockeruser/.local/bin/
 RUN chmod 755 /home/dockeruser/.local/bin/aws-lambda-rie /home/dockeruser/.local/bin/docker-entrypoint.sh && \
     touch bignbit/__init__.py
 ENTRYPOINT [ "/home/dockeruser/.local/bin/docker-entrypoint.sh" ]
-CMD [ "bignbit.apply_opera_treatment.lambda_handler" ]
+CMD [ "bignbit.apply_opera_hls_treatment.lambda_handler" ]

@@ -7,10 +7,10 @@ import boto3
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 
-CUMULUS_LOGGER = CumulusLogger('save_cma_message')
+CUMULUS_LOGGER = CumulusLogger('save_cmm_message')
 
 
-class CMA(Process):
+class CNM(Process):
     """
     A cumulus message adapter
     """
@@ -21,7 +21,7 @@ class CMA(Process):
 
     def process(self):
         """
-        Upload CMA message into a s3 bucket
+        Upload CNM message into a s3 bucket
 
         Returns
         -------
@@ -29,28 +29,35 @@ class CMA(Process):
           Same input sent to this function
 
         """
-        pobit_audit_bucket = self.config['pobit_audit_bucket']
-        cma_key_name = self.config['cma_key_name']
+        bignbit_audit_bucket = self.config['bignbit_audit_bucket']
+        bignbit_audit_path = self.config['bignbit_audit_path']
 
-        upload_cma(pobit_audit_bucket, cma_key_name, self.input)
+        granule_ur = self.config['granule_ur']
+
+        cnm_content = self.config['cnm']
+        collection_name = cnm_content['collection']
+
+        cnm_key_name = bignbit_audit_path + "/" + collection_name + "/" + granule_ur + "." + cnm_content['submissionTime'] + "." + "cnm.json"
+
+        upload_cnm(bignbit_audit_bucket, cnm_key_name, cnm_content)
 
         return self.input
 
 
-def upload_cma(pobit_audit_bucket: str, cma_key_name: str, cma_content: dict):
+def upload_cnm(bignbit_audit_bucket: str, cnm_key_name: str, cnm_content: dict):
     """
-    Upload CMA message into a s3 bucket
+    Upload CNM message into a s3 bucket
 
     Parameters
     ----------
-    pobit_audit_bucket: str
-      Bucket name containing where CMA should be uploaded
+    bignbit_audit_bucket: str
+      Bucket name containing where CNM should be uploaded
 
-    cma_key_name: str
+    cnm_key_name: str
       Key to object location in bucket
 
-    cma_content: dict
-      The CMA message to upload
+    cnm_content: dict
+      The CNM message to upload
 
     Returns
     -------
@@ -58,9 +65,9 @@ def upload_cma(pobit_audit_bucket: str, cma_key_name: str, cma_content: dict):
     """
     s3_client = boto3.client('s3')
     s3_client.put_object(
-        Body=json.dumps(cma_content, default=str).encode("utf-8"),
-        Bucket=pobit_audit_bucket,
-        Key=cma_key_name
+        Body=json.dumps(cnm_content, default=str).encode("utf-8"),
+        Bucket=bignbit_audit_bucket,
+        Key=cnm_key_name
     )
 
 
@@ -75,7 +82,7 @@ def lambda_handler(event, context):
     Returns
     ----------
         dict
-            A CMA json message
+            A CNM json message
     """
     # pylint: disable=duplicate-code
     levels = {
@@ -91,8 +98,8 @@ def lambda_handler(event, context):
     CUMULUS_LOGGER.logger.level = levels.get(logging_level, 'info')
     CUMULUS_LOGGER.setMetadata(event, context)
 
-    return CMA.cumulus_handler(event, context=context)
+    return CNM.cumulus_handler(event, context=context)
 
 
 if __name__ == "__main__":
-    CMA()
+    CNM()

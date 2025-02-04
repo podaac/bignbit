@@ -2,6 +2,7 @@
 """
 Transforms each image in the input using specific processing required to produce an image for display in GITC
 """
+import datetime
 import logging
 import os
 import pathlib
@@ -16,7 +17,7 @@ from osgeo import gdal
 
 from bignbit import utils
 
-CUMULUS_LOGGER = CumulusLogger('apply_opera_treatment')
+CUMULUS_LOGGER = CumulusLogger('apply_opera_hls_treatment')
 
 
 def load_mgrs_gibs_intersection():
@@ -51,17 +52,20 @@ class CMA(Process):
           A list of CMA file dictionaries pointing to the transformed image(s)
         """
         cma_file_list = self.input['big']
+        staging_bucket = self.config.get('bignbit_staging_bucket')
 
         mgrs_grid_code = utils.extract_mgrs_grid_code(self.input['granule_umm_json'])
-        file_metadata_list = transform_images(cma_file_list, pathlib.Path(f"{self.path}"), mgrs_grid_code)
+        file_metadata_list = transform_images(cma_file_list, pathlib.Path(f"{self.path}"), mgrs_grid_code,
+                                              staging_bucket)
         del self.input['big']
         self.input['big'] = file_metadata_list
         return self.input
 
 
-def transform_images(cma_file_list: List[Dict], temp_dir: pathlib.Path, mgrs_grid_code: str) -> List[Dict]:
+def transform_images(cma_file_list: List[Dict], temp_dir: pathlib.Path, mgrs_grid_code: str,
+                     staging_bucket: str) -> List[Dict]:
     """
-    Applies special OPERA processing to each input image. Each input image will result in multiple output transformed
+    Applies special OPERA HLS processing to each input image. Each input image will result in multiple output transformed
     images.
 
     Parameters
@@ -72,6 +76,8 @@ def transform_images(cma_file_list: List[Dict], temp_dir: pathlib.Path, mgrs_gri
         Temporary working directory on local disk
     mgrs_grid_code
         MGRS grid code for the current granule being processed
+    staging_bucket
+        Staging bucket to which transformed files should be written
 
     Returns
     -------
@@ -91,12 +97,12 @@ def transform_images(cma_file_list: List[Dict], temp_dir: pathlib.Path, mgrs_gri
         # Reproject and resample image to sub-tiles
         transformed_images_dirpath = temp_dir.joinpath(source_image_local_filepath.stem)
         transformed_images_dirpath.mkdir(parents=True)
-        transformed_images_filepaths = the_opera_treatment(source_image_local_filepath, transformed_images_dirpath,
-                                                           mgrs_grid_code)
+        transformed_images_filepaths = the_opera_hls_treatment(source_image_local_filepath, transformed_images_dirpath,
+                                                               mgrs_grid_code)
         CUMULUS_LOGGER.info(f'Created new images: {[str(t) for t in transformed_images_filepaths]}')
 
         # Create new file metadata for each new image
-        file_metadata_dicts = create_file_metadata(cma_file_meta, transformed_images_filepaths)
+        file_metadata_dicts = create_file_metadata(transformed_images_filepaths, staging_bucket)
         file_metadata_results.extend(file_metadata_dicts)
 
         # Upload new images to s3
@@ -138,8 +144,8 @@ def get_file(bucket: str, key: str, local_filepath: pathlib.Path) -> pathlib.Pat
     return local_filepath
 
 
-def the_opera_treatment(source_image_filepath: pathlib.Path, working_dirpath: pathlib.Path,
-                        mgrs_grid_code: str) -> List[pathlib.Path]:
+def the_opera_hls_treatment(source_image_filepath: pathlib.Path, working_dirpath: pathlib.Path,
+                            mgrs_grid_code: str) -> List[pathlib.Path]:
     """
     What is the OPERA treatment? Well, it is special.
 
@@ -205,7 +211,7 @@ def the_opera_treatment(source_image_filepath: pathlib.Path, working_dirpath: pa
     return result_image_filepaths
 
 
-def create_file_metadata(original_cma_file_meta: dict, transformed_images_filepaths: List[pathlib.Path]) -> List[Dict]:
+def create_file_metadata(transformed_images_filepaths: List[pathlib.Path], staging_bucket: str) -> List[Dict]:
     """
     Generate a new CMA file metadata dictionary for each transformed image using the original CMA metadata as a
     template.
@@ -215,10 +221,10 @@ def create_file_metadata(original_cma_file_meta: dict, transformed_images_filepa
 
     Parameters
     ----------
-    original_cma_file_meta
-        CMA file metadata dict of the original source image
     transformed_images_filepaths
         Local filepaths to each output transformed image
+    staging_bucket
+        Staging bucket to which transformed files should be written
 
     Returns
     -------
@@ -227,14 +233,16 @@ def create_file_metadata(original_cma_file_meta: dict, transformed_images_filepa
     """
     new_cma_file_meta_list = []
     for transformed_image in transformed_images_filepaths:
-        new_cma_file_meta = original_cma_file_meta.copy()
-        new_cma_file_meta["fileName"] = transformed_image.name
-        # Takes the 'key' from the original and replace just the last part with the new filename
-        new_cma_file_meta["key"] = str(pathlib.Path(*pathlib.Path(original_cma_file_meta["key"]).parts[0:-1]).joinpath(
-            transformed_image.name))
-        new_cma_file_meta["local_filepath"] = str(transformed_image.resolve())
+        file_dict = {
+            "fileName": transformed_image.name,
+            "bucket": staging_bucket,
+            "key": f'opera_hls_processing/{datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d")}/{transformed_image.name}',
+            "local_filepath": str(transformed_image.resolve()),
+            "checksum": utils.sha512sum(transformed_image),
+            "checksumType": "SHA512"
+        }
 
-        new_cma_file_meta_list.append(new_cma_file_meta)
+        new_cma_file_meta_list.append(file_dict)
 
     return new_cma_file_meta_list
 

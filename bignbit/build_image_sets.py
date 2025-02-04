@@ -6,7 +6,7 @@ import os
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 
-from bignbit.image_set import from_big_output, IncompleteImageSet
+from bignbit.image_set import from_big_output, IncompleteImageSet, ImageSet
 
 CUMULUS_LOGGER = CumulusLogger('build_image_sets')
 
@@ -52,11 +52,18 @@ class ImageSetGenerator(Process):
             del response_payload['big']
             response_payload['pobit'] = []
 
-            for image_set in image_sets:
+            for big_image_set in image_sets:
+                pobit_image_set = ImageSet(
+                    name=big_image_set.name + '_' + self.input['granules'][0]['cmrConceptId'],
+                    image=big_image_set.image,
+                    image_metadata=big_image_set.image_metadata,
+                    world_file=big_image_set.world_file)
+
                 response_payload['pobit'].append({
-                    'image_set': image_set._asdict(),
+                    'image_set': pobit_image_set._asdict(),
                     'cmr_provider': self.config.get('cmr_provider'),
                     'collection_name': self.config.get('collection').get('name'),
+                    'granule_ur': self.input['granules'][0]['granuleId']
                 })
 
         return response_payload

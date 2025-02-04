@@ -1,0 +1,206 @@
+{
+  "meta": {
+    "provider": {},
+    "stack": {},
+    "buckets": {
+      "internal": {
+        "name": "podaac-uat-svc-internal",
+        "type": "internal"
+      },
+      "private": {
+        "name": "podaac-uat-svc-private",
+        "type": "private"
+      },
+      "protected": {
+        "name": "podaac-uat-svc-protected",
+        "type": "protected"
+      },
+      "public": {
+        "name": "podaac-uat-svc-public",
+        "type": "public"
+      },
+      "staging": {
+        "name": "podaac-uat-svc-staging",
+        "type": "internal"
+      }
+    },
+    "cmr": {
+      "clientId": "POCLOUD",
+      "cmrEnvironment": "UAT",
+      "cmrLimit": 100,
+      "cmrPageSize": 50,
+      "provider": "POCLOUD",
+      "username": "podaaccumulus"
+    },
+    "collection": {
+      "name": "OPERA_L3_DSWX-S1_V1",
+      "version": "1.0"
+    }
+  },
+  "payload": {
+    "granules": [
+      {
+        "createdAt": 1733518237281,
+        "granuleId": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0",
+        "provider": "opera",
+        "dataType": "OPERA_L3_DSWX-S1_V1",
+        "sync_granule_duration": 1166,
+        "files": [
+          {
+            "bucket": "podaac-uat-svc-public",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_BROWSE.png",
+            "size": 5754,
+            "checksumType": "md5",
+            "checksum": "c5b4bd0cfe478279a9825a4edf53c61b",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_BROWSE.png",
+            "type": "browse",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_BROWSE.png"
+          },
+          {
+            "bucket": "podaac-uat-svc-protected",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B01_WTR.tif",
+            "size": 99968,
+            "checksumType": "md5",
+            "checksum": "efeef830e479cc8747fcd038330a6f6e",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B01_WTR.tif",
+            "type": "data",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B01_WTR.tif"
+          },
+          {
+            "bucket": "podaac-uat-svc-protected",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B02_BWTR.tif",
+            "size": 98425,
+            "checksumType": "md5",
+            "checksum": "94e8c1386194303fb4c3d4fbf17d3bde",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B02_BWTR.tif",
+            "type": "data",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B02_BWTR.tif"
+          },
+          {
+            "bucket": "podaac-uat-svc-protected",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B03_CONF.tif",
+            "size": 107257,
+            "checksumType": "md5",
+            "checksum": "2be28883d0b24890f7c33f4a008dcf9e",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B03_CONF.tif",
+            "type": "data",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B03_CONF.tif"
+          },
+          {
+            "bucket": "podaac-uat-svc-protected",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B04_DIAG.tif",
+            "size": 216605,
+            "checksumType": "md5",
+            "checksum": "3ecf23ac688360aade60acacb130951d",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B04_DIAG.tif",
+            "type": "data",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B04_DIAG.tif"
+          },
+          {
+            "bucket": "podaac-uat-svc-public",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0.iso.xml",
+            "size": 333986,
+            "checksumType": "md5",
+            "checksum": "f2a06932b0ad066073c822396518be09",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0.iso.xml",
+            "type": "metadata",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0.iso.xml"
+          },
+          {
+            "bucket": "podaac-uat-svc-public",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0.iso.xml.md5",
+            "size": 32,
+            "checksumType": "md5",
+            "checksum": "ee3d1e52012634d8a3982c57f1cc7e03",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0.iso.xml.md5",
+            "type": "metadata",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0.iso.xml.md5"
+          },
+          {
+            "bucket": "podaac-uat-svc-public",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B01_WTR.tif.md5",
+            "size": 32,
+            "checksumType": "md5",
+            "checksum": "7cd1bf39eba2ec55f9d73ee60dc388e9",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B01_WTR.tif.md5",
+            "type": "metadata",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B01_WTR.tif.md5"
+          },
+          {
+            "bucket": "podaac-uat-svc-public",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B02_BWTR.tif.md5",
+            "size": 32,
+            "checksumType": "md5",
+            "checksum": "ade3ebb43db5d1ab3bbe8ae25181dc36",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B02_BWTR.tif.md5",
+            "type": "metadata",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B02_BWTR.tif.md5"
+          },
+          {
+            "bucket": "podaac-uat-svc-public",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B03_CONF.tif.md5",
+            "size": 32,
+            "checksumType": "md5",
+            "checksum": "a76fc9be71b41c4b530caa6bfa620c2a",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B03_CONF.tif.md5",
+            "type": "metadata",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B03_CONF.tif.md5"
+          },
+          {
+            "bucket": "podaac-uat-svc-public",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B04_DIAG.tif.md5",
+            "size": 32,
+            "checksumType": "md5",
+            "checksum": "e69c48c1ef3fce0e81b1d9c9dcf5f9ac",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B04_DIAG.tif.md5",
+            "type": "metadata",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_B04_DIAG.tif.md5"
+          },
+          {
+            "bucket": "podaac-uat-svc-public",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_BROWSE.png.md5",
+            "size": 32,
+            "checksumType": "md5",
+            "checksum": "409faa73732f46d7c495ccff34ddf2ed",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_BROWSE.png.md5",
+            "type": "metadata",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_BROWSE.png.md5"
+          },
+          {
+            "bucket": "podaac-uat-svc-public",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_BROWSE.tif.md5",
+            "size": 32,
+            "checksumType": "md5",
+            "checksum": "da3ae2b44cd75152fd21fe4b628a1554",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_BROWSE.tif.md5",
+            "type": "metadata",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_BROWSE.tif.md5"
+          },
+          {
+            "bucket": "podaac-uat-svc-protected",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_BROWSE.tif",
+            "size": 93686,
+            "checksumType": "md5",
+            "checksum": "c1d839cf2b6477f96dced66494fb76e4",
+            "source": "products/DSWx_S1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_BROWSE.tif",
+            "type": "metadata",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0_BROWSE.tif"
+          },
+          {
+            "bucket": "podaac-uat-cumulus-private",
+            "fileName": "OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0.cmr.json",
+            "size": 27303,
+            "type": "metadata",
+            "key": "OPERA_L3_DSWX-S1_V1/OPERA_L3_DSWx-S1_T45QYD_20241001T121219Z_20241206T065726Z_S1A_30_v1.0.cmr.json"
+          }
+        ],
+        "version": "1.0",
+        "cmrLink": "https://cmr.uat.earthdata.nasa.gov/search/concepts/G1272632541-POCLOUD.umm_json",
+        "cmrConceptId": "G1272632541-POCLOUD",
+        "published": true,
+        "cmrMetadataFormat": "umm_json_v1_6_6",
+        "post_to_cmr_duration": 573
+      }
+    ]
+  }
+}

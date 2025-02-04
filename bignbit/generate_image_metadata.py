@@ -94,7 +94,7 @@ def generate_metadata(cma_file_list: List[Dict], granule_umm_json: dict, temp_di
         granule_type = "browse" if granule_extension in BROWSE_IMAGE_EXTENSION_SUBTYPES else "metadata"
         if granule_type == "browse":
             granule_subtype = BROWSE_IMAGE_EXTENSION_SUBTYPES.get(granule_extension, None)
-        elif granule_extension.lower() == '.wld':
+        elif granule_extension.lower() == '.wld' or granule_extension.lower() == '.pgw':
             granule_subtype = "world file"
         else:
             granule_subtype = None
@@ -268,8 +268,8 @@ def extract_granule_dates(granule_umm_json: dict) -> (str, str, str, str):
     """
     time_range_dict = granule_umm_json['TemporalExtent']['RangeDateTime']
 
-    beginning_time_dt = datetime.strptime(time_range_dict["BeginningDateTime"], "%Y-%m-%dT%H:%M:%S.%fZ")
-    ending_time_dt = datetime.strptime(time_range_dict["EndingDateTime"], "%Y-%m-%dT%H:%M:%S.%fZ")
+    beginning_time_dt = parse_datetime(time_range_dict["BeginningDateTime"])
+    ending_time_dt = parse_datetime(time_range_dict["EndingDateTime"])
     middle_time_dt = beginning_time_dt + (ending_time_dt - beginning_time_dt) / 2
 
     begin = beginning_time_dt.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
@@ -281,6 +281,26 @@ def extract_granule_dates(granule_umm_json: dict) -> (str, str, str, str):
     dataday = middle_year + day_of_year
 
     return begin, mid, end, dataday
+
+
+def parse_datetime(datetime_str: str) -> datetime:
+    """
+    Parses a datetime string into a datetime object.
+
+    Parameters
+    ----------
+    datetime_str
+      Datetime in str format to parse
+
+    Returns
+    -------
+    datetime
+      a datetime object
+    """
+    try:
+        return datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S.%fZ")
+    except ValueError:
+        return datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%SZ")
 
 
 def create_metadata_xml(beginning_time: str, middle_time: str, ending_time: str, dataday: str,

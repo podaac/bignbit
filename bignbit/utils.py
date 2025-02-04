@@ -27,7 +27,7 @@ def get_edl_creds() -> (str, str):
     global ED_USER  # pylint: disable=W0603
     global ED_PASS  # pylint: disable=W0603
 
-    ssm = boto3.client('ssm')
+    ssm = boto3.client('ssm', region_name='us-west-2')
 
     if not ED_USER:
         edl_user_ssm_name = os.environ.get('EDL_USER_SSM')
@@ -110,6 +110,35 @@ def get_cmr_user_token(edl_user: str, edl_pass: str, cmr_env: str) -> str:
     return EDL_USER_TOKEN['access_token']
 
 
+def get_umm_json(granule_concept_id: str, cmr_environment):
+    """
+    Get the granuleUR for the given concept ID
+
+    Parameters
+    ----------
+    granule_concept_id: str
+      the concept ID for the granule to find
+
+    cmr_environment: str
+      CMR environment used to retrieve user token
+
+    Returns
+    -------
+    dict
+      The umm-json document
+    """
+
+    edl_user, edl_pass = get_edl_creds()
+    token = get_cmr_user_token(edl_user, edl_pass, cmr_environment)
+
+    cmr_link = f'https://cmr.{"uat." if cmr_environment == "UAT" else ""}earthdata.nasa.gov/search/concepts/{granule_concept_id}.umm_json'
+    umm_json_response = requests.get(cmr_link, headers={'Authorization': f'Bearer {token}'}, timeout=10)
+    umm_json_response.raise_for_status()
+    umm_json = umm_json_response.json()
+
+    return umm_json
+
+
 def sha512sum(filepath: pathlib.Path):
     """
     Generate a SHA512 hash for the given file
@@ -129,6 +158,34 @@ def sha512sum(filepath: pathlib.Path):
         for each in iter(lambda: file.readinto(mem_view), 0):
             hash512.update(mem_view[:each])
     return hash512.hexdigest()
+
+
+def upload_cnm(bucket_name: str, key_name: str, cnm_content: str) -> str:
+    """
+    Upload CNM message into a s3 bucket
+
+    Parameters
+    ----------
+    bucket_name: str
+      Bucket name containing where CNM should be uploaded
+
+    key_name: str
+      Key to object location in bucket
+
+    cnm_content: str
+      The CNM message to upload
+
+    Returns
+    -------
+    S3 URI of new object
+    """
+    s3_client = boto3.client('s3')
+    s3_client.put_object(
+        Body=cnm_content,
+        Bucket=bucket_name,
+        Key=key_name
+    )
+    return f's3://{bucket_name}/{key_name}'
 
 
 def upload_to_s3(filepath: pathlib.Path, bucket_name: str, object_key: str):
@@ -204,7 +261,7 @@ def get_harmony_client(environment_str: str) -> harmony.Client:
 
     harmony_environ = Environment.UAT
     if environment_str.upper() in ("SIT", "SANDBOX", "SBX"):
-        harmony_environ = Environment.SIT
+        harmony_environ = Environment.UAT
     elif environment_str.upper() == "UAT":
         harmony_environ = Environment.UAT
     elif environment_str.upper() in ("OPS", "PROD"):

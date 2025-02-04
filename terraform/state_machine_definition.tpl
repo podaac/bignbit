@@ -77,23 +77,23 @@
           "MaxAttempts": 2
         }
       ],
-      "Next":"Convert to PNG?"
+      "Next":"Send to Harmony?"
     },
-    "Convert to PNG?":{
+    "Send to Harmony?":{
       "Type":"Choice",
       "Choices":[
         {
           "And":[
             {
-              "Variable":"$.payload.datasetConfigurationForBIG.config.convertToPNG",
+              "Variable":"$.payload.datasetConfigurationForBIG.config.sendToHarmony",
               "IsPresent":true
             },
             {
-              "Variable":"$.payload.datasetConfigurationForBIG.config.convertToPNG",
+              "Variable":"$.payload.datasetConfigurationForBIG.config.sendToHarmony",
               "BooleanEquals":true
             }
           ],
-          "Comment":"If convertToPNG is true",
+          "Comment":"If sendToHarmony is true",
           "Next":"Get Collection Concept Id"
         }
       ],
@@ -133,35 +133,36 @@
           "MaxAttempts": 2
        }
       ],
-      "Next":"Apply OPERA Treatment?"
+      "Next":"Apply OPERA HLS Treatment?"
     },
-    "Apply OPERA Treatment?":{
+    "Apply OPERA HLS Treatment?":{
       "Type":"Choice",
       "Choices":[
         {
           "And":[
             {
-              "Variable":"$.payload.datasetConfigurationForBIG.config.operaTreatment",
+              "Variable":"$.payload.datasetConfigurationForBIG.config.operaHLSTreatment",
               "IsPresent":true
             },
             {
-              "Variable":"$.payload.datasetConfigurationForBIG.config.operaTreatment",
+              "Variable":"$.payload.datasetConfigurationForBIG.config.operaHLSTreatment",
               "BooleanEquals":true
             }
           ],
-          "Comment":"If operaTreatment is true",
-          "Next":"Apply OPERA Treatment"
+          "Comment":"If operaHLSTreatment is true",
+          "Next":"Apply OPERA HLS Treatment"
         }
       ],
       "Default":"Generate Image Metadata"
     },
-    "Apply OPERA Treatment":{
+    "Apply OPERA HLS Treatment":{
       "Type":"Task",
-      "Resource":"${ApplyOperaTreatmentLambda}",
+      "Resource":"${ApplyOperaHLSTreatmentLambda}",
       "Parameters":{
         "cma":{
           "event.$":"$",
           "task_config":{
+            "bignbit_staging_bucket": "${StagingBucket}",
             "cumulus_message":{
               "input":"{$.payload}"
             }
@@ -236,7 +237,6 @@
       "Type":"Map",
       "ItemsPath":"$.payload.datasetConfigurationForBIG.config.imgVariables",
       "ItemSelector":{
-        "cumulus_meta.$":"$.cumulus_meta",
         "meta.$":"$.meta",
         "payload.$":"$.payload",
         "task_config.$":"$.task_config",
@@ -261,6 +261,8 @@
                   "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
                   "cmr_clientid":"{$.meta.cmr.clientId}",
                   "current_item":"{$.current_item}",
+                  "bignbit_staging_bucket": "${StagingBucket}",
+                  "harmony_staging_path": "${HarmonyStagingPath}",
                   "big_config":"{$.payload.datasetConfigurationForBIG}",
                   "cumulus_message":{
                     "input":"{$.payload}"
@@ -320,7 +322,7 @@
               {
                 "Variable":"$.payload.harmony_job_status",
                 "StringMatches":"successful",
-                "Next":"Copy Harmony Output to S3",
+                "Next":"Process Harmony Job Output",
                 "Comment":"Job successful"
               },
               {
@@ -344,16 +346,17 @@
             ],
             "Default":"Wait 20 Seconds"
           },
-          "Copy Harmony Output to S3":{
+          "Process Harmony Job Output":{
             "Type":"Task",
-            "Resource":"${CopyHarmonyOutputToS3Lambda}",
+            "Resource":"${ProcessHarmonyJobOutputLambda}",
+            "OutputPath": "$.payload",
             "Parameters":{
               "cma":{
                 "event.$":"$",
                 "task_config":{
                   "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
                   "harmony_job":"{$.payload.harmony_job.job}",
-                  "current_item":"{$.current_item}",
+                  "variable":"{$.current_item.id}",
                   "cumulus_message":{
                     "input":"{$.payload}"
                   }
@@ -375,7 +378,7 @@
               {
                 "ErrorEquals": [
                   "Lambda.Unknown"
-                ],
+               ],
                 "BackoffRate": 2,
                 "IntervalSeconds": 2,
                 "MaxAttempts": 2
@@ -432,7 +435,6 @@
       "Type":"Pass",
       "Next":"BuildImageSets",
       "Parameters":{
-        "cumulus_meta.$": "$.cumulus_meta",
         "meta": {
           "buckets.$": "$.meta.buckets",
           "cmr.$": "$.meta.cmr",
@@ -444,8 +446,7 @@
           "granules.$":"$.payload.granules",
           "big.$":"$.payload.big"
         },
-        "exception.$":"$.exception",
-        "task_config.$":"$.task_config"
+        "exception.$":"$.exception"
       },
       "Comment":"Removes extra data from payload that is no longer necessary"
     },
@@ -501,7 +502,6 @@
                   "task_config": {
                     "collection": "{$.collection}",
                     "cmr_provider": "{$.cmr_provider}",
-                    "token.$": "$$.Task.Token",
                     "cumulus_message": {
                       "input": "{$}"
                     }
@@ -510,24 +510,43 @@
               }
             },
             "Type": "Task",
-            "Resource": "arn:aws:states:::lambda:invoke.waitForTaskToken",
+            "Resource": "arn:aws:states:::lambda:invoke",
             "TimeoutSeconds": 86400,
-            "End": true,
-            "ResultPath": "$.gitc_response",
-            "Catch": [
+            "ResultPath": "$.cnm",
+            "Next": "SaveCNMMessage"
+          },
+          "SaveCNMMessage": {
+            "Type": "Task",
+            "Resource": "${SaveCNMMessageLambda}",
+            "Parameters": {
+              "cma": {
+                "event.$": "$",
+                "task_config": {
+                  "collection": "{$.collection_name}",
+                  "granule_ur": "{$.granule_ur}",
+                  "cnm": "{$.cnm.Payload.payload}",
+                  "bignbit_audit_bucket": "${BignbitAuditBucket}",
+                  "bignbit_audit_path": "${BignbitAuditPath}",
+                  "cumulus_message": {
+                    "input": "{$}"
+                  }
+                }
+              }
+            },
+            "Retry": [
               {
                 "ErrorEquals": [
-                  "States.Timeout"
-                ],
-                "ResultPath": "$.gitc_response",
-                "Next": "GITC Timeout"
+                  "Lambda.ServiceException",
+                  "Lambda.AWSLambdaException",
+                  "Lambda.SdkClientException",
+                  "Lambda.TooManyRequestsException"
+                  ],
+                "IntervalSeconds": 2,
+                "MaxAttempts": 6,
+                "BackoffRate": 2
               }
-            ]
-          },
-          "GITC Timeout": {
-            "Type": "Pass",
-            "End": true,
-            "Comment": "No response was received from GITC within the configured timeout"
+            ],
+            "End": true
           }
         }
       },
@@ -548,44 +567,6 @@
           ],
           "IntervalSeconds": 2,
           "MaxAttempts": 3
-        }
-      ],
-      "Next": "Save CMA Message"
-    },
-    "Save CMA Message": {
-      "Type": "Task",
-      "Resource": "${SaveCMAMessageLambda}",
-      "Parameters": {
-        "cma": {
-          "event.$": "$",
-          "task_config": {
-            "pobit_audit_bucket": "${PobitAuditBucket}",
-            "cma_key_name.$": "States.Format('${PobitAuditPath}/{}/{}.{}.cma.json', $.meta.collection.name, $.payload.granules[0].granuleId, $$.State.EnteredTime)",
-            "cumulus_message": {
-              "input": "{$.payload}"
-            }
-          }
-        }
-      },
-      "Retry": [
-        {
-          "ErrorEquals": [
-            "Lambda.ServiceException",
-            "Lambda.AWSLambdaException",
-            "Lambda.SdkClientException",
-            "Lambda.TooManyRequestsException"
-          ],
-          "IntervalSeconds": 2,
-          "MaxAttempts": 6,
-          "BackoffRate": 2
-        },
-        {
-          "ErrorEquals": [
-            "Lambda.Unknown"
-          ],
-          "BackoffRate": 2,
-          "IntervalSeconds": 2,
-          "MaxAttempts": 2
         }
       ],
       "Next": "WorkflowSucceeded"

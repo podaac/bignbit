@@ -19,7 +19,7 @@ resource "aws_sqs_queue" "gitc_input_deadletter" {
   content_based_deduplication = true
   redrive_allow_policy = jsonencode({
     redrivePermission = "byQueue",
-    sourceQueueArns   = ["arn:aws:sqs:${var.region}:${local.account_id}:${local.ec2_resources_name}-fake-gitc-IN.fifo"]
+    sourceQueueArns   = ["arn:aws:sqs:${data.aws_region.current.name}:${local.account_id}:${local.ec2_resources_name}-fake-gitc-IN.fifo"]
   })
 }
 
@@ -31,15 +31,9 @@ resource "aws_lambda_function" "fakeGitcProcessing" {
   source_code_hash = filebase64sha256("./bin/fake_gitc.py.zip")
   handler          = "fake_gitc.handler"
   role             = aws_iam_role.iam_execution.arn
-  runtime          = "python3.8"
+  runtime          = "python3.10"
   timeout          = 5
   memory_size      = 128
-
-  environment {
-    variables = {
-      GITC_RESPONSE_TOPIC_ARN  = module.bignbit_module.pobit_gibs_topic
-    }
-  }
 
   vpc_config {
     subnet_ids         = []
