@@ -5,6 +5,8 @@ locals {
 module "bignbit_module" {
     source = "../../terraform"
 
+    count = 1
+
     stage = var.bignbit_stage
     prefix = var.prefix
 
