@@ -193,3 +193,13 @@ _Visual representation of the bignbit step function state machine:_
 3. Activate the bignbit conda environment `conda activate bignbit`
 4. Install python package and dependencies `poetry install`
 5. Verify tests pass `poetry run pytest tests/`
+
+> [!IMPORTANT] 
+> If developing on a `darwin_arm64` based mac, running terraform locally may result
+> in an error message during `terraform init`: "Provider registry.terraform.io/hashicorp/null v2.1.2 
+> does not have a package available for your current platform, darwin_arm64."
+> One workaround for this is to use https://github.com/kreuzwerker/m1-terraform-provider-helper
+> to compile a local arm-based version of the hashicorp/null provider.
+> 
+> This is only necessary as long as cumulus core requires `~>2.1` version of hashicorp/null because
+> v3.x of the provider does have support for `darwin_arm64` platforms
