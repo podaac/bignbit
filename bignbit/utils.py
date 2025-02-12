@@ -12,7 +12,7 @@ from harmony import Environment, Client
 
 ED_USER = ED_PASS = None
 EDL_USER_TOKEN = {}
-HARMONY_CLIENT = None
+HARMONY_CLIENT: Client or None = None
 
 
 def get_edl_creds() -> (str, str):
@@ -269,6 +269,11 @@ def get_harmony_client(environment_str: str) -> harmony.Client:
         harmony_environ = Environment.PROD
 
     global HARMONY_CLIENT  # pylint: disable=W0603
+
+    # If we already have a client, but it's for a different environment, replace it with one configured for new environment.
+    if HARMONY_CLIENT and HARMONY_CLIENT.config.environment != harmony_environ:
+        HARMONY_CLIENT = None
+
     if not HARMONY_CLIENT:
         HARMONY_CLIENT = Client(
         env=harmony_environ,
