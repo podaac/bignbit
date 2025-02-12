@@ -435,6 +435,7 @@
       "Type":"Pass",
       "Next":"BuildImageSets",
       "Parameters":{
+        "cumulus_meta.$": "$.cumulus_meta",
         "meta": {
           "buckets.$": "$.meta.buckets",
           "cmr.$": "$.meta.cmr",

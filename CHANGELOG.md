@@ -13,6 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.2.3]
+### Added
+### Changed
+- [issues/55](https://github.com/podaac/bignbit/issues/55): Harmony client changed from per request and instead will be cached as global variable and will not validate auth credentials on initialization.
+### Deprecated
+### Removed
+### Fixed
+- [issues/54](https://github.com/podaac/bignbit/issues/54): Fixed bug where status was not being reported to Cumulus Dashboard by adding `cumulus_meta` back into the output CMA.
+### Security
+
 ## [0.2.2]
 ### Added
 ### Changed
