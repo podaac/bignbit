@@ -276,10 +276,10 @@ def get_harmony_client(environment_str: str) -> harmony.Client:
 
     if not HARMONY_CLIENT:
         HARMONY_CLIENT = Client(
-        env=harmony_environ,
-        auth=get_edl_creds(),
-        should_validate_auth=False
-    )
+            env=harmony_environ,
+            auth=get_edl_creds(),
+            should_validate_auth=False
+        )
 
     return HARMONY_CLIENT
 
