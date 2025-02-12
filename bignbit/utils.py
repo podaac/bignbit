@@ -14,6 +14,8 @@ ED_USER = ED_PASS = None
 EDL_USER_TOKEN = {}
 HARMONY_CLIENT: Client or None = None
 
+HARMONY_SHOULD_VALIDATE_AUTH = os.environ.get('HARMONY_SHOULD_VALIDATE_AUTH', default='False').upper() == 'TRUE'
+
 
 def get_edl_creds() -> (str, str):
     """
@@ -278,7 +280,7 @@ def get_harmony_client(environment_str: str) -> harmony.Client:
         HARMONY_CLIENT = Client(
             env=harmony_environ,
             auth=get_edl_creds(),
-            should_validate_auth=False
+            should_validate_auth=HARMONY_SHOULD_VALIDATE_AUTH
         )
 
     return HARMONY_CLIENT
