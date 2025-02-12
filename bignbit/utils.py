@@ -12,6 +12,7 @@ from harmony import Environment, Client
 
 ED_USER = ED_PASS = None
 EDL_USER_TOKEN = {}
+HARMONY_CLIENT = None
 
 
 def get_edl_creds() -> (str, str):
@@ -267,12 +268,15 @@ def get_harmony_client(environment_str: str) -> harmony.Client:
     elif environment_str.upper() in ("OPS", "PROD"):
         harmony_environ = Environment.PROD
 
-    harmony_client = Client(
+    global HARMONY_CLIENT  # pylint: disable=W0603
+    if not HARMONY_CLIENT:
+        HARMONY_CLIENT = Client(
         env=harmony_environ,
-        auth=get_edl_creds()
+        auth=get_edl_creds(),
+        should_validate_auth=False
     )
 
-    return harmony_client
+    return HARMONY_CLIENT
 
 
 def extract_mgrs_grid_code(granule_umm_json: dict) -> str:
