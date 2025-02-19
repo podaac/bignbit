@@ -443,7 +443,7 @@ resource "aws_lambda_function" "handle_gitc_response" {
       REGION                      = data.aws_region.current.name
       BIGNBIT_AUDIT_BUCKET_NAME   = var.bignbit_audit_bucket
       BIGNBIT_AUDIT_PATH_NAME     = var.bignbit_audit_path
-      CMR_ENVIRONMENT             = local.environment != "OPS" ? "UAT" : ""
+      CMR_ENVIRONMENT             = upper(local.environment) != "OPS" ? "UAT" : ""
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
     }
