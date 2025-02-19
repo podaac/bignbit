@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
+- [issues/60](https://github.com/podaac/bignbit/issues/60): Fixed bug causing GIBS responses to fail processing in OPS due to a case-sensitive comparison of environment name.
 ### Security
 
 ## [0.2.3]
