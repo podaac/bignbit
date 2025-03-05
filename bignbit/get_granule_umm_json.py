@@ -35,7 +35,7 @@ class CMA(Process):
         try:
             cmr_concept_id = self.input['granules'][0]['cmrConceptId']
         except KeyError:
-            cmr_concept_id = urllib.parse.urlparse(self.input['granules'][0]['cmrLink']).path.rstrip('/').split('/')[-1]
+            cmr_concept_id = urllib.parse.urlparse(self.input['granules'][0]['cmrLink']).path.rstrip('/').split('/')[-1].split('.')[0]
 
         self.input['granule_umm_json'] = utils.get_umm_json(cmr_concept_id, cmr_environment)
         return self.input
