@@ -115,7 +115,7 @@ The contents of the configuration file should be a valid json object with the fo
 | height                     | int          | Controls the height of the output image from Harmony (see https://github.com/nasa/harmony-browse-image-generator?tab=readme-ov-file#dimensions--scale-sizes) |
 | width                      | int          | Controls the width of the output image from Harmony (see https://github.com/nasa/harmony-browse-image-generator?tab=readme-ov-file#dimensions--scale-sizes)  |
 
-A few example configurations can be found in the (podaac/bignbit-config)[https://github.com/podaac/bignbit-config] repository. NOTE: some of the example configurations have other options specified (e.g. `variables`, `latVar`, `lonVar`, etc...) that are no longer supported by this module. The table above are the attributes that are still in use.
+A few example configurations can be found in the [podaac/bignbit-config](https://github.com/podaac/bignbit-config) repository. NOTE: some of the example configurations have other options specified (e.g. `variables`, `latVar`, `lonVar`, etc...) that are no longer supported by this module. The table above are the attributes that are still in use.
 
 ## Harmony requests
 
