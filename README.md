@@ -99,9 +99,21 @@ should define the bignbit module and the bignbit step function state machine. Se
 
 
 # Configuring a collection
+In order to configure a collection for use with bignbit the following must be done:
 
 1. Add config file to the `config_bucket`. The file should be named "_collection shortname_.cfg" and the contents should be JSON
 2. Associate the UMM-C record to the appropriate Harmony service (HyBIG, net2cog, etc...)
+
+The contents of the configuration file should be a valid json object with the following attributes:
+
+| Name                       | Type         | Description                                                                                                                      | 
+|----------------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------|
+| sendToHarmony              | boolean      | true/false if this collection should be processed using Harmony to generate browse images                                        |
+| operaHLSTreatment          | boolean      | true/false if this collection should have special OPERA_L3_DSWX-HLS processing applied to it (see [apply_opera_hls_treatment](bignbit/apply_opera_hls_treatment.py))  |
+| imageFilenameRegex         | string       | Regular expression used to identify which file in a granule should be used as the image file. Uses first if multiple files match |
+| imgVariables               | list(object) | List of JSON objects with at least one attribute called `id` whose value is the name of a variable to generate an image for. `all` can be used in cases where the collection does not have variables or all variables in the collection should have images generated      |
+| height                     | int          | Controls the height of the output image from Harmony (see https://github.com/nasa/harmony-browse-image-generator?tab=readme-ov-file#dimensions--scale-sizes) |
+| width                      | int          | Controls the width of the output image from Harmony (see https://github.com/nasa/harmony-browse-image-generator?tab=readme-ov-file#dimensions--scale-sizes)  |
 
 ## Harmony requests
 
