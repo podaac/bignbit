@@ -7,10 +7,12 @@ import boto3
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 
+from bignbit import utils
+
 CUMULUS_LOGGER = CumulusLogger('save_cmm_message')
 
 
-class CNM(Process):
+class CMA(Process):
     """
     A cumulus message adapter
     """
@@ -25,8 +27,8 @@ class CNM(Process):
 
         Returns
         -------
-        dict
-          Same input sent to this function
+        str
+          Path to the object in s3
 
         """
         bignbit_audit_bucket = self.config['bignbit_audit_bucket']
@@ -37,42 +39,44 @@ class CNM(Process):
         cnm_content = self.config['cnm']
         collection_name = cnm_content['collection']
 
-        cnm_key_name = bignbit_audit_path + "/" + collection_name + "/" + granule_ur + "." + cnm_content['submissionTime'] + "." + "cnm.json"
+        cnm_object_path = upload_cnm(bignbit_audit_bucket, bignbit_audit_path, collection_name, granule_ur, cnm_content)
 
-        upload_cnm(bignbit_audit_bucket, cnm_key_name, cnm_content)
-
-        return self.input
+        return cnm_object_path
 
 
-def upload_cnm(bignbit_audit_bucket: str, cnm_key_name: str, cnm_content: dict):
+def upload_cnm(bignbit_audit_bucket: str, bignbit_audit_path: str, collection_name: str, granule_ur : str, cnm_content: dict):
     """
     Upload CNM message into a s3 bucket
 
     Parameters
     ----------
     bignbit_audit_bucket: str
-      Bucket name containing where CNM should be uploaded
-
-    cnm_key_name: str
-      Key to object location in bucket
-
+        bucket name where the CNM message will be stored
+    bignbit_audit_path: str
+        path where the CNM message will be stored
+    collection_name: str
+        name of the collection
+    granule_ur : str
+        granule unique identifier
     cnm_content: dict
-      The CNM message to upload
+        CNM content as a python dictionary
 
     Returns
-    -------
-    None
+    ----------
+        str
+            The path to the uploaded CNM message in s3
     """
-    s3_client = boto3.client('s3')
-    s3_client.put_object(
-        Body=json.dumps(cnm_content, default=str).encode("utf-8"),
-        Bucket=bignbit_audit_bucket,
-        Key=cnm_key_name
-    )
+
+    cnm_key_name = bignbit_audit_path + "/" + collection_name + "/" + granule_ur + "." + cnm_content[
+        'submissionTime'] + "." + "cnm.json"
+    cnm_content_json = json.dumps(cnm_content)
+
+    return utils.upload_string_as_object(bignbit_audit_bucket, cnm_key_name, cnm_content_json)
 
 
 def lambda_handler(event, context):
-    """handler that gets called by aws lambda
+    """
+    Main lambda handler that gets called by aws lambda
     Parameters
     ----------
     event: dictionary
@@ -98,8 +102,8 @@ def lambda_handler(event, context):
     CUMULUS_LOGGER.logger.level = levels.get(logging_level, 'info')
     CUMULUS_LOGGER.setMetadata(event, context)
 
-    return CNM.cumulus_handler(event, context=context)
+    return CMA.cumulus_handler(event, context=context)
 
 
 if __name__ == "__main__":
-    CNM()
+    CMA()
