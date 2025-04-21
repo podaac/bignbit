@@ -43,7 +43,7 @@ class CMA(Process):
         return cnm_object_path
 
 
-def upload_cnm(bignbit_audit_bucket: str, bignbit_audit_path: str, collection_name: str, granule_ur : str, cnm_content: dict):
+def upload_cnm(bignbit_audit_bucket: str, bignbit_audit_path: str, collection_name: str, granule_ur: str, cnm_content: dict):
     """
     Upload CNM message into a s3 bucket
 
