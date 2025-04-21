@@ -3,7 +3,6 @@ import json
 import logging
 import os
 
-import boto3
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 
