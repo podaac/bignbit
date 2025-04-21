@@ -3,6 +3,7 @@ Simple CMA lambda that get a granule's umm-json document and ads it to the paylo
 """
 import logging
 import os
+import urllib.parse
 
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
@@ -31,7 +32,10 @@ class CMA(Process):
 
         """
         cmr_environment = self.config['cmr_environment']
-        cmr_concept_id = self.input['granules'][0]['cmrConceptId']
+        try:
+            cmr_concept_id = self.input['granules'][0]['cmrConceptId']
+        except KeyError:
+            cmr_concept_id = urllib.parse.urlparse(self.input['granules'][0]['cmrLink']).path.rstrip('/').split('/')[-1].split('.')[0]
 
         self.input['granule_umm_json'] = utils.get_umm_json(cmr_concept_id, cmr_environment)
         return self.input
