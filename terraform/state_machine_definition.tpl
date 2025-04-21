@@ -512,7 +512,7 @@
             "TimeoutSeconds": 86400,
             "ResultPath": "$.gibs",
             "ResultSelector": {
-              "cnm.$": "$.payload"
+              "cnmContent.$": "$.payload"
             },
             "Next": "SaveCNMMessage"
           },
@@ -525,7 +525,7 @@
                 "task_config": {
                   "collection": "{$.collection_name}",
                   "granule_ur": "{$.granule_ur}",
-                  "cnm": "{$.gibs.cnm}",
+                  "cnm": "{$.gibs.cnmContent}",
                   "bignbit_audit_bucket": "${BignbitAuditBucket}",
                   "bignbit_audit_path": "${BignbitAuditPath}",
                   "cumulus_message": {
@@ -535,9 +535,9 @@
               }
             },
             "ResultSelector": {
-              "path.$": "$.payload"
+              "cnmObjectName.$": "$.payload"
             },
-            "ResultPath": "$.gibs.cnm.object",
+            "ResultPath": "$.gibs",
             "Retry": [
               {
                 "ErrorEquals": [
