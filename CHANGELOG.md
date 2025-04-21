@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
+- [issues/68](https://github.com/podaac/bignbit/issues/68): Fixed bug that was causing excessive size of output state object from the TransferImageSet map step.
 ### Security
 
 ## [0.2.3]
