@@ -2,6 +2,7 @@
 
 import logging
 import os
+import urllib.parse
 
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
@@ -52,9 +53,14 @@ class ImageSetGenerator(Process):
             del response_payload['big']
             response_payload['pobit'] = []
 
+            try:
+                cmr_concept_id = self.input['granules'][0]['cmrConceptId']
+            except KeyError:
+                cmr_concept_id = urllib.parse.urlparse(self.input['granules'][0]['cmrLink']).path.rstrip('/').split('/')[-1].split('.')[0]
+
             for big_image_set in image_sets:
                 pobit_image_set = ImageSet(
-                    name=big_image_set.name + '_' + self.input['granules'][0]['cmrConceptId'],
+                    name=big_image_set.name + '_' + cmr_concept_id,
                     image=big_image_set.image,
                     image_metadata=big_image_set.image_metadata,
                     world_file=big_image_set.world_file)
