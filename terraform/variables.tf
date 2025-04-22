@@ -5,7 +5,14 @@ variable "stage" {
 
 variable "cmr_environment" {
   type = string
-  description = "Environment used when querying CMR during GIBS response handling."
+  description = "Environment used when querying CMR during GIBS response handling. Defaults to var.stage if not provided"
+  default = upper(var.stage)
+
+  validation {
+    condition     = contains(["UAT", "OPS"], upper(var.cmr_environment))
+    error_message = "Valid values for var: cmr_environment are (UAT, OPS)."
+  }
+
 }
 
 variable "prefix" {
