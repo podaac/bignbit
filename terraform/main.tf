@@ -17,6 +17,7 @@ data "aws_region" "current" {}
 
 locals {
   environment = var.stage
+  cmr_environment = var.cmr_environment ? upper(var.cmr_environment) : upper(var.stage)
 
   account_id = data.aws_caller_identity.current.account_id
 

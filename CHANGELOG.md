@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- [issues/71](https://github.com/podaac/bignbit/issues/71): New module parameter `cmr_environment` is used to determine which environment to use for CMR requests when processing GIBS responses.
 ### Changed
 ### Deprecated
 ### Removed
