@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bignbit"
-version = "0.2.4rc5"
+version = "0.2.4rc6"
 description = "Browse image generation and transfer"
 authors = ["PO.DAAC <podaac@jpl.nasa.gov>"]
 license = "Apache 2.0"
