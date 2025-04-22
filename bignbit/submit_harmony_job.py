@@ -2,6 +2,8 @@
 import datetime
 import logging
 import os
+import urllib.parse
+
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 
@@ -33,7 +35,10 @@ class CMA(Process):
         collection_concept_id = self.config.get('collection_concept_id')
         collection_name = self.config.get('collection').get('name')
         granule = self.config.get('granule')
-        granule_concept_id = granule.get('cmrConceptId')
+        if 'cmrConceptId' in granule:
+            granule_concept_id = granule.get('cmrConceptId')
+        else:
+            granule_concept_id = urllib.parse.urlparse(granule.get('cmrLink')).path.rstrip('/').split('/')[-1].split('.')[0]
         granule_id = granule.get('granuleId')
         current_item = self.config.get('current_item')
         variable = current_item.get('id')
