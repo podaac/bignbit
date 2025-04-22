@@ -433,7 +433,7 @@ resource "aws_lambda_function" "handle_gitc_response" {
   }
   function_name = local.handle_gitc_response_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 15
+  timeout       = 45
   memory_size   = 128
 
   environment {
