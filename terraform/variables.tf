@@ -3,6 +3,11 @@ variable "stage" {
   description = "Environment used for resource tagging (dev, int, ops, etc...)"
 }
 
+variable "cmr_environment" {
+  type = string
+  description = "Environment used when querying CMR during GIBS response handling."
+}
+
 variable "prefix" {
   type = string
   description = "Prefix used for resource naming (project name, env name, etc...)"
