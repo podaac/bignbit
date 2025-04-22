@@ -9,7 +9,7 @@ variable "cmr_environment" {
   default = ""
 
   validation {
-    condition     = contains(["UAT", "OPS"], upper(var.cmr_environment))
+    condition     = contains(["UAT", "OPS"], upper(var.cmr_environment)) || var.cmr_environment == ""
     error_message = "Valid values for var: cmr_environment are (UAT, OPS)."
   }
 
