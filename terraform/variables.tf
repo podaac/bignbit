@@ -6,7 +6,7 @@ variable "stage" {
 variable "cmr_environment" {
   type = string
   description = "Environment used when querying CMR during GIBS response handling. Defaults to var.stage if not provided"
-  default = upper(var.stage)
+  default = ""
 
   validation {
     condition     = contains(["UAT", "OPS"], upper(var.cmr_environment))
