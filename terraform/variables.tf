@@ -3,6 +3,18 @@ variable "stage" {
   description = "Environment used for resource tagging (dev, int, ops, etc...)"
 }
 
+variable "cmr_environment" {
+  type = string
+  description = "Environment used when querying CMR during GIBS response handling. Defaults to var.stage if not provided"
+  default = ""
+
+  validation {
+    condition     = contains(["UAT", "OPS"], upper(var.cmr_environment)) || var.cmr_environment == ""
+    error_message = "Valid values for var: cmr_environment are (UAT, OPS)."
+  }
+
+}
+
 variable "prefix" {
   type = string
   description = "Prefix used for resource naming (project name, env name, etc...)"

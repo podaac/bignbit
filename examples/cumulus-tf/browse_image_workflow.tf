@@ -21,6 +21,7 @@ module "bignbit_module" {
   count = 1
 
   stage  = var.bignbit_stage
+  cmr_environment = var.bignbit_stage
   prefix = var.prefix
 
   data_buckets = [aws_s3_bucket.protected.id, aws_s3_bucket.public.id, aws_s3_bucket.private.id]
