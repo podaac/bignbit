@@ -496,24 +496,24 @@
         "States": {
           "SendToGITC": {
             "Parameters": {
-              "FunctionName": "${SendToGITCLambda}",
-              "Payload": {
-                "cma": {
-                  "event.$": "$",
-                  "task_config": {
-                    "collection": "{$.collection}",
-                    "cmr_provider": "{$.cmr_provider}",
-                    "cumulus_message": {
-                      "input": "{$}"
-                    }
+              "cma": {
+                "event.$": "$",
+                "task_config": {
+                  "collection": "{$.collection}",
+                  "cmr_provider": "{$.cmr_provider}",
+                  "cumulus_message": {
+                    "input": "{$}"
                   }
                 }
               }
             },
             "Type": "Task",
-            "Resource": "arn:aws:states:::lambda:invoke",
+            "Resource": "${SendToGITCLambda}",
             "TimeoutSeconds": 86400,
-            "ResultPath": "$.cnm",
+            "ResultPath": "$.gibs",
+            "ResultSelector": {
+              "cnmContent.$": "$.payload"
+            },
             "Next": "SaveCNMMessage"
           },
           "SaveCNMMessage": {
@@ -525,7 +525,7 @@
                 "task_config": {
                   "collection": "{$.collection_name}",
                   "granule_ur": "{$.granule_ur}",
-                  "cnm": "{$.cnm.Payload.payload}",
+                  "cnm": "{$.gibs.cnmContent}",
                   "bignbit_audit_bucket": "${BignbitAuditBucket}",
                   "bignbit_audit_path": "${BignbitAuditPath}",
                   "cumulus_message": {
@@ -534,6 +534,10 @@
                 }
               }
             },
+            "ResultSelector": {
+              "cnmObjectName.$": "$.payload"
+            },
+            "ResultPath": "$.gibs",
             "Retry": [
               {
                 "ErrorEquals": [

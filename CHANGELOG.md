@@ -13,6 +13,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.2.4]
+### Added
+- [issues/71](https://github.com/podaac/bignbit/issues/71): New module parameter `cmr_environment` is used to determine which environment to use for CMR requests when processing GIBS responses.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- [issues/71](https://github.com/podaac/bignbit/issues/71): Increased timeout of the handle_gitc_response lambda function from 15 seconds to 45 seconds.
+- [issues/68](https://github.com/podaac/bignbit/issues/68): Fixed bug that was causing excessive size of output state object from the TransferImageSet map step.
+- [issues/60](https://github.com/podaac/bignbit/issues/60): Fixed bug causing GIBS responses to fail processing in OPS due to a case-sensitive comparison of environment name.
+- [issues/65](https://github.com/podaac/bignbit/issues/65): Fixed bug when input CMA message does not contain `cmrConceptId` by parsing the concept ID from the `cmrLink` instead.
+### Security
+
 ## [0.2.3]
 ### Added
 ### Changed

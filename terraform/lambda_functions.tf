@@ -433,7 +433,7 @@ resource "aws_lambda_function" "handle_gitc_response" {
   }
   function_name = local.handle_gitc_response_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 15
+  timeout       = 45
   memory_size   = 128
 
   environment {
@@ -443,7 +443,7 @@ resource "aws_lambda_function" "handle_gitc_response" {
       REGION                      = data.aws_region.current.name
       BIGNBIT_AUDIT_BUCKET_NAME   = var.bignbit_audit_bucket
       BIGNBIT_AUDIT_PATH_NAME     = var.bignbit_audit_path
-      CMR_ENVIRONMENT             = local.environment != "OPS" ? "UAT" : ""
+      CMR_ENVIRONMENT             = local.cmr_environment
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
     }
