@@ -279,7 +279,6 @@ jobs:
       TF_VAR_gibs_account_id: ${{ secrets.GIBS_ACCOUNT_ID }}
     if: |
       github.ref == 'refs/heads/develop' ||
-      github.ref == 'refs/heads/main'    ||
       startsWith(github.ref, 'refs/heads/release') ||
       github.event_name == 'workflow_dispatch'
     steps:
