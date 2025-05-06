@@ -87,7 +87,7 @@ def generate_metadata(cma_file_list: List[Dict], granule_umm_json: Dict, temp_di
     temp_dir
       Temporary location to write xml file to prior to upload to s3
     static_data_day
-      Optionally, the DatasetConfiguration can override the date metadata in the 
+      Optionally, the DatasetConfiguration can override the date metadata in the
       granule umm-json
 
     Returns
@@ -335,18 +335,18 @@ def parse_datetime(datetime_str: str) -> datetime:
 def parse_doy(year: int, doy: int) -> str:
     """
     Parses a year and day of year into a string.
-    
+
     Parameters
     ----------
     year
       integer year (parsed from midpoint of granule time range)
     doy
       static data day provided in DatasetConfiguration
-    
+
     Returns
     -------
     str
-      a static Y-m-d format date string with the time set to midnight UTC 
+      a static Y-m-d format date string with the time set to midnight UTC
     """
     jan_1 = datetime(year, 1, 1)
     result_dt = jan_1 + timedelta(days=doy - 1)
