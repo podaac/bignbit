@@ -203,11 +203,12 @@ _Visual representation of the bignbit step function state machine:_
 # Local Development
 ## MacOS
 
-1. Install miniconda (or conda) and [poetry](https://python-poetry.org/)
+1. Install miniconda (or conda) and [poetry](https://python-poetry.org/). On MacOS, you can `brew install miniconda` and `brew install poetry`.
 2. Run `conda env create -f conda-environment.yaml` to install GDAL
-3. Activate the bignbit conda environment `conda activate bignbit`
-4. Install python package and dependencies `poetry install`
-5. Verify tests pass `poetry run pytest tests/`
+3. **(For MacOS users)** If you have a MacOS system and use zsh, you will need to run `conda init zsh`, close your terminal, and re-open before activating the environment in the next step.
+4. Activate the bignbit conda environment `conda activate bignbit`
+5. Install python package and dependencies `poetry install`
+6. Verify tests pass `poetry run pytest tests/`
 
 > [!IMPORTANT] 
 > If developing on a `darwin_arm64` based mac, running terraform locally may result
