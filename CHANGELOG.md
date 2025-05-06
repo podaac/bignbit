@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- [issues/59](https://github.com/podaac/bignbit/issues/59): A new pair of keywords (`dataDayStrategy` and `singleDayNumber`) have been added to the DatasetConfiguration for BIG to enable proper image metadata for annual products. These keywords allow a dataset to override the umm-g date info.
 ### Changed
 ### Deprecated
 ### Removed
