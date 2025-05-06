@@ -53,7 +53,7 @@ class CMA(Process):
             cma_file_list = [item for sublist in cma_file_list for item in sublist]
         granule_umm_json = self.input['granule_umm_json']
 
-        # TO DO: perhaps there is a more organized way of managing these 
+        # TO DO: perhaps there is a more organized way of managing these
         # dataset-level overrides?
         dataset_config = self.input['datasetConfigurationForBIG']['config']
         data_day_strat = dataset_config.get('dataDayStrategy')
@@ -101,11 +101,11 @@ def generate_metadata(cma_file_list: List[Dict], granule_umm_json: Dict, temp_di
         CUMULUS_LOGGER.info(f'Processing file {granule_filename}')
 
         if static_data_day is not None and (static_data_day < 1 or static_data_day > 366):
-                CUMULUS_LOGGER.warn(
-                    f"Specified data day override {static_data_day} is not logical"
-                    "as a day of year. Defaulting to doy 001."
-                )
-                static_data_day = 1
+            CUMULUS_LOGGER.warning(
+                f"Specified data day override {static_data_day} is not logical "
+                "as a day of year. Defaulting to doy 001."
+            )
+            static_data_day = 1
         # Get date information from umm-g, if static_data_day is None it will be ignored
         begin, mid, end, dataday = extract_granule_dates(granule_umm_json, static_data_day)
 
@@ -125,7 +125,7 @@ def generate_metadata(cma_file_list: List[Dict], granule_umm_json: Dict, temp_di
         except KeyError:
             # No partial id for this granule
             partial_id = None
-            CUMULUS_LOGGER.warn(f"No partial id found in metadata for {granule_filename}. Leaving partial id blank.")
+            CUMULUS_LOGGER.warning(f"No partial id found in metadata for {granule_filename}. Leaving partial id blank.")
 
         # Convert from CMA file dict to CNM file dict
         cnm_file_meta = transform_files_to_cnm_product_files(cma_file_meta, granule_type, granule_subtype, dataday)

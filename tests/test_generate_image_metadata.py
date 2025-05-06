@@ -60,7 +60,6 @@ def test_process_static_data_day():
     assert result
     # Assert two outputs, one image metadata xml and the other geotiff
     assert len(result['payload']['big']) == 2
-    # Why is this any?
     assert any([r['subtype'] == 'ImageMetadata-v1.2' for r in result['payload']['big']])
     assert any([r['subtype'] == 'geotiff' for r in result['payload']['big']])
     for r in result['payload']['big']:
