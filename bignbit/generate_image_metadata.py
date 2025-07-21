@@ -62,7 +62,7 @@ class CMA(Process):
             static_data_day = int(static_data_day)
         else:
             static_data_day = None
-        
+
         subdaily = dataset_config.get('subdaily', False)
 
         file_metadata_list = generate_metadata(
@@ -345,13 +345,13 @@ def parse_datetime(datetime_str: str) -> datetime:
         "%Y-%m-%dT%H:%M:%S.%f%z",       # 2023-01-01T12:30:45.123456+00:00
         "%Y-%m-%dT%H:%M:%S%z",          # 2023-01-01T12:30:45+00:00
     ]
-    
+
     for fmt in formats:
         try:
             return datetime.strptime(datetime_str, fmt)
         except ValueError:
             continue
-    
+
     # If none of the formats worked
     raise ValueError(f"Unable to parse datetime string: {datetime_str}")
 

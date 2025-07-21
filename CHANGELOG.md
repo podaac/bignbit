@@ -17,8 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.0]
 ### Added
 - [issues/84](https://github.com/podaac/bignbit/issues/84): New parameter in dataset config `subdaily` that sends DataDateTime to GIBS instead of DataDay.
-- [issues/82](https://github.com/podaac/bignbit/issues/82): Fixed date parsing bug where ISO-8601 format dates, the default for UMM-G, were not handled properly.
 - Added optional `concept_id` keyword to dataset config to provide an override for finding the proper CMR collection concept ID when testing.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- [issues/82](https://github.com/podaac/bignbit/issues/82): Fixed date parsing bug where ISO-8601 format dates, the default for UMM-G, were not handled properly.
+### Security
 
 ## [0.2.4]
 ### Added
