@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
+- Update gibs_response_queue visibility timeout to match aws_lambda_function handle_gitc_response timeout
 ### Security
 
 ## [0.2.4]
