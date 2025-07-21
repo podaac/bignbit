@@ -53,8 +53,7 @@ class CMA(Process):
             cma_file_list = [item for sublist in cma_file_list for item in sublist]
         granule_umm_json = self.input['granule_umm_json']
 
-        # TO DO: perhaps there is a more organized way of managing these
-        # dataset-level overrides?
+        # Parse dataset-level overrides
         dataset_config = self.input['datasetConfigurationForBIG']['config']
         data_day_strat = dataset_config.get('dataDayStrategy')
         if data_day_strat is not None and data_day_strat == 'single_day_of_year':
