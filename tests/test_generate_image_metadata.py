@@ -79,4 +79,40 @@ def test_process_static_data_day():
                     assert child.text == "2023001"
         finally:
             os.remove(r['fileName'])
-        
+
+
+@mock_s3
+def test_process_subdaily():
+    test_dir = os.path.dirname(os.path.realpath(__file__))
+    cma_json = json.load(open(os.path.join(
+        test_dir, 'sample_messages', 'generate_image_metadata',
+        'cma.uat.input.TEMPO_NO2_L3.json')))
+
+    result = bignbit.generate_image_metadata.lambda_handler(cma_json, {})
+    s3_mock = boto3.client('s3')
+    metadata_bucket = 'podaac-uat-cumulus-private'
+
+    assert result
+    # Assert one outputs, the image metadata xml
+    assert len(result['payload']['big']) == 1
+    for r in result['payload']['big']:
+        metadata_xml = r['key']
+        try:
+            s3_mock.download_file(metadata_bucket, metadata_xml, r['fileName'])
+        except botocore.exceptions.ClientError:
+            print(f"could not stat s3://{metadata_bucket}/{metadata_xml}")
+            continue
+        md_tree = ET.parse(r['fileName'])
+        md_root = md_tree.getroot()
+        try:
+            for child in md_root:
+                if child.tag == "DataStartDateTime":
+                    assert child.text == "2025-04-22T11:47:02.000000Z"
+                elif child.tag == "DataMidDateTime":
+                    assert child.text == "2025-04-22T12:06:56.500000Z"
+                elif child.tag == "DataEndDateTime":
+                    assert child.text == "2025-04-22T12:26:51.000000Z"
+                elif child.tag == "DataDateTime":
+                    assert child.text == "2025-04-22T11:47:02.000000Z"
+        finally:
+            os.remove(r['fileName'])

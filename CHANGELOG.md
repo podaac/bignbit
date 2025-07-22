@@ -8,10 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - [issues/59](https://github.com/podaac/bignbit/issues/59): A new pair of keywords (`dataDayStrategy` and `singleDayNumber`) have been added to the DatasetConfiguration for BIG to enable proper image metadata for annual products. These keywords allow a dataset to override the umm-g date info.
+- [issues/84](https://github.com/podaac/bignbit/issues/84): New parameter in dataset config `subdaily` that sends DataDateTime to GIBS instead of DataDay.
+- Added optional `concept_id` keyword to dataset config to provide an override for finding the proper CMR collection concept ID when testing.
 ### Changed
 ### Deprecated
 ### Removed
 ### Fixed
+- [issues/82](https://github.com/podaac/bignbit/issues/82): Fixed date parsing bug where ISO-8601 format dates, the default for UMM-G, were not handled properly.
 - Update gibs_response_queue visibility timeout to match aws_lambda_function handle_gitc_response timeout
 ### Security
 

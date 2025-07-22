@@ -7,7 +7,7 @@ import pathlib
 import uuid
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
@@ -53,8 +53,7 @@ class CMA(Process):
             cma_file_list = [item for sublist in cma_file_list for item in sublist]
         granule_umm_json = self.input['granule_umm_json']
 
-        # TO DO: perhaps there is a more organized way of managing these
-        # dataset-level overrides?
+        # Parse dataset-level overrides
         dataset_config = self.input['datasetConfigurationForBIG']['config']
         data_day_strat = dataset_config.get('dataDayStrategy')
         if data_day_strat is not None and data_day_strat == 'single_day_of_year':
@@ -64,14 +63,26 @@ class CMA(Process):
         else:
             static_data_day = None
 
-        file_metadata_list = generate_metadata(cma_file_list, granule_umm_json, pathlib.Path(f"{self.path}"), static_data_day)
+        subdaily = dataset_config.get('subdaily', False)
+
+        file_metadata_list = generate_metadata(
+            cma_file_list, granule_umm_json,
+            pathlib.Path(f"{self.path}"),
+            static_data_day,
+            subdaily
+        )
         del self.input['granule_umm_json']
         del self.input['big']
         self.input['big'] = file_metadata_list
         return self.input
 
 
-def generate_metadata(cma_file_list: List[Dict], granule_umm_json: Dict, temp_dir: pathlib.Path, static_data_day: Optional[int] = None) -> List[Dict]:
+def generate_metadata(
+        cma_file_list: List[Dict],
+        granule_umm_json: Dict,
+        temp_dir: pathlib.Path,
+        static_data_day: int | None = None,
+        subdaily: bool = False) -> List[Dict]:
     """
     For each file in the list, create an ImageMetadata-v1.2 xml file and upload it to s3 in the same
     bucket and path as the image file.
@@ -89,6 +100,8 @@ def generate_metadata(cma_file_list: List[Dict], granule_umm_json: Dict, temp_di
     static_data_day
       Optionally, the DatasetConfiguration can override the date metadata in the
       granule umm-json
+    subdaily
+      boolean flag if product is subdaily (if True, add DataDateTime to metadata)
 
     Returns
     -------
@@ -133,7 +146,7 @@ def generate_metadata(cma_file_list: List[Dict], granule_umm_json: Dict, temp_di
 
         # If this is a browse image, generate image metadata for it and upload it to s3
         if granule_type == 'browse':
-            image_metadata_xml = create_metadata_xml(begin, mid, end, dataday, partial_id)
+            image_metadata_xml = create_metadata_xml(begin, mid, end, dataday, subdaily, partial_id)
             temp_xml_path = write_image_metadata_xml(image_metadata_xml, temp_dir)
             image_metadata_xml_metadata = get_file_metadata_for_image_metadta_xml(temp_xml_path, cnm_file_meta)
             s3_uri = upload_image_metadata_xml(image_metadata_xml_metadata, temp_xml_path)
@@ -267,7 +280,7 @@ def transform_files_to_cnm_product_files(cma_file_meta: Dict, file_type: str, su
     return cnm_file_meta
 
 
-def extract_granule_dates(granule_umm_json: dict, static_data_day: Optional[int] = None) -> tuple[str, str, str, str]:
+def extract_granule_dates(granule_umm_json: dict, static_data_day: int | None = None) -> tuple[str, str, str, str]:
     """
     Parse the begin, midpoint, end, and dataday for this granule
 
@@ -326,10 +339,21 @@ def parse_datetime(datetime_str: str) -> datetime:
     datetime
       a datetime object
     """
-    try:
-        return datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%S.%fZ")
-    except ValueError:
-        return datetime.strptime(datetime_str, "%Y-%m-%dT%H:%M:%SZ")
+    formats = [
+        "%Y-%m-%dT%H:%M:%S.%fZ",        # 2023-01-01T12:30:45.123456Z
+        "%Y-%m-%dT%H:%M:%SZ",           # 2023-01-01T12:30:45Z
+        "%Y-%m-%dT%H:%M:%S.%f%z",       # 2023-01-01T12:30:45.123456+00:00
+        "%Y-%m-%dT%H:%M:%S%z",          # 2023-01-01T12:30:45+00:00
+    ]
+
+    for fmt in formats:
+        try:
+            return datetime.strptime(datetime_str, fmt)
+        except ValueError:
+            continue
+
+    # If none of the formats worked
+    raise ValueError(f"Unable to parse datetime string: {datetime_str}")
 
 
 def parse_doy(year: int, doy: int) -> str:
@@ -354,7 +378,7 @@ def parse_doy(year: int, doy: int) -> str:
 
 
 def create_metadata_xml(beginning_time: str, middle_time: str, ending_time: str, dataday: str,
-                        partial_id: str = None) -> ET.ElementTree:
+                        subdaily: bool = False, partial_id: str | None = None) -> ET.ElementTree:
     """
     Create an ImageMetadata-v1.2 XML Element tree
 
@@ -368,6 +392,8 @@ def create_metadata_xml(beginning_time: str, middle_time: str, ending_time: str,
       formatted datetime string for data end date time
     dataday
       string if format %Y%j for day of year the data represents
+    subdaily
+      boolean flag if product is subdaily (if True, add DataDateTime to metadata)
     partial_id
       partial id associated with data
 
@@ -384,7 +410,10 @@ def create_metadata_xml(beginning_time: str, middle_time: str, ending_time: str,
     ET.SubElement(imagery_metadata, "DataStartDateTime").text = beginning_time
     ET.SubElement(imagery_metadata, "DataMidDateTime").text = middle_time
     ET.SubElement(imagery_metadata, "DataEndDateTime").text = ending_time
-    ET.SubElement(imagery_metadata, "DataDay").text = dataday
+    if subdaily:
+        ET.SubElement(imagery_metadata, "DataDateTime").text = beginning_time
+    else:
+        ET.SubElement(imagery_metadata, "DataDay").text = dataday
     if partial_id:
         ET.SubElement(imagery_metadata, "PartialId").text = partial_id
 
