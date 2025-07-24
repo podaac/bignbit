@@ -3,6 +3,7 @@ import datetime
 import logging
 import os
 import urllib.parse
+from importlib.metadata import version, PackageNotFoundError
 
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
@@ -61,8 +62,17 @@ def submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_
     harmony_request = generate_harmony_request(collection_concept_id, granule_concept_id, variable, big_config,
                                                destination_bucket_url)
 
+    # Get package name and version from installed metadata
+    pkg_name = "bignbit"
+    try:
+        pkg_version = version(pkg_name)
+    except PackageNotFoundError:
+        pkg_version = "unknown"
+    user_agent = f"{pkg_name}/{pkg_version}"
+
     CUMULUS_LOGGER.info("Submitting Harmony request: {}", harmony_client.request_as_url(harmony_request))
-    job = harmony_client.submit(harmony_request)
+    # Pass User-Agent header to Harmony client submit
+    job = harmony_client.submit(harmony_request, headers={"User-Agent": user_agent})
     harmony_job = {
         'job': job,
         'granule_id': granule_id,

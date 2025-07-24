@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [issues/84](https://github.com/podaac/bignbit/issues/84): New parameter in dataset config `subdaily` that sends DataDateTime to GIBS instead of DataDay.
 - Added optional `concept_id` keyword to dataset config to provide an override for finding the proper CMR collection concept ID when testing.
 ### Changed
+- [issues/63](https://github.com/podaac/bignbit/issues/63): Harmony job submission now includes a User-Agent header with the package name and version, improving traceability and compliance with best practices.
 ### Deprecated
 ### Removed
 ### Fixed
