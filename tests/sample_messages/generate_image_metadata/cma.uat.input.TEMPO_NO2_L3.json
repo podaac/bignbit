@@ -33,7 +33,7 @@
                     "files": [
                         {
                             "bucket": "podaac-sit-svc-private",
-                            "fileName": "TEMPO_NO2_L3_V03_20250422T114702Z_S003.tiff",
+                            "fileName": "TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc",
                             "granuleId":"TEMPO_NO2_L3_V03_20250422T114702Z_S003",
                             "provider":"larc",
                             "cmrLink":"https://cmr.uat.earthdata.nasa.gov/search/concepts/G1273455903-LARC_CLOUD.umm_json",
@@ -391,9 +391,9 @@
                 "big": [
                     {
                         "bucket": "podaac-sit-svc-private",
-                        "fileName": "TEMPO_NO2_L3_V03_20250422T114702Z_S003.tiff",
+                        "fileName": "TEMPO_NO2_L3_V03_20250422T114702Z_S003.png",
                         "type": "data",
-                        "key": "TEMPO_NO2_L3/TEMPO_NO2_L3_V03_20250422T114702Z_S003.tiff"
+                        "key": "TEMPO_NO2_L3/TEMPO_NO2_L3_V03_20250422T114702Z_S003.png"
                     }
                 ],
                 "datasetConfigurationForBIG": {
