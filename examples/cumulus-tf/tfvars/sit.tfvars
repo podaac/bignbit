@@ -1,5 +1,6 @@
 # stage: dev, sandbox, sit, uat, prod
 bignbit_stage = "sit"
+bignbit_cmr_environment = "UAT"
 prefix = "podaac-sit-svc"
 
 gibs_region="mocked"

@@ -14,7 +14,7 @@ def handler(event, context):
     logger.info(f"Received event {json.dumps(event)}")
 
     for message in event["Records"]:
-        response_topic_arn = message['messageAttributes']['response_topic_arn']
+        response_topic_arn = message['messageAttributes']['response_topic_arn']['stringValue']
         message_body = loads(message["body"])
         logger.info(f"Processing message {json.dumps(message_body)}")
 

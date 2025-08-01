@@ -33,7 +33,11 @@ class CMA(Process):
         collection_shortname = self.config['collection_shortname']
         cmr_provider = self.config['cmr_provider']
         cmr_environment = self.config['cmr_environment']
-        collection_id = get_collection_concept_id(collection_shortname, cmr_provider, cmr_environment)
+        dataset_config = self.input['datasetConfigurationForBIG']['config']
+        # Use override for collection concept id from dataset config if provided
+        collection_id = dataset_config.get('concept_id')
+        if collection_id is None:
+            collection_id = get_collection_concept_id(collection_shortname, cmr_provider, cmr_environment)
         self.input['collection_concept_id'] = collection_id
         return self.input
 

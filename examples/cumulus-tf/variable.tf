@@ -23,6 +23,12 @@ variable "bignbit_stage" {
   type = string
   description = "environment used for tagging resources"
 }
+
+variable "bignbit_cmr_environment" {
+  type = string
+  description = "cmr environment used for bignbit"
+}
+
 variable "big_throttled_execution_limit" {
   type    = number
   default = 50

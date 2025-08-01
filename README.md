@@ -99,9 +99,27 @@ should define the bignbit module and the bignbit step function state machine. Se
 
 
 # Configuring a collection
+In order to configure a collection for use with bignbit the following must be done:
 
 1. Add config file to the `config_bucket`. The file should be named "_collection shortname_.cfg" and the contents should be JSON
 2. Associate the UMM-C record to the appropriate Harmony service (HyBIG, net2cog, etc...)
+
+The contents of the configuration file should be a valid json object with the following attributes:
+
+| Name               | Type         | Description                                                                                                                                                                                                                                                          | 
+|--------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| sendToHarmony      | boolean      | true/false if this collection should be processed using Harmony to generate browse images                                                                                                                                                                            |
+| operaHLSTreatment  | boolean      | true/false if this collection should have special OPERA_L3_DSWX-HLS processing applied to it (see [apply_opera_hls_treatment](bignbit/apply_opera_hls_treatment.py))                                                                                                 |
+| imageFilenameRegex | string       | Regular expression used to identify which file in a granule should be used as the image file. Uses first if multiple files match                                                                                                                                     |
+| imgVariables       | list(object) | List of JSON objects with at least one attribute called `id` whose value is the name of a variable to generate an image for. `all` can be used in cases where the collection does not have variables or all variables in the collection should have images generated |
+| height             | int          | Controls the height of the output image from Harmony (see https://github.com/nasa/harmony-browse-image-generator?tab=readme-ov-file#dimensions--scale-sizes)                                                                                                         |
+| width              | int          | Controls the width of the output image from Harmony (see https://github.com/nasa/harmony-browse-image-generator?tab=readme-ov-file#dimensions--scale-sizes)                                                                                                          |
+| dataDayStrategy    | string       | [OPTIONAL] (Default: "") If this keyword is set to "single_day_of_year", bignbit will override the date from the granule metadata with the one specified in "singleDayNumber"                                                                                        |
+| singleDayNumber    | string       | [OPTIONAL] (Default: "") If using the "dataDayStrategy" keyword, all granules in this dataset will use the day of year specified in this keyword. ex: "001" for January 1st                                                                                          |
+| subdaily           | boolean      | [OPTIONAL] (Default: False) Set to true if granules contain subdaily data. This will send `DataDateTime` metadata to GIBS as described in the GIBS ICD                                                                                                               |
+| concept_id         | string       | [OPTIONAL] (Default: "") Overrides the concept id derived from the granule metadata with this value. ex: "C1996881146-POCLOUD"                                                                                                                                       |
+
+A few example configurations can be found in the [podaac/bignbit-config](https://github.com/podaac/bignbit-config) repository. NOTE: some of the example configurations have other options specified (e.g. `variables`, `latVar`, `lonVar`, etc...) that are no longer supported by this module. The table above are the attributes that are still in use.
 
 ## Harmony requests
 
@@ -189,11 +207,12 @@ _Visual representation of the bignbit step function state machine:_
 # Local Development
 ## MacOS
 
-1. Install miniconda (or conda) and [poetry](https://python-poetry.org/)
+1. Install miniconda (or conda) and [poetry](https://python-poetry.org/). On MacOS, you can `brew install miniconda` and `brew install poetry`.
 2. Run `conda env create -f conda-environment.yaml` to install GDAL
-3. Activate the bignbit conda environment `conda activate bignbit`
-4. Install python package and dependencies `poetry install`
-5. Verify tests pass `poetry run pytest tests/`
+3. **(For MacOS users)** If you have a MacOS system and use zsh, you will need to run `conda init zsh`, close your terminal, and re-open before activating the environment in the next step.
+4. Activate the bignbit conda environment `conda activate bignbit`
+5. Install python package and dependencies `poetry install`
+6. Verify tests pass `poetry run pytest tests/`
 
 > [!IMPORTANT] 
 > If developing on a `darwin_arm64` based mac, running terraform locally may result

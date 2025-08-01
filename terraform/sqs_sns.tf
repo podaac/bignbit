@@ -34,6 +34,7 @@ resource "aws_sqs_queue" "gibs_response_queue" {
     deadLetterTargetArn = aws_sqs_queue.gibs_response_deadletter.arn
     maxReceiveCount     = 4
   })
+  visibility_timeout_seconds = 45
 }
 
 resource "aws_sqs_queue" "gibs_response_deadletter" {
@@ -111,6 +112,7 @@ resource "aws_iam_role_policy" "allow_lambda_role_to_read_sqs_messages" {
 resource "aws_lambda_event_source_mapping" "gibs_response_event_trigger" {
   event_source_arn = aws_sqs_queue.gibs_response_queue.arn
   function_name    = aws_lambda_function.handle_gitc_response.arn
+
 }
 
 data "aws_iam_policy_document" "gibs_request_queue_policy" {

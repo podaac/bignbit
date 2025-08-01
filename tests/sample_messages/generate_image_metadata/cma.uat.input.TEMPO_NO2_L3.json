@@ -1,0 +1,423 @@
+{
+    "cma": {
+        "cumulus_meta":{
+            
+        },
+        "event": {
+            "meta":{
+                "buckets":{
+                    "internal": {
+                        "name": "podaac-sit-svc-internal",
+                        "type": "internal"
+                    },
+                    "private": {
+                        "name": "podaac-sit-svc-private",
+                        "type": "private"
+                    }
+                },
+                "cmr":{
+                    "clientId":"POCLOUD",
+                    "cmrEnvironment":"UAT",
+                    "provider":"LARC_CLOUD"
+                },
+                "collection":{
+                    "name":"TEMPO_NO2_L3"
+                },
+                "stack":"podaac-uat-cumulus",
+                "provider":{
+                    
+                }
+            },
+            "payload":{
+                "granules":[{
+                    "files": [
+                        {
+                            "bucket": "podaac-sit-svc-private",
+                            "fileName": "TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc",
+                            "granuleId":"TEMPO_NO2_L3_V03_20250422T114702Z_S003",
+                            "provider":"larc",
+                            "cmrLink":"https://cmr.uat.earthdata.nasa.gov/search/concepts/G1273455903-LARC_CLOUD.umm_json",
+                            "cmrConceptId":"G1273455903-LARC_CLOUD"
+                        }
+                    ]
+                }],
+                "granule_umm_json": {
+                    "PGEVersionClass": {
+                        "PGEVersion": "1.0.0"
+                    },
+                    "RelatedUrls": [
+                        {
+                        "URL": "https://data.asdc.uat.earthdata.nasa.gov/asdc2-uat-protected/TEMPO/TEMPO_NO2_L3_V03/2025.04.22/TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc",
+                        "Description": "Download TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc",
+                        "Type": "GET DATA"
+                        },
+                        {
+                        "URL": "https://data.asdc.uat.earthdata.nasa.gov/asdc2-uat-protected/TEMPO/TEMPO_NO2_L3_V03/2025.04.22/TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc.met",
+                        "Description": "Download TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc.met",
+                        "Type": "EXTENDED METADATA"
+                        },
+                        {
+                        "URL": "https://data.asdc.uat.earthdata.nasa.gov/asdc2-uat-public/TEMPO/TEMPO_NO2_L3_V03/2025.04.22/thumb-TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc.png",
+                        "Description": "Download thumb-TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc.png",
+                        "Type": "GET RELATED VISUALIZATION"
+                        },
+                        {
+                        "URL": "s3://asdc2-uat-protected/TEMPO/TEMPO_NO2_L3_V03/2025.04.22/TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc",
+                        "Description": "This link provides direct download access via S3 to the granule",
+                        "Type": "GET DATA VIA DIRECT ACCESS"
+                        },
+                        {
+                        "URL": "s3://asdc2-uat-protected/TEMPO/TEMPO_NO2_L3_V03/2025.04.22/TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc.met",
+                        "Description": "This link provides direct download access via S3 to the granule",
+                        "Type": "EXTENDED METADATA"
+                        },
+                        {
+                        "URL": "s3://asdc2-uat-public/TEMPO/TEMPO_NO2_L3_V03/2025.04.22/thumb-TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc.png",
+                        "Description": "This link provides direct download access via S3 to the granule",
+                        "Type": "GET RELATED VISUALIZATION"
+                        },
+                        {
+                        "URL": "https://data.asdc.uat.earthdata.nasa.gov/s3credentials",
+                        "Description": "api endpoint to retrieve temporary credentials valid for same-region direct s3 access",
+                        "Type": "VIEW RELATED INFORMATION"
+                        },
+                        {
+                        "URL": "https://opendap.uat.earthdata.nasa.gov/collections/C1262899964-LARC_CLOUD/granules/TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc",
+                        "Type": "USE SERVICE API",
+                        "Subtype": "OPENDAP DATA",
+                        "Description": "OPeNDAP request URL"
+                        }
+                    ],
+                    "AccessConstraints": {
+                        "Description": "WORLD",
+                        "Value": 4
+                    },
+                    "SpatialExtent": {
+                        "HorizontalSpatialDomain": {
+                        "Geometry": {
+                            "GPolygons": [
+                            {
+                                "Boundary": {
+                                "Points": [
+                                    {
+                                    "Latitude": 57.66,
+                                    "Longitude": -110.94
+                                    },
+                                    {
+                                    "Latitude": 53.38,
+                                    "Longitude": -108.58
+                                    },
+                                    {
+                                    "Latitude": 49.52,
+                                    "Longitude": -106.94
+                                    },
+                                    {
+                                    "Latitude": 44.96,
+                                    "Longitude": -105.42
+                                    },
+                                    {
+                                    "Latitude": 40,
+                                    "Longitude": -104.14
+                                    },
+                                    {
+                                    "Latitude": 34.86,
+                                    "Longitude": -103.12
+                                    },
+                                    {
+                                    "Latitude": 28.98,
+                                    "Longitude": -102.24
+                                    },
+                                    {
+                                    "Latitude": 23.32,
+                                    "Longitude": -101.62
+                                    },
+                                    {
+                                    "Latitude": 17.26,
+                                    "Longitude": -101.16
+                                    },
+                                    {
+                                    "Latitude": 17.24,
+                                    "Longitude": -82.84
+                                    },
+                                    {
+                                    "Latitude": 17.5,
+                                    "Longitude": -65.12
+                                    },
+                                    {
+                                    "Latitude": 22.5,
+                                    "Longitude": -63.98
+                                    },
+                                    {
+                                    "Latitude": 25.78,
+                                    "Longitude": -63.04
+                                    },
+                                    {
+                                    "Latitude": 29.54,
+                                    "Longitude": -61.74001
+                                    },
+                                    {
+                                    "Latitude": 33.2,
+                                    "Longitude": -60.2
+                                    },
+                                    {
+                                    "Latitude": 36.22,
+                                    "Longitude": -58.68
+                                    },
+                                    {
+                                    "Latitude": 39.52,
+                                    "Longitude": -56.7
+                                    },
+                                    {
+                                    "Latitude": 42.44,
+                                    "Longitude": -54.60001
+                                    },
+                                    {
+                                    "Latitude": 45.34,
+                                    "Longitude": -52.10001
+                                    },
+                                    {
+                                    "Latitude": 48.08,
+                                    "Longitude": -49.24001
+                                    },
+                                    {
+                                    "Latitude": 50.74,
+                                    "Longitude": -45.84
+                                    },
+                                    {
+                                    "Latitude": 53.12,
+                                    "Longitude": -42.06001
+                                    },
+                                    {
+                                    "Latitude": 55.04,
+                                    "Longitude": -38.28
+                                    },
+                                    {
+                                    "Latitude": 56.62,
+                                    "Longitude": -34.44
+                                    },
+                                    {
+                                    "Latitude": 58.04,
+                                    "Longitude": -30.12001
+                                    },
+                                    {
+                                    "Latitude": 59.14,
+                                    "Longitude": -25.84
+                                    },
+                                    {
+                                    "Latitude": 60.06,
+                                    "Longitude": -21
+                                    },
+                                    {
+                                    "Latitude": 60.26,
+                                    "Longitude": -20.52
+                                    },
+                                    {
+                                    "Latitude": 60.36,
+                                    "Longitude": -19.82001
+                                    },
+                                    {
+                                    "Latitude": 61.16,
+                                    "Longitude": -19.8
+                                    },
+                                    {
+                                    "Latitude": 61.14,
+                                    "Longitude": -20.06
+                                    },
+                                    {
+                                    "Latitude": 61.42,
+                                    "Longitude": -20.08
+                                    },
+                                    {
+                                    "Latitude": 61.38,
+                                    "Longitude": -20.32001
+                                    },
+                                    {
+                                    "Latitude": 62.28,
+                                    "Longitude": -20.34
+                                    },
+                                    {
+                                    "Latitude": 62.26,
+                                    "Longitude": -20.52
+                                    },
+                                    {
+                                    "Latitude": 62.36,
+                                    "Longitude": -20.64
+                                    },
+                                    {
+                                    "Latitude": 63.14,
+                                    "Longitude": -20.66
+                                    },
+                                    {
+                                    "Latitude": 63,
+                                    "Longitude": -21.62001
+                                    },
+                                    {
+                                    "Latitude": 63.5,
+                                    "Longitude": -21.64
+                                    },
+                                    {
+                                    "Latitude": 63.48,
+                                    "Longitude": -21.84
+                                    },
+                                    {
+                                    "Latitude": 63.86,
+                                    "Longitude": -21.92
+                                    },
+                                    {
+                                    "Latitude": 62.24,
+                                    "Longitude": -33.56
+                                    },
+                                    {
+                                    "Latitude": 60.82,
+                                    "Longitude": -44.18
+                                    },
+                                    {
+                                    "Latitude": 59.24,
+                                    "Longitude": -58.94
+                                    },
+                                    {
+                                    "Latitude": 58.8,
+                                    "Longitude": -63.66
+                                    },
+                                    {
+                                    "Latitude": 58.2,
+                                    "Longitude": -72.34
+                                    },
+                                    {
+                                    "Latitude": 57.76,
+                                    "Longitude": -83.38
+                                    },
+                                    {
+                                    "Latitude": 57.66,
+                                    "Longitude": -91.4
+                                    },
+                                    {
+                                    "Latitude": 57.8,
+                                    "Longitude": -101.06
+                                    },
+                                    {
+                                    "Latitude": 58,
+                                    "Longitude": -106.34
+                                    },
+                                    {
+                                    "Latitude": 58.26,
+                                    "Longitude": -110.94
+                                    },
+                                    {
+                                    "Latitude": 57.66,
+                                    "Longitude": -110.94
+                                    }
+                                ]
+                                }
+                            }
+                            ]
+                        }
+                        }
+                    },
+                    "ProviderDates": [
+                        {
+                        "Date": "2025-04-22T17:20:32.548Z",
+                        "Type": "Create"
+                        },
+                        {
+                        "Date": "2025-04-22T17:20:32.548Z",
+                        "Type": "Update"
+                        }
+                    ],
+                    "CollectionReference": {
+                        "ShortName": "TEMPO_NO2_L3",
+                        "Version": "V03"
+                    },
+                    "DataGranule": {
+                        "ArchiveAndDistributionInformation": [
+                        {
+                            "Checksum": {
+                            "Algorithm": "MD5",
+                            "Value": "170c05d8975d9a9159c23fecf2940f3d"
+                            },
+                            "Name": "TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc",
+                            "Size": 540.965558052063,
+                            "SizeUnit": "MB"
+                        },
+                        {
+                            "Checksum": {
+                            "Algorithm": "MD5",
+                            "Value": "4d4ef5459d539fb9202ab08f1d742058"
+                            },
+                            "Name": "TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc.met",
+                            "Size": 5.1953125,
+                            "SizeUnit": "KB"
+                        }
+                        ],
+                        "DayNightFlag": "Unspecified",
+                        "Identifiers": [
+                        {
+                            "Identifier": "TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc",
+                            "IdentifierType": "ProducerGranuleId"
+                        },
+                        {
+                            "Identifier": "RFC1321 MD5 = not yet calculated",
+                            "IdentifierType": "LocalVersionId"
+                        }
+                        ],
+                        "ProductionDateTime": "2025-04-22T17:05:56+00:00"
+                    },
+                    "TemporalExtent": {
+                        "RangeDateTime": {
+                        "BeginningDateTime": "2025-04-22T11:47:02+00:00",
+                        "EndingDateTime": "2025-04-22T12:26:51+00:00"
+                        }
+                    },
+                    "GranuleUR": "TEMPO_NO2_L3_V03_20250422T114702Z_S003.nc",
+                    "Projects": [
+                        {
+                        "ShortName": "TEMPO"
+                        }
+                    ],
+                    "MetadataSpecification": {
+                        "URL": "https://cdn.earthdata.nasa.gov/umm/granule/v1.6.6",
+                        "Name": "UMM-G",
+                        "Version": "1.6.6"
+                    },
+                    "InputGranules": [
+                        "TEMPO_NO2_L2_V03_20250422T114702Z_S003G01.nc",
+                        "TEMPO_NO2_L2_V03_20250422T115342Z_S003G02.nc",
+                        "TEMPO_NO2_L2_V03_20250422T120022Z_S003G03.nc",
+                        "TEMPO_NO2_L2_V03_20250422T120700Z_S003G04.nc",
+                        "TEMPO_NO2_L2_V03_20250422T121337Z_S003G05.nc",
+                        "TEMPO_NO2_L2_V03_20250422T122014Z_S003G06.nc"
+                    ]
+                },
+                "big": [
+                    {
+                        "bucket": "podaac-sit-svc-private",
+                        "fileName": "TEMPO_NO2_L3_V03_20250422T114702Z_S003.png",
+                        "type": "data",
+                        "key": "TEMPO_NO2_L3/TEMPO_NO2_L3_V03_20250422T114702Z_S003.png"
+                    }
+                ],
+                "datasetConfigurationForBIG": {
+                    "config": {
+                        "sendToHarmony":true,
+                        "latVar":"latitude",
+                        "lonVar":"longiude",
+                        "timeVar":"time",
+                        "subdaily":true,
+                        "imgVariables":[
+                            {"id": "product/vertical_column_stratosphere","title":"stratosphere nitrogen dioxide vertical column","units":"molecules/cm^2","min":"0.0","max":"5.0"}
+                        ],
+                        "height":2950,
+                        "width":7750,
+                        "variables":["time","latitude","longitude","product/vertical_column_stratosphere"]
+                    }
+                }
+            },
+            "task_config": {
+                "cumulus_message": {
+                    "input": "{$.payload}"
+                }
+            },
+            "exception": "None"
+        }
+    }
+}
