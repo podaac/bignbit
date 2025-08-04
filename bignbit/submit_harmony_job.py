@@ -82,7 +82,8 @@ def generate_harmony_request(collection_concept_id, granule_concept_id, variable
         variables=[variable],
         width=big_config['config']['width'],
         height=big_config['config']['height'],
-        format="image/png",
+        format=big_config['config'].get('format', 'image/png'),
+        output_crs=big_config['config'].get('outputCrs', 'EPSG:4326'),
         destination_url=destination_bucket_url
     )
     return request
