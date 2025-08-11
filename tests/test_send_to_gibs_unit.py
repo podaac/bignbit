@@ -151,3 +151,34 @@ def test_construct_cnm_no_wld(cnm_v151_schema):
 
     cnm = bignbit.send_to_gitc.construct_cnm(image_sets[0], 'pytest', 'token', 'testcollection')
     jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
+
+def test_construct_cnm_variable_with_slash(cnm_v151_schema):
+    test_input = [
+        {
+            'name': 'test.png',
+            'fileName': 's3://test.png',
+            'type': 'browse',
+            'size': 512,
+            'subtype': 'png',
+            'key': 'test.png',
+            'bucket': 'test',
+            "variable": "groupA/analysed_sst"
+        },
+        {
+            'name': 'test.xml',
+            'fileName': 's3://test.xml',
+            'type': 'metadata',
+            'size': 30,
+            'subtype': 'ImageMetadata-v1.2',
+            'dataday': '1992001',
+            'key': 'test.xml',
+            'bucket': 'test',
+            "variable": "groupA/analysed_sst"
+        }
+    ]
+
+    image_sets = bignbit.image_set.from_big_output(test_input)
+
+    cnm = bignbit.send_to_gitc.construct_cnm(image_sets[0], 'pytest', 'token', 'testcollection')
+    jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
+    assert cnm['collection'] == 'testcollection_groupA_analysed_sst'

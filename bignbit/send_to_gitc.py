@@ -45,14 +45,13 @@ class NotifyGitc(Process):
             list of granules
         """
 
-        if self.input is not None:
-            # Send ImageSet(s) to GITC for processing
-            collection_name = self.input.get('collection_name')
-            cmr_provider = self.input.get('cmr_provider')
-            image_set = ImageSet(**self.input['image_set'])
-            gitc_id = image_set.name
+        # Send ImageSet(s) to GITC for processing
+        collection_name = self.input.get('collection_name')
+        cmr_provider = self.input.get('cmr_provider')
+        image_set = ImageSet(**self.input['image_set'])
+        gitc_id = image_set.name
 
-            cnm_message = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
+        cnm_message = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
 
         return cnm_message
 
@@ -132,7 +131,7 @@ def construct_cnm(image_set: ImageSet, cmr_provider: str, gitc_id: str, collecti
     product = to_cnm_product_dict(image_set)
     submission_time = datetime.now(timezone.utc).isoformat()[:-9] + 'Z'
     CUMULUS_LOGGER.debug(image_set.image['variable'])
-    new_collection = collection_name + "_" + image_set.image['variable']
+    new_collection = (collection_name + "_" + image_set.image['variable']).replace('/', '_')
     return {
         "version": "1.5.1",
         "duplicationid": image_set.name,
