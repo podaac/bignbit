@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 ### Changed
+- [issues/62](https://github.com/podaac/bignbit/issues/62): The retry policy for querying Harmony job status is now configurable as module parameters. By default, it will query for job status every 20 seconds for a maximum of 15 attempts.
 ### Deprecated
 ### Removed
 ### Fixed

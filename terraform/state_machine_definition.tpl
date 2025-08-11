@@ -271,11 +271,6 @@
               }
             },
             "Resource":"${SubmitHarmonyJobLambda}",
-            "Next":"Wait 20 Seconds"
-          },
-          "Wait 20 Seconds":{
-            "Type":"Wait",
-            "Seconds":20,
             "Next":"Get Harmony Job Status"
           },
           "Get Harmony Job Status":{
@@ -296,6 +291,15 @@
             "Retry":[
               {
                 "ErrorEquals":[
+                  "HarmonyJobIncompleteError"
+                ],
+                "IntervalSeconds":${HarmonyJobStatusIntervalSeconds},
+                "MaxAttempts":${HarmonyJobStatusMaxAttempts},
+                "BackoffRate":${HarmonyJobStatusBackoffRate},
+                "MaxDelaySeconds":${HarmonyJobStatusMaxDelaySeconds}
+              },
+              {
+                "ErrorEquals":[
                   "Lambda.ServiceException",
                   "Lambda.AWSLambdaException",
                   "Lambda.SdkClientException",
@@ -314,37 +318,7 @@
                 "MaxAttempts": 2
               }
             ],
-            "Next":"Job Complete?"
-          },
-          "Job Complete?":{
-            "Type":"Choice",
-            "Choices":[
-              {
-                "Variable":"$.payload.harmony_job_status",
-                "StringMatches":"successful",
-                "Next":"Process Harmony Job Output",
-                "Comment":"Job successful"
-              },
-              {
-                "And":[
-                  {
-                    "Not":{
-                      "Variable":"$.payload.harmony_job_status",
-                      "StringMatches":"running"
-                    }
-                  },
-                  {
-                    "Not":{
-                      "Variable":"$.payload.harmony_job_status",
-                      "StringMatches":"accepted"
-                    }
-                  }
-                ],
-                "Next":"Fail",
-                "Comment":"Job not successful"
-              }
-            ],
-            "Default":"Wait 20 Seconds"
+            "Next":"Process Harmony Job Output"
           },
           "Process Harmony Job Output":{
             "Type":"Task",
@@ -385,9 +359,6 @@
               }
             ],
             "End":true
-          },
-          "Fail":{
-            "Type":"Fail"
           }
         }
       },
