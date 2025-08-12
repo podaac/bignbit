@@ -22,16 +22,8 @@ class HarmonyJobFailedError(Exception):
 
     def __init__(self, message):
         super().__init__(message)
-        self.message = message
 
 
-
-
-class HarmonyJobFailedError(Exception):
-    """Exception raised when a harmony job has failed"""
-
-    def __init__(self, message):
-        super().__init__(message)
 class CMA(Process):
     """Cumulus class to check harmony job status"""
 
