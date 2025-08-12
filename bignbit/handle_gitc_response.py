@@ -36,7 +36,7 @@ def handler(event, _):
         collection_name = message_body["collection"]
         cmr_env = os.environ['CMR_ENVIRONMENT']
 
-        granule_concept_id = gitc_id.rpartition('_')[-1]
+        granule_concept_id = gitc_id.rpartition('!')[-1]
         umm_json = utils.get_umm_json(granule_concept_id, cmr_env)
         granule_ur = umm_json['GranuleUR']
 
