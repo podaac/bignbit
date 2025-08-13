@@ -136,34 +136,46 @@ can be set via configuration. **Each variable** configured for imaging will resu
 
 See `bignbit.submit_harmony_job.generate_harmony_request` for details on how the Harmony request is constructed.
 
+### Harmony status check policy
+
+The frequency of checking the Harmony job status is controlled by the `harmony_job_status_*` parameters in the module inputs.
+The default policy will check the Harmony job status every 20 seconds for a maximum of 15 attempts, essentially giving a 
+maximum wait time of 5 minutes for the Harmony job to complete. If the job does not complete within this time, it will be 
+considered a failure.
+
+For more details of what each of these parameters does, see the [AWS documentation](https://docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html#error-handling-retrying-after-an-error)
+
 # Module Inputs
 
 This module uses the following input variables:
 
-| Name                       | Type         | Description                                                                                                                      | Default Value                                                       |
-|----------------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|
-| stage                      | string       | Environment used for resource tagging (dev, int, ops, etc...)                                                                    |                                                                     |
-| cmr_environment            | string       | Environment used when querying CMR during GIBS response handling (UAT or OPS)                                                    |                                                                     |
-| prefix                     | string       | Prefix used for resource naming (project name, env name, etc...)                                                                 |                                                                     |
-| data_buckets               | list(string) | List of buckets where data is stored. Lambdas will be given read/write access to these buckets.                                  | []                                                                  |
-| config_bucket              | string       | Bucket where dataset configuration is stored                                                                                     |                                                                     |
-| config_dir                 | string       | Path relative to `config_bucket` where dataset configuration is stored                                                           | "big-config"                                                        |
-| bignbit_audit_bucket       | string       | S3 bucket where messages exchanged with GITC will be saved. Typically the cumulus internal bucket                                |                                                                     |
-| bignbit_audit_path         | string       | Path relative to `bignbit_audit_bucket` where messages exchanged with GITC will be saved.                                        | "bignbit-cnm-output"                                                |
-| bignbit_staging_bucket     | string       | S3 bucket where generated images will be saved. Leave blank to use bucket managed by this module.                                | _create new bucket named svc-${var.app_name}-${var.prefix}-staging_ |
-| harmony_staging_path       | string       | Path relative to `bignbit_staging_bucket` where harmony results will be saved.                                                   | "bignbit-harmony-output"                                            |
-| gibs_region                | string       | Region where GIBS resources are deployed                                                                                         |                                                                     |
-| gibs_queue_name            | string       | Name of the GIBS SQS queue where outgoing CNM messages will be sent                                                              |                                                                     |
-| gibs_account_id            | string       | AWS account ID for GIBS                                                                                                          |                                                                     |
-| edl_user_ssm               | string       | Name of SSM parameter containing EDL username for querying CMR                                                                   |                                                                     |
-| edl_pass_ssm               | string       | Name of SSM parameter containing EDL password for querying CMR                                                                   |                                                                     |
-| permissions_boundary_arn   | string       | Permissions boundary ARN to apply to the roles created by this module. If not provided, no permissions boundary will be applied. |                                                                     |
-| security_group_ids         | list(string) |                                                                                                                                  |                                                                     |
-| subnet_ids                 | list(string) |                                                                                                                                  |                                                                     |
-| app_name                   | string       |                                                                                                                                  | "bignbit"                                                           |
-| default_tags               | map(string)  |                                                                                                                                  | {}                                                                  |
-| lambda_container_image_uri | string       |                                                                                                                                  | ""                                                                  |
-
+| Name                                 | Type         | Description                                                                                                                      | Default Value                                                       |
+|--------------------------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|
+| stage                                | string       | Environment used for resource tagging (dev, int, ops, etc...)                                                                    |                                                                     |
+| cmr_environment                      | string       | Environment used when querying CMR during GIBS response handling (UAT or OPS)                                                    |                                                                     |
+| prefix                               | string       | Prefix used for resource naming (project name, env name, etc...)                                                                 |                                                                     |
+| data_buckets                         | list(string) | List of buckets where data is stored. Lambdas will be given read/write access to these buckets.                                  | []                                                                  |
+| config_bucket                        | string       | Bucket where dataset configuration is stored                                                                                     |                                                                     |
+| config_dir                           | string       | Path relative to `config_bucket` where dataset configuration is stored                                                           | "big-config"                                                        |
+| bignbit_audit_bucket                 | string       | S3 bucket where messages exchanged with GITC will be saved. Typically the cumulus internal bucket                                |                                                                     |
+| bignbit_audit_path                   | string       | Path relative to `bignbit_audit_bucket` where messages exchanged with GITC will be saved.                                        | "bignbit-cnm-output"                                                |
+| bignbit_staging_bucket               | string       | S3 bucket where generated images will be saved. Leave blank to use bucket managed by this module.                                | _create new bucket named svc-${var.app_name}-${var.prefix}-staging_ |
+| harmony_staging_path                 | string       | Path relative to `bignbit_staging_bucket` where harmony results will be saved.                                                   | "bignbit-harmony-output"                                            |
+| gibs_region                          | string       | Region where GIBS resources are deployed                                                                                         |                                                                     |
+| gibs_queue_name                      | string       | Name of the GIBS SQS queue where outgoing CNM messages will be sent                                                              |                                                                     |
+| gibs_account_id                      | string       | AWS account ID for GIBS                                                                                                          |                                                                     |
+| edl_user_ssm                         | string       | Name of SSM parameter containing EDL username for querying CMR                                                                   |                                                                     |
+| edl_pass_ssm                         | string       | Name of SSM parameter containing EDL password for querying CMR                                                                   |                                                                     |
+| permissions_boundary_arn             | string       | Permissions boundary ARN to apply to the roles created by this module. If not provided, no permissions boundary will be applied. |                                                                     |
+| security_group_ids                   | list(string) |                                                                                                                                  |                                                                     |
+| subnet_ids                           | list(string) |                                                                                                                                  |                                                                     |
+| app_name                             | string       |                                                                                                                                  | "bignbit"                                                           |
+| default_tags                         | map(string)  |                                                                                                                                  | {}                                                                  |
+| lambda_container_image_uri           | string       |                                                                                                                                  | ""                                                                  |
+| harmony_job_status_interval_seconds  | number       | Interval in seconds for checking Harmony job status                                                                              | 20                                                                  |
+| harmony_job_status_max_attempts      | number       | Maximum number of attempts to check Harmony job status                                                                           | 15                                                                  |
+| harmony_job_status_backoff_rate      | number       | Backoff rate for Harmony job status checks                                                                                       | 1.0                                                                 |
+| harmony_job_status_max_delay_seconds | number       | Maximum delay in seconds for Harmony job status checks                                                                           | 20                                                                  |
 
 # Module Outputs
 
