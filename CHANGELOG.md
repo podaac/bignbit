@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
-- [issues/91](https://github.com/podaac/bignbit/issues/91): Fixed bug where the CNM collection name sent to GIBS included '/' characters when dealing with certain variables. This caused processing errors in GIBS, all collection names will now replace '/' with '_' before being sent to GIBS. 
+- [issues/91](https://github.com/podaac/bignbit/issues/91): Fixed bug where the CNM collection name sent to GIBS included '/' characters when dealing with certain variables. This caused processing errors in GIBS, all collection names will now replace '/' with '_' before being sent to GIBS.
+- [issues/96](https://github.com/podaac/bignbit/issues/96): Fixed bug causing GIBS responses to fail processing due to provider name containing an underscore `_` which collided with the delimiter used in CNM identifiers. The new delimiter for CNM identifier is now an exclamation mark `!`.
 ### Security
 
 ## [0.4.0]
