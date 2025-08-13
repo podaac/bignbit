@@ -115,6 +115,7 @@ def test_process_sends_message(fake_response_sqs_queue, mock_gitc_success, cnm_v
 
     gibs_cnm = json.loads(sent_messages[0].body)
     jsonschema.validate(gibs_cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
+    assert gibs_cnm['identifier'] == '20210102090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_analysed_sst_regridded_subsetted_2021002!G1240565717-POCUMULUS'
 
     response_messages = fake_response_sqs_queue.receive_messages(MaxNumberOfMessages=1, WaitTimeSeconds=5)
     gitc_cnmr = json.loads(response_messages[0].body)
