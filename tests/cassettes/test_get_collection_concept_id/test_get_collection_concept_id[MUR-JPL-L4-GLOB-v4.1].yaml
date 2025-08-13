@@ -1,0 +1,200 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.4
+    method: GET
+    uri: https://cmr.uat.earthdata.nasa.gov/search/collections.umm_json?provider=POCLOUD&short_name=MUR-JPL-L4-GLOB-v4.1&version=4.1
+  response:
+    body:
+      string: "{\"hits\":1,\"took\":9,\"items\":[{\"meta\":{\"revision-id\":1115,\"deleted\":false,\"format\":\"application/vnd.nasa.cmr.umm+json\",\"provider-id\":\"POCLOUD\",\"has-combine\":false,\"user-id\":\"viviant\",\"has-formats\":true,\"associations\":{\"variables\":[\"V1241047544-POCLOUD\",\"V1241047538-POCLOUD\",\"V1244919092-POCLOUD\",\"V1241047534-POCLOUD\",\"V1241047540-POCLOUD\",\"V1241047546-POCLOUD\",\"V1241047536-POCLOUD\",\"V1241047542-POCLOUD\"],\"services\":[\"S1245706235-POCLOUD\",\"S1245787332-EEDTEST\"],\"tools\":[\"TL1244140294-POCLOUD\"]},\"s3-links\":[\"podaac-ops-cumulus-public/MUR-JPL-L4-GLOB-v4.1/\",\"podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/\"],\"has-spatial-subsetting\":true,\"native-id\":\"GHRSST+Level+4+MUR+Global+Foundation+Sea+Surface+Temperature+Analysis+(v4.1)\",\"has-transforms\":false,\"association-details\":{\"variables\":[{\"concept-id\":\"V1241047544-POCLOUD\"},{\"concept-id\":\"V1241047538-POCLOUD\"},{\"concept-id\":\"V1244919092-POCLOUD\"},{\"concept-id\":\"V1241047534-POCLOUD\"},{\"concept-id\":\"V1241047540-POCLOUD\"},{\"concept-id\":\"V1241047546-POCLOUD\"},{\"concept-id\":\"V1241047536-POCLOUD\"},{\"concept-id\":\"V1241047542-POCLOUD\"}],\"services\":[{\"concept-id\":\"S1245706235-POCLOUD\"},{\"concept-id\":\"S1245787332-EEDTEST\"}],\"tools\":[{\"concept-id\":\"TL1244140294-POCLOUD\"}]},\"has-variables\":true,\"concept-id\":\"C1238621141-POCLOUD\",\"revision-date\":\"2025-08-11T11:06:39.505Z\",\"has-temporal-subsetting\":true,\"concept-type\":\"collection\"},\"umm\":{\"DataLanguage\":\"eng\",\"AncillaryKeywords\":[\"GHRSST\",\"sea
+        surface temperature\",\"Level 4\",\"SST\",\"surface temperature\",\" MUR\",\"
+        foundation SST\",\" SST anomaly\",\" anomaly\"],\"CollectionCitations\":[{\"Creator\":\"JPL
+        MUR MEaSUREs Project\",\"OnlineResource\":{\"Linkage\":\"https://podaac.jpl.nasa.gov/MEaSUREs-MUR\"},\"Publisher\":\"JPL
+        NASA\",\"Title\":\"GHRSST Level 4 MUR Global Foundation Sea Surface Temperature
+        Analysis\",\"SeriesName\":\"GHRSST Level 4 MUR Global Foundation Sea Surface
+        Temperature Analysis\",\"OtherCitationDetails\":\"JPL MUR MEaSUREs Project,
+        JPL NASA, 2015-03-11, GHRSST Level 4 MUR Global Foundation Sea Surface Temperature
+        Analysis (v4.1)\",\"ReleaseDate\":\"2015-03-11T00:00:00.000Z\",\"Version\":\"4.1\",\"ReleasePlace\":\"Jet
+        Propulsion Laboratory\"}],\"AdditionalAttributes\":[{\"DataType\":\"DATETIME\",\"Description\":\"Earliest
+        Granule Start Time for dataset.\",\"Name\":\"earliest_granule_start_time\",\"Value\":\"2002-06-01T09:00:00.000Z\"},{\"DataType\":\"DATETIME\",\"Description\":\"Latest
+        Granule Stop/End Time for dataset.\",\"Name\":\"latest_granule_end_time\",\"Value\":\"2021-01-25T09:00:00.000Z\"},{\"DataType\":\"STRING\",\"Description\":\"Dataset
+        citation series name\",\"Name\":\"Series Name\",\"Value\":\"GHRSST Level 4
+        MUR Global Foundation Sea Surface Temperature Analysis\"},{\"DataType\":\"STRING\",\"Description\":\"Dataset
+        Persistent ID\",\"Name\":\"Persistent ID\",\"Value\":\"PODAAC-GHGMR-4FJ04\"}],\"SpatialExtent\":{\"GranuleSpatialRepresentation\":\"CARTESIAN\",\"HorizontalSpatialDomain\":{\"Geometry\":{\"BoundingRectangles\":[{\"EastBoundingCoordinate\":180,\"NorthBoundingCoordinate\":90,\"SouthBoundingCoordinate\":-90,\"WestBoundingCoordinate\":-180}],\"CoordinateSystem\":\"CARTESIAN\"},\"ResolutionAndCoordinateSystem\":{\"Description\":\"Projection
+        Type: Cylindrical Lat-Lon, Projection Detail: Geolocation information included
+        for each pixel\",\"GeodeticModel\":{\"DenominatorOfFlatteningRatio\":298.2572236,\"EllipsoidName\":\"WGS
+        84\",\"HorizontalDatumName\":\"World Geodetic System 1984\",\"SemiMajorAxis\":6378137},\"HorizontalDataResolution\":{\"GenericResolutions\":[{\"Unit\":\"Decimal
+        Degrees\",\"XDimension\":0.01,\"YDimension\":0.01}]}}},\"SpatialCoverageType\":\"HORIZONTAL\"},\"CollectionProgress\":\"ACTIVE\",\"StandardProduct\":false,\"ScienceKeywords\":[{\"Category\":\"EARTH
+        SCIENCE\",\"DetailedVariable\":\"FOUNDATION SEA SURFACE TEMPERATURE\",\"Term\":\"OCEAN
+        TEMPERATURE\",\"Topic\":\"OCEANS\",\"VariableLevel1\":\"SEA SURFACE TEMPERATURE\"}],\"TemporalExtents\":[{\"RangeDateTimes\":[{\"BeginningDateTime\":\"2002-05-31T21:00:00.000Z\"}]}],\"ProcessingLevel\":{\"Id\":\"4\",\"ProcessingLevelDescription\":\"Level
+        4  following GHRSST Data Specification\"},\"DOI\":{\"Authority\":\"https://doi.org\",\"DOI\":\"10.5067/GHGMR-4FJ04\"},\"ShortName\":\"MUR-JPL-L4-GLOB-v4.1\",\"EntryTitle\":\"GHRSST
+        Level 4 MUR Global Foundation Sea Surface Temperature Analysis (v4.1)\",\"PublicationReferences\":[{\"Author\":\"Chin,
+        T.M,  J. Vazquez-Cuervo, and E.M. Armstrong\",\"DOI\":{\"DOI\":\"https://doi.org/10.1016/j.rse.2017.07.029\\r\\n\"},\"Pages\":\"154-169\",\"PublicationDate\":\"2017-10-01T00:00:00.000Z\",\"Publisher\":\"Remote
+        Sensing of Environment \",\"Title\":\" A multi-scale high-resolution analysis
+        of global sea surface temperature\",\"Volume\":\"200 \"}],\"DirectDistributionInformation\":{\"Region\":\"us-west-2\",\"S3BucketAndObjectPrefixNames\":[\"podaac-ops-cumulus-public/MUR-JPL-L4-GLOB-v4.1/\",\"podaac-ops-cumulus-protected/MUR-JPL-L4-GLOB-v4.1/\"],\"S3CredentialsAPIDocumentationURL\":\"https://archive.podaac.earthdata.nasa.gov/s3credentialsREADME\",\"S3CredentialsAPIEndpoint\":\"https://archive.podaac.earthdata.nasa.gov/s3credentials\"},\"RelatedUrls\":[{\"Description\":\"Data
+        Use and Citation Guidelines\",\"Subtype\":\"DATA CITATION GUIDELINES\",\"Type\":\"VIEW
+        RELATED INFORMATION\",\"URL\":\"https://podaac.jpl.nasa.gov/CitingPODAAC\",\"URLContentType\":\"PublicationURL\"},{\"Description\":\"Group
+        for High Resolution Sea Surface Temperature Information\",\"Subtype\":\"GENERAL
+        DOCUMENTATION\",\"Type\":\"VIEW RELATED INFORMATION\",\"URL\":\"https://ghrsst.jpl.nasa.gov\",\"URLContentType\":\"PublicationURL\"},{\"Description\":\"Homepage
+        for the NASA MEaSUREs projects\",\"Subtype\":\"GENERAL DOCUMENTATION\",\"Type\":\"VIEW
+        RELATED INFORMATION\",\"URL\":\"https://earthdata.nasa.gov/esds/competitive-programs/measures/mur-sst\",\"URLContentType\":\"PublicationURL\"},{\"Description\":\"Chin
+        T.M., Milliff R.F., Large W.G. (1998). Basin-scale, high-wavenumber sea surface
+        wind fields from a multiresolution analysis of scatterometer data. Journal
+        of Atmospheric and Oceanic Technology, 15: 741-763\",\"Subtype\":\"PUBLICATIONS\",\"Type\":\"VIEW
+        RELATED INFORMATION\",\"URL\":\"http://journals.ametsoc.org/doi/abs/10.1175/1520-0426%281998%29015%3C0741:BSHWSS%3E2.0.CO;2\",\"URLContentType\":\"PublicationURL\"},{\"Description\":\"Documentation
+        on the GDS version 2 format specification\",\"Subtype\":\"USER'S GUIDE\",\"Type\":\"VIEW
+        RELATED INFORMATION\",\"URL\":\"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-docs/ghrsst/open/docs/GDS20r5.pdf\",\"URLContentType\":\"PublicationURL\"},{\"Description\":\"Generic
+        data readers\",\"Subtype\":\"DATA RECIPE\",\"Type\":\"VIEW RELATED INFORMATION\",\"URL\":\"https://github.com/podaac/data-readers\",\"URLContentType\":\"PublicationURL\"},{\"Description\":\"Chin,
+        Toshio Michael, Jorge Vazquez-Cuervo, and Edward M. Armstrong. A multi-scale
+        high-resolution analysis of global sea surface temperature. Remote sensing
+        of environment 200 (2017): 154-169.\",\"Subtype\":\"PUBLICATIONS\",\"Type\":\"VIEW
+        RELATED INFORMATION\",\"URL\":\"https://doi.org/10.1016/j.rse.2017.07.029\",\"URLContentType\":\"PublicationURL\"},{\"Description\":\"GHRSST
+        Project website\",\"Subtype\":\"GENERAL DOCUMENTATION\",\"Type\":\"VIEW RELATED
+        INFORMATION\",\"URL\":\"http://www.ghrsst.org\",\"URLContentType\":\"PublicationURL\"},{\"Description\":\"HTTPS
+        endpoint for data browse and download\",\"GetData\":{\"Format\":\"netCDF-4
+        classic\",\"MimeType\":\"application/x-netcdf\",\"Size\":300,\"Unit\":\"MB\"},\"Subtype\":\"DIRECT
+        DOWNLOAD\",\"Type\":\"GET DATA\",\"URL\":\"https://cmr.earthdata.nasa.gov/virtual-directory/collections/C1996881146-POCLOUD
+        \",\"URLContentType\":\"DistributionURL\"},{\"Description\":\"Browse granule
+        search results in Earthdata Search\",\"GetData\":{\"Format\":\"netCDF-4 classic\",\"MimeType\":\"application/x-netcdf\",\"Size\":700,\"Unit\":\"MB\"},\"Subtype\":\"Earthdata
+        Search\",\"Type\":\"GET DATA\",\"URL\":\" https://search.earthdata.nasa.gov/search/granules?p=C1996881146-POCLOUD
+        \",\"URLContentType\":\"DistributionURL\"},{\"Description\":\"MUR Project
+        homepage\",\"Subtype\":\"GENERAL DOCUMENTATION\",\"Type\":\"VIEW RELATED INFORMATION\",\"URL\":\"https://podaac.jpl.nasa.gov/MEaSUREs-MUR\",\"URLContentType\":\"PublicationURL\"},{\"Description\":\"Jupyter
+        python notebook to co-locate MUR and MODIS L2P satellite data with  Argo in-situ
+        data for cross-validation\",\"Subtype\":\"DATA RECIPE\",\"Type\":\"VIEW RELATED
+        INFORMATION\",\"URL\":\"https://github.com/podaac/tutorials/blob/master/notebooks/SWOT-EA-2021/Colocate_satellite_insitu_ocean.ipynb\",\"URLContentType\":\"PublicationURL\"},{\"Description\":\"SOTO
+        (State of the Ocean) Visualization\",\"Subtype\":\"SOTO\",\"Type\":\"GET RELATED
+        VISUALIZATION\",\"URL\":\"https://soto.podaac.earthdatacloud.nasa.gov/?l=GHRSST_L4_MUR_Sea_Surface_Temperature,BlueMarble_ShadedRelief_Bathymetry,Coastlines_15m\",\"URLContentType\":\"VisualizationURL\"},{\"Description\":\"Virtual
+        data set reference file for first decade of MUR record in JSON (experimental)\",\"Subtype\":\"VIRTUAL
+        COLLECTION\",\"Type\":\"GET DATA\",\"URL\":\"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-docs/ghrsst/open/docs/MUR-JPL-L4-GLOB-v4.1_combined-ref.json\",\"URLContentType\":\"DistributionURL\"},{\"Description\":\"Virtual
+        data set reference file for first decade of MUR record in PARQUET (experimental)\",\"Subtype\":\"VIRTUAL
+        COLLECTION\",\"Type\":\"GET DATA\",\"URL\":\"https://archive.podaac.earthdata.nasa.gov/podaac-ops-cumulus-docs/ghrsst/open/docs/MUR-JPL-L4-GLOB-v4.1_combined-ref.parq.zip\",\"URLContentType\":\"DistributionURL\"},{\"Description\":\"Thumbnail\",\"Type\":\"GET
+        RELATED VISUALIZATION\",\"URL\":\"https://podaac.jpl.nasa.gov/Podaac/thumbnails/MUR-JPL-L4-GLOB-v4.1.jpg\",\"URLContentType\":\"VisualizationURL\"}],\"DataDates\":[{\"Date\":\"2014-10-31T16:30:37.998Z\",\"Type\":\"CREATE\"},{\"Date\":\"2017-04-28T05:01:45.000Z\",\"Type\":\"UPDATE\"}],\"Abstract\":\"A
+        Group for High Resolution Sea Surface Temperature (GHRSST) Level 4 sea surface
+        temperature analysis produced as a retrospective dataset (four day latency)
+        and near-real-time dataset (one day latency) at the JPL Physical Oceanography
+        DAAC using wavelets as basis functions in an optimal interpolation approach
+        on a global 0.01 degree grid. The version 4 Multiscale Ultrahigh Resolution
+        (MUR) L4 analysis is based upon nighttime GHRSST L2P skin and subskin SST
+        observations from several instruments including the NASA Advanced Microwave
+        Scanning Radiometer-EOS (AMSR-E), the JAXA Advanced Microwave Scanning Radiometer
+        2 on GCOM-W1, the Moderate Resolution Imaging Spectroradiometers (MODIS) on
+        the NASA Aqua and Terra platforms, the US Navy microwave WindSat radiometer,
+        the Advanced Very High Resolution Radiometer (AVHRR) on several NOAA satellites,
+        and in situ SST observations from the NOAA iQuam project. The ice concentration
+        data are from the archives at the EUMETSAT Ocean and Sea Ice Satellite Application
+        Facility (OSI SAF) High Latitude Processing Center and are also used for an
+        improved SST parameterization for the high-latitudes.  The dataset also contains
+        additional variables for some granules including a SST anomaly derived from
+        a MUR climatology and the temporal distance to the nearest IR measurement
+        for each pixel.This dataset is funded by the NASA MEaSUREs program ( http://earthdata.nasa.gov/our-community/community-data-system-programs/measures-projects
+        ), and created by a team led by Dr. Toshio M. Chin from JPL. It adheres to
+        the GHRSST Data Processing Specification (GDS) version 2 format specifications.
+        Use the file global metadata \\\"history:\\\" attribute to determine if a
+        granule is near-realtime or retrospective.\",\"LocationKeywords\":[{\"Category\":\"GEOGRAPHIC
+        REGION\",\"Type\":\"GLOBAL\"}],\"MetadataDates\":[{\"Date\":\"2021-04-07T16:30:00.000Z\",\"Type\":\"CREATE\"},{\"Date\":\"2023-05-30T16:42:00.000Z\",\"Type\":\"UPDATE\"}],\"Version\":\"4.1\",\"Projects\":[{\"LongName\":\"Group
+        for High Resolution Sea Surface Temperature\",\"ShortName\":\"GHRSST\"}],\"ContactPersons\":[{\"ContactInformation\":{\"ContactMechanisms\":[{\"Type\":\"Email\",\"Value\":\"toshio.m.chin@jpl.nasa.gov\"}]},\"FirstName\":\"Toshio\",\"LastName\":\"Chin\",\"MiddleName\":\"Mike\",\"NonDataCenterAffiliation\":\"NASA
+        Jet Propulsion Laboratory\",\"Roles\":[\"Science Contact\"]}],\"DataCenters\":[{\"ContactGroups\":[{\"ContactInformation\":{\"ContactMechanisms\":[{\"Type\":\"Email\",\"Value\":\"podaac@podaac.jpl.nasa.gov\"}],\"RelatedUrls\":[{\"Type\":\"HOME
+        PAGE\",\"URL\":\"https://podaac.jpl.nasa.gov/\",\"URLContentType\":\"DataContactURL\"}]},\"GroupName\":\"Help
+        Desk\",\"Roles\":[\"Data Center Contact\"]}],\"ContactInformation\":{\"ContactMechanisms\":[{\"Type\":\"Email\",\"Value\":\"podaac@podaac.jpl.nasa.gov\"}],\"RelatedUrls\":[{\"Type\":\"HOME
+        PAGE\",\"URL\":\"https://podaac.jpl.nasa.gov/\",\"URLContentType\":\"DataCenterURL\"}]},\"LongName\":\"Physical
+        Oceanography Distributed Active Archive Center, Jet Propulsion Laboratory,
+        NASA\",\"Roles\":[\"ARCHIVER\"],\"ShortName\":\"NASA/JPL/PODAAC\"},{\"ContactInformation\":{\"ContactMechanisms\":[{\"Type\":\"Email\",\"Value\":\"podaac@podaac.jpl.nasa.gov\"}],\"RelatedUrls\":[{\"Type\":\"HOME
+        PAGE\",\"URL\":\"https://podaac.jpl.nasa.gov/missions\",\"URLContentType\":\"DataCenterURL\"}]},\"LongName\":\"Jet
+        Propulsion Laboratory, NASA\",\"Roles\":[\"PROCESSOR\"],\"ShortName\":\"NASA/JPL\"},{\"ContactInformation\":{\"ContactMechanisms\":[{\"Type\":\"Email\",\"Value\":\"podaac@podaac.jpl.nasa.gov\"}],\"RelatedUrls\":[{\"Type\":\"HOME
+        PAGE\",\"URL\":\"https://podaac.jpl.nasa.gov/\",\"URLContentType\":\"DataCenterURL\"}]},\"LongName\":\"Physical
+        Oceanography Distributed Active Archive Center, Jet Propulsion Laboratory,
+        NASA\",\"Roles\":[\"DISTRIBUTOR\"],\"ShortName\":\"NASA/JPL/PODAAC\"}],\"TemporalKeywords\":[\"Hourly
+        - < Daily\"],\"Platforms\":[{\"Characteristics\":[{\"DataType\":\"FLOAT\",\"Description\":\"Nominal
+        period of a spacecraft\u2019s single revolution on an orbital plane.\",\"Name\":\"OrbitPeriod\",\"Unit\":\"Minutes\",\"Value\":\"98.4\"},{\"DataType\":\"FLOAT\",\"Description\":\"Spacecraft
+        angular distance from orbital plane relative to the Equator.\",\"Name\":\"InclinationAngle\",\"Unit\":\"Degrees\",\"Value\":\"98.1\"}],\"Instruments\":[{\"Characteristics\":[{\"DataType\":\"FLOAT\",\"Description\":\"Spacecraft
+        angular distance from orbital plane relative to the Equator.\",\"Name\":\"SwathWidth\",\"Unit\":\"Kilometers\",\"Value\":\"2330.0\"}],\"LongName\":\"Moderate-Resolution
+        Imaging Spectroradiometer\",\"ShortName\":\"MODIS\"},{\"Characteristics\":[{\"DataType\":\"FLOAT\",\"Description\":\"Spacecraft
+        angular distance from orbital plane relative to the Equator.\",\"Name\":\"SwathWidth\",\"Unit\":\"Kilometers\",\"Value\":\"1450.0\"}],\"LongName\":\"Advanced
+        Microwave Scanning Radiometer-EOS\",\"ShortName\":\"AMSR-E\"}],\"LongName\":\"Earth
+        Observing System, Aqua\",\"ShortName\":\"Aqua\",\"Type\":\"Earth Observation
+        Satellites\"},{\"Characteristics\":[{\"DataType\":\"FLOAT\",\"Description\":\"Nominal
+        period of a spacecraft\u2019s single revolution on an orbital plane.\",\"Name\":\"OrbitPeriod\",\"Unit\":\"Minutes\",\"Value\":\"101.6\"},{\"DataType\":\"FLOAT\",\"Description\":\"Spacecraft
+        angular distance from orbital plane relative to the Equator.\",\"Name\":\"InclinationAngle\",\"Unit\":\"Degrees\",\"Value\":\"98.7\"}],\"Instruments\":[{\"Characteristics\":[{\"DataType\":\"FLOAT\",\"Description\":\"Spacecraft
+        angular distance from orbital plane relative to the Equator.\",\"Name\":\"SwathWidth\",\"Unit\":\"Kilometers\",\"Value\":\"1200.0\"}],\"LongName\":\"WindSat\",\"ShortName\":\"WINDSAT\"}],\"LongName\":\"Coriolis\",\"ShortName\":\"CORIOLIS\",\"Type\":\"Earth
+        Observation Satellites\"},{\"Characteristics\":[{\"DataType\":\"FLOAT\",\"Description\":\"Nominal
+        period of a spacecraft\u2019s single revolution on an orbital plane.\",\"Name\":\"OrbitPeriod\",\"Unit\":\"Minutes\",\"Value\":\"98.8\"},{\"DataType\":\"FLOAT\",\"Description\":\"Spacecraft
+        angular distance from orbital plane relative to the Equator.\",\"Name\":\"InclinationAngle\",\"Unit\":\"Degrees\",\"Value\":\"98.2\"}],\"Instruments\":[{\"Characteristics\":[{\"DataType\":\"FLOAT\",\"Description\":\"Spacecraft
+        angular distance from orbital plane relative to the Equator.\",\"Name\":\"SwathWidth\",\"Unit\":\"Kilometers\",\"Value\":\"2330.0\"}],\"LongName\":\"Moderate-Resolution
+        Imaging Spectroradiometer\",\"ShortName\":\"MODIS\"}],\"LongName\":\"Earth
+        Observing System, Terra (AM-1)\",\"ShortName\":\"Terra\",\"Type\":\"Earth
+        Observation Satellites\"},{\"Characteristics\":[{\"DataType\":\"FLOAT\",\"Description\":\"Nominal
+        period of a spacecraft\u2019s single revolution on an orbital plane.\",\"Name\":\"OrbitPeriod\",\"Unit\":\"Minutes\",\"Value\":\"102.12\"},{\"DataType\":\"FLOAT\",\"Description\":\"Spacecraft
+        angular distance from orbital plane relative to the Equator.\",\"Name\":\"InclinationAngle\",\"Unit\":\"Degrees\",\"Value\":\"98.74\"}],\"Instruments\":[{\"Characteristics\":[{\"DataType\":\"FLOAT\",\"Description\":\"Spacecraft
+        angular distance from orbital plane relative to the Equator.\",\"Name\":\"SwathWidth\",\"Unit\":\"Kilometers\",\"Value\":\"2400.0\"}],\"LongName\":\"Advanced
+        Very High Resolution Radiometer-3\",\"ShortName\":\"AVHRR-3\"}],\"LongName\":\"National
+        Oceanic & Atmospheric Administration-19\",\"ShortName\":\"NOAA-19\",\"Type\":\"Earth
+        Observation Satellites\"},{\"Characteristics\":[{\"DataType\":\"FLOAT\",\"Description\":\"Nominal
+        period of a spacecraft\u2019s single revolution on an orbital plane.\",\"Name\":\"OrbitPeriod\",\"Unit\":\"Minutes\",\"Value\":\"100.0\"},{\"DataType\":\"FLOAT\",\"Description\":\"Spacecraft
+        angular distance from orbital plane relative to the Equator.\",\"Name\":\"InclinationAngle\",\"Unit\":\"Degrees\",\"Value\":\"98.19\"}],\"Instruments\":[{\"Characteristics\":[{\"DataType\":\"FLOAT\",\"Description\":\"Spacecraft
+        angular distance from orbital plane relative to the Equator.\",\"Name\":\"SwathWidth\",\"Unit\":\"Kilometers\",\"Value\":\"1450.0\"}],\"LongName\":\"Advanced
+        Microwave Scanning Radiometer 2\",\"ShortName\":\"AMSR2\"}],\"LongName\":\"Global
+        Change Observation Mission 1st-Water\",\"ShortName\":\"GCOM-W1\",\"Type\":\"Earth
+        Observation Satellites\"},{\"Instruments\":[{\"ShortName\":\"DRIFTING BUOYS\"}],\"ShortName\":\"BUOYS\",\"Type\":\"In
+        Situ Ocean-based Platforms\"}],\"MetadataSpecification\":{\"Name\":\"UMM-C\",\"URL\":\"https://cdn.earthdata.nasa.gov/umm/collection/v1.18.4\",\"Version\":\"1.18.4\"},\"ArchiveAndDistributionInformation\":{\"FileArchiveInformation\":[{\"AverageFileSize\":700,\"AverageFileSizeUnit\":\"MB\",\"Format\":\"netCDF-4\",\"FormatType\":\"Native\",\"TotalCollectionFileSizeBeginDate\":\"2002-06-01T00:00:00.000Z\"}],\"FileDistributionInformation\":[{\"AverageFileSize\":700,\"AverageFileSizeUnit\":\"MB\",\"Format\":\"netCDF-4\",\"FormatType\":\"Native\",\"TotalCollectionFileSizeBeginDate\":\"2002-06-01T00:00:00.000Z\"}]}}}]}"
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - CMR-Hits, CMR-Request-Id, X-Request-Id, CMR-Scroll-Id, CMR-Search-After, CMR-Timed-Out,
+        CMR-Shapefile-Original-Point-Count, CMR-Shapefile-Simplified-Point-Count
+      CMR-Hits:
+      - '1'
+      CMR-Request-Id:
+      - b36ecc4f-e0eb-4015-91ea-073ea1a18cc1
+      CMR-Search-After:
+      - '[0.0,8400.0,"MUR-JPL-L4-GLOB-v4.1","4.1",1238621141,1115]'
+      CMR-Took:
+      - '11'
+      Connection:
+      - keep-alive
+      Content-MD5:
+      - d61ec45d16eab4b5a8d6f6bac2a65c6b
+      Content-SHA1:
+      - a71263ed976793311e0bf7872912a3cd8e9970bf
+      Content-Type:
+      - application/vnd.nasa.cmr.umm_results+json;version=1.18.4; charset=utf-8
+      Date:
+      - Mon, 11 Aug 2025 19:58:11 GMT
+      Server:
+      - ServerTokens ProductOnly
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 1350a036cede21cb668ee0a3279a5c4c.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - Whi6SSjeWEiGJHyqNQkv_pllnbQI02DF58KHhg-Pope0U87UPcbTmA==
+      X-Amz-Cf-Pop:
+      - LAX53-P2
+      X-Cache:
+      - Miss from cloudfront
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - Whi6SSjeWEiGJHyqNQkv_pllnbQI02DF58KHhg-Pope0U87UPcbTmA==
+      X-XSS-Protection:
+      - 1; mode=block
+      content-length:
+      - '17642'
+    status:
+      code: 200
+      message: OK
+version: 1

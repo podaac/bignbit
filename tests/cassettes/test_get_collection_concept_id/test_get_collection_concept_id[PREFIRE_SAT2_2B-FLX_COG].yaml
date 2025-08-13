@@ -1,0 +1,157 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.4
+    method: GET
+    uri: https://cmr.uat.earthdata.nasa.gov/search/collections.umm_json?provider=LARC_CLOUD&short_name=PREFIRE_SAT2_2B-FLX_COG&version=R01
+  response:
+    body:
+      string: "{\"hits\":1,\"took\":10,\"items\":[{\"meta\":{\"revision-id\":5,\"deleted\":false,\"format\":\"application/vnd.nasa.cmr.umm+json\",\"provider-id\":\"LARC_CLOUD\",\"has-combine\":false,\"user-id\":\"userexample\",\"has-formats\":true,\"associations\":{\"variables\":[\"V1270130943-LARC_CLOUD\"],\"services\":[\"S1257776354-EEDTEST\"]},\"s3-links\":[\"s3://asdc-prod-protected/PREFIRE/PREFIRE_SAT2_2B-FLX_COG_R01\"],\"has-spatial-subsetting\":false,\"native-id\":\"MMT_a95a070e-9d29-47af-b828-33b31ab09b74\",\"has-transforms\":true,\"association-details\":{\"variables\":[{\"concept-id\":\"V1270130943-LARC_CLOUD\"}],\"services\":[{\"concept-id\":\"S1257776354-EEDTEST\"}]},\"has-variables\":true,\"concept-id\":\"C1273150419-LARC_CLOUD\",\"revision-date\":\"2025-04-11T15:00:34.487Z\",\"has-temporal-subsetting\":false,\"concept-type\":\"collection\"},\"umm\":{\"DataLanguage\":\"eng\",\"AdditionalAttributes\":[{\"Name\":\"CUMULUS\",\"Description\":\"Cumulus
+        flag\",\"DataType\":\"BOOLEAN\"}],\"SpatialExtent\":{\"HorizontalSpatialDomain\":{\"Geometry\":{\"BoundingRectangles\":[{\"EastBoundingCoordinate\":180,\"NorthBoundingCoordinate\":90,\"SouthBoundingCoordinate\":-90,\"WestBoundingCoordinate\":-180}],\"CoordinateSystem\":\"GEODETIC\"},\"ResolutionAndCoordinateSystem\":{\"HorizontalDataResolution\":{\"VariesResolution\":\"Varies\"}}},\"SpatialCoverageType\":\"HORIZONTAL\",\"GranuleSpatialRepresentation\":\"GEODETIC\"},\"CollectionProgress\":\"PLANNED\",\"StandardProduct\":false,\"ScienceKeywords\":[{\"Category\":\"EARTH
+        SCIENCE\",\"Topic\":\"ATMOSPHERE\",\"Term\":\"ATMOSPHERIC RADIATION\",\"VariableLevel1\":\"RADIATIVE
+        FLUX\"},{\"Category\":\"EARTH SCIENCE\",\"Topic\":\"ATMOSPHERE\",\"Term\":\"ATMOSPHERIC
+        RADIATION\",\"VariableLevel1\":\"EARTH RADIATION BUDGET\"},{\"Category\":\"EARTH
+        SCIENCE\",\"Topic\":\"ATMOSPHERE\",\"Term\":\"ATMOSPHERIC RADIATION\",\"VariableLevel1\":\"OUTGOING
+        LONGWAVE RADIATION\"},{\"Category\":\"EARTH SCIENCE\",\"Topic\":\"ATMOSPHERE\",\"Term\":\"ATMOSPHERIC
+        RADIATION\",\"VariableLevel1\":\"LONGWAVE RADIATION\",\"VariableLevel2\":\"UPWELLING
+        LONGWAVE RADIATION\"}],\"TemporalExtents\":[{\"RangeDateTimes\":[{\"BeginningDateTime\":\"2024-06-29T00:00:00.000Z\"}],\"PrecisionOfSeconds\":3,\"EndsAtPresentFlag\":true}],\"ProcessingLevel\":{\"Id\":\"2\",\"ProcessingLevelDescription\":\"Result
+        of analysis of lower level data\"},\"DOI\":{\"Authority\":\"https://doi.org/\",\"DOI\":\"10.5067/PREFIRE-SAT2/PREFIRE/FLX_COG_L2B.R01\"},\"ShortName\":\"PREFIRE_SAT2_2B-FLX_COG\",\"EntryTitle\":\"Polar
+        Radiant Energy in the Far InfraRed Experiment (PREFIRE) Spectral Flux from
+        PREFIRE Satellite 2 COG R01\",\"PublicationReferences\":[{\"OnlineResource\":{\"Name\":\"American
+        Meteorological Society\",\"Linkage\":\"https://journals.ametsoc.org/view/journals/bams/102/7/BAMS-D-20-0155.1.xml\",\"Protocol\":\"https\",\"MimeType\":\"application/pdf\"},\"Volume\":\"102\",\"Publisher\":\"American
+        Meteorological Society\",\"Title\":\"The Polar Radiant Energy in the Far InfraRed
+        Experiment: A New Perspective on Polar Longwave Energy Exchanges\",\"DOI\":{\"DOI\":\"https://doi.org/10.1175/BAMS-D-20-0155.1\"},\"Issue\":\"7\",\"PublicationDate\":\"2021-07-01T00:00:00.000Z\",\"Author\":\"L'Ecuyer,T.S,
+        B.J. Drouin, J. Anheuser, M. Grames, D. Henderson, X. Huang, B.H. Kahn, J.E.
+        Kay, B.H. Lim, M. Mateling, A. Merelli, N.B. Miller, S. Padmanabhan, C. Peterson,
+        N. Schlegel, M.L. White, and Y Xie\",\"OtherReferenceDetails\":\"Boston, MA\",\"Series\":\"Bulletin
+        of the American Meteorological Society\",\"Pages\":\"E1431-E1449\"}],\"DirectDistributionInformation\":{\"S3BucketAndObjectPrefixNames\":[\"s3://asdc-prod-protected/PREFIRE/PREFIRE_SAT2_2B-FLX_COG_R01\"],\"Region\":\"us-west-2\",\"S3CredentialsAPIEndpoint\":\"https://data.asdc.uat.earthdata.nasa.gov/s3credentials\",\"S3CredentialsAPIDocumentationURL\":\"https://data.asdc.uat.earthdata.nasa.gov/s3credentialsREADME\"},\"AccessConstraints\":{\"Value\":4,\"Description\":\"WORLD\"},\"MetadataLanguage\":\"eng\",\"RelatedUrls\":[{\"Description\":\"Mission
+        Logo\",\"URLContentType\":\"VisualizationURL\",\"Type\":\"GET RELATED VISUALIZATION\",\"Subtype\":\"WORLDVIEW\",\"URL\":\"https://asdc.larc.nasa.gov/static/images/project_logos/prefire.png\"},{\"Description\":\"PREFIRE
+        Data Set Landing Page ASDC\",\"URLContentType\":\"CollectionURL\",\"Type\":\"DATA
+        SET LANDING PAGE\",\"URL\":\"https://asdc.larc.nasa.gov/project/PREFIRE\"},{\"Description\":\"NASA
+        JPL PREFIRE Project Page\",\"URLContentType\":\"CollectionURL\",\"Type\":\"PROJECT
+        HOME PAGE\",\"URL\":\"https://science.jpl.nasa.gov/projects/prefire/\"},{\"Description\":\"University
+        of Wisconsin PREFIRE Project Page\",\"URLContentType\":\"CollectionURL\",\"Type\":\"PROFESSIONAL
+        HOME PAGE\",\"URL\":\"https://prefire.ssec.wisc.edu/\"}],\"Abstract\":\"Polar
+        Radiant Energy in the Far InfraRed Experiment (PREFIRE) Spectral Flux from
+        PREFIRE Satellite 2 (PREFIRE_SAT2_2B-FLX) contains surface emissivity derived
+        from data collected by the PREFIRE Thermal Infrared Spectrometer (TIRS-PREFIRE)
+        aboard PREFIRE-SAT2. Duel CubeSats each carry a PREFIRE Thermal Infrared Spectrometer
+        (TIRS-PREFIRE), a push broom spectrometer with 63 channels measuring mid-
+        and far-infrared (FIR) radiation from approximately 5 to 53 \xB5m. Most polar
+        emissions are in the FIR but have not been measured on a large scale. PREFIRE
+        aims to fill knowledge gaps in the global energy budget by more accurately
+        characterizing polar emissions. This information will then be assimilated
+        into global circulation and other climate models to predict future climates
+        more accurately.\\r\\n\\r\\nPREFIRE_SAT2_2B-FLX contains spectral flux at
+        the top of the atmosphere for all available TIRS-PREFIRE channels as derived
+        from PREFIRE Spectral Radiance (PREFIRE_SAT2_1B-RAD) data using an Optimal
+        Estimation retrieval with inputs from the PREFIRE_SAT2_2B-MSK (cloud mask),
+        PREFIRE_SAT2_AUX-MET (Auxiliary Meteorology), and PREFIRE_SAT2_AUX-SAT collections.
+        PREFIRE_SAT2_2B-FLX also contains the top-of-atmosphere Outgoing Longwave
+        Radiation (OLR) broadband flux.  \\r\\nThe primary purpose of this collection
+        is to assess the radiative activities over the polar regions to better quantify
+        the energy budget in those regions.\\r\\n\\r\\nData retrieval started in May
+        TBD, 2024, and is ongoing. Geographic coverage is global, with the greatest
+        concentration of data in the polar regions. The data swath is TBD km wide,
+        with 8 discrete TBD km wide data tracks corresponding to the 8 TIRS sensors.
+        Individual data footprints are TBD km long by TBD km wide. This data has a
+        temporal resolution of 0.707 seconds and is available in netCDF-4.\\r\\n\\r\\nThe
+        spectral flux data for the sister instrument aboard PREFIRE-SAT1 can be found
+        in the PREFIRE_SAT1_2B-FLX collection.\\r\\n\",\"Purpose\":\"PREFIRE_SAT2_2B-FLX_COG
+        will be used to study radiative balance in the polar regions.\\n\",\"LocationKeywords\":[{\"Category\":\"GEOGRAPHIC
+        REGION\",\"Type\":\"GLOBAL\"}],\"MetadataDates\":[{\"Type\":\"CREATE\",\"Date\":\"2024-07-01T15:29:00.000Z\"},{\"Type\":\"UPDATE\",\"Date\":\"2024-07-01T15:29:00.000Z\"}],\"MetadataAssociations\":[{\"Type\":\"INPUT\",\"EntryId\":\"PREFIRE_SAT2_AUX-MET\",\"Description\":\"PREFIRE_SAT2_AUX-MET
+        is a collection of analysis and satellite data that provides essential information
+        used to process Level 1B PREFIRE data to Level 2 products.\",\"Version\":\"R00\"},{\"Type\":\"INPUT\",\"EntryId\":\"PREFIRE_SAT2_1B-RAD\",\"Description\":\"This
+        product is derived from mid and far-infrared data contained in PREFIRE_SAT2_1B-RAD.\",\"Version\":\"R00\"},{\"Type\":\"INPUT\",\"EntryId\":\"PREFIRE_SAT1_2B-MSK\",\"Description\":\"PREFIRE_SAT1_2B-MSK
+        is used to identify clear an cloudy scenes.\",\"Version\":\"R00\"},{\"Type\":\"INPUT\",\"EntryId\":\"PREFIRE_SAT2_2B-CLD\",\"Description\":\"PREFIRE_SAT2_2B-CLD
+        provides cloud properties inputs for PREFIRE_SAT2_2B-FLX cloudy sky flux calculations.\",\"Version\":\"R00\"}],\"VersionDescription\":\"Initial
+        processing\",\"Version\":\"R01\",\"Projects\":[{\"Campaigns\":[\"PREFIRE\"],\"ShortName\":\"PREFIRE\",\"LongName\":\"Polar
+        Radiant Energy in the Far-InfraRed Experiment\"}],\"UseConstraints\":{\"LicenseURL\":{\"Linkage\":\"https://www.earthdata.nasa.gov/engage/open-data-services-software-policies/data-use-guidance\",\"Name\":\"Data
+        Use Guidance\",\"Description\":\"The Earth Observing System Data and Information
+        System (EOSDIS) data use guidance for NASA data.\"},\"FreeAndOpenData\":true},\"ContactPersons\":[{\"Roles\":[\"Technical
+        Contact\"],\"FirstName\":\"Erin \",\"LastName\":\"Hokanson Wagner\",\"ContactInformation\":{\"ServiceHours\":\"9am
+        - 4pm M-F\",\"ContactInstruction\":\"This is a group admin email.  The appropriate
+        party will be assigned to your inquiry.\",\"ContactMechanisms\":[{\"Type\":\"Email\",\"Value\":\"prefire-sdps.admin@office365.wisc.edu\"}],\"Addresses\":[{\"Country\":\"United
+        States\",\"StreetAddresses\":[\"Space Science and Engineering Center, University
+        of Wisconsin-Madison\",\"1225 West Dayton Street\"],\"City\":\"Madison\",\"PostalCode\":\"53706\"}]}}],\"CollectionDataType\":\"OTHER\",\"DataCenters\":[{\"Roles\":[\"ARCHIVER\"],\"ShortName\":\"NASA/LARC/SD/ASDC\",\"LongName\":\"Atmospheric
+        Science Data Center, Science Directorate, Langley Research Center, NASA\",\"ContactInformation\":{\"RelatedUrls\":[{\"URLContentType\":\"DataCenterURL\",\"Type\":\"HOME
+        PAGE\",\"URL\":\"https://asdc.larc.nasa.gov/\"}]},\"ContactGroups\":[{\"Roles\":[\"Data
+        Center Contact\"],\"GroupName\":\"ASDC USER SERVICES\",\"ContactInformation\":{\"ContactMechanisms\":[{\"Type\":\"Email\",\"Value\":\"support-asdc@earthdata.nasa.gov\"}],\"Addresses\":[{\"Country\":\"United
+        States\",\"StreetAddresses\":[\"NASA Langley Atmospheric Science Data Center\",\"User
+        and Data Services\",\"NASA Langley Research Center\"],\"City\":\"Hampton\",\"StateProvince\":\"Virginia\",\"PostalCode\":\"23681-2199\"}],\"RelatedUrls\":[{\"URLContentType\":\"DataContactURL\",\"Type\":\"HOME
+        PAGE\",\"URL\":\"https://asdc.larc.nasa.gov/\"}]}}]}],\"TemporalKeywords\":[\"<
+        1 second\"],\"Platforms\":[{\"Characteristics\":[{\"Name\":\"Satellite type\",\"Description\":\"Type
+        of CubeSat body.  In this case, the body is comprised of 6 basic CubeSat units.\",\"Value\":\"6\",\"Unit\":\"Unit\",\"DataType\":\"INT\"},{\"Name\":\"Length\",\"Description\":\"Length
+        of CubeSat body, not including solar panels\",\"Value\":\"300\",\"Unit\":\"cm\",\"DataType\":\"FLOAT\"},{\"Name\":\"Width\",\"Description\":\"Width
+        of CubeSat body, not including solar panels.\",\"Value\":\"200\",\"Unit\":\"cm\",\"DataType\":\"FLOAT\"},{\"Name\":\"Depth\",\"Description\":\"Depth
+        of CubeSat body, not including solar panels.\",\"Value\":\"100\",\"Unit\":\"cm\",\"DataType\":\"FLOAT\"}],\"Instruments\":[{\"Characteristics\":[{\"Name\":\"Minimum
+        wavelength\",\"Description\":\"Minimum usable wavelength measured by the instrument\",\"Value\":\"4.64\",\"Unit\":\"\xB5m\",\"DataType\":\"FLOAT\"},{\"Name\":\"Maximum
+        wavelength\",\"Description\":\"Maximum wavelength\",\"Value\":\"52.74\",\"Unit\":\"\xB5m\",\"DataType\":\"FLOAT\"}],\"ShortName\":\"TIRS-PREFIRE\",\"LongName\":\"Thermal
+        InfraRed Spectrometer\",\"Technique\":\"Thermal Infrared Spectrometer - Polar
+        Radiant Energy in the Far Infrared Experiment\",\"NumberOfInstruments\":1}],\"Type\":\"Earth
+        Observation Satellites\",\"ShortName\":\"PREFIRE-SAT2\",\"LongName\":\"Polar
+        Radiant Energy in the Far InfraRed Experiment (PREFIRE) Satellite-2\"}],\"MetadataSpecification\":{\"URL\":\"https://cdn.earthdata.nasa.gov/umm/collection/v1.18.4\",\"Name\":\"UMM-C\",\"Version\":\"1.18.4\"},\"ArchiveAndDistributionInformation\":{\"FileArchiveInformation\":[{\"Format\":\"netCDF-4\",\"FormatType\":\"Native\",\"FormatDescription\":\"Files
+        are moderately self-describing via their internal metadata.\",\"AverageFileSize\":3.7,\"AverageFileSizeUnit\":\"MB\"}],\"FileDistributionInformation\":[{\"Format\":\"netCDF-4\",\"FormatType\":\"Native\",\"FormatDescription\":\"Files
+        are moderately self-describing via their internal metadata.\",\"AverageFileSize\":3.7,\"AverageFileSizeUnit\":\"MB\"}]}}}]}"
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - CMR-Hits, CMR-Request-Id, X-Request-Id, CMR-Scroll-Id, CMR-Search-After, CMR-Timed-Out,
+        CMR-Shapefile-Original-Point-Count, CMR-Shapefile-Simplified-Point-Count
+      CMR-Hits:
+      - '1'
+      CMR-Request-Id:
+      - b5925ce6-21ce-4075-96ba-261279a5a84e
+      CMR-Search-After:
+      - '[0.0,0.0,"PREFIRE_SAT2_2B-FLX_COG","r01",1273150419,5]'
+      CMR-Took:
+      - '11'
+      Connection:
+      - keep-alive
+      Content-MD5:
+      - 30a987cfe6bebf7e594938ae4c4136a1
+      Content-SHA1:
+      - 03b4fc9105ce9be22b33d53412ed24656c2e6b40
+      Content-Type:
+      - application/vnd.nasa.cmr.umm_results+json;version=1.18.4; charset=utf-8
+      Date:
+      - Mon, 11 Aug 2025 19:58:10 GMT
+      Server:
+      - ServerTokens ProductOnly
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 e1781e38c27c8587a4a79b775f1d6666.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - Uii-xcPPXs4arScWl7fpcmKFbmQoqbl5ZQTq-q4M0-uQEVdeomMEcQ==
+      X-Amz-Cf-Pop:
+      - LAX53-P2
+      X-Cache:
+      - Miss from cloudfront
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Request-Id:
+      - Uii-xcPPXs4arScWl7fpcmKFbmQoqbl5ZQTq-q4M0-uQEVdeomMEcQ==
+      X-XSS-Protection:
+      - 1; mode=block
+      content-length:
+      - '11159'
+    status:
+      code: 200
+      message: OK
+version: 1

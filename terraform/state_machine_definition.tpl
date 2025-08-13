@@ -200,6 +200,7 @@
           "event.$":"$",
           "task_config":{
             "collection_shortname":"{$.meta.collection.name}",
+            "collection_version":"{$.meta.collection.version}",
             "cmr_provider":"{$.meta.cmr.provider}",
             "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
             "cumulus_message":{

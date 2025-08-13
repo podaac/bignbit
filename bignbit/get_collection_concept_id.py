@@ -31,24 +31,27 @@ class CMA(Process):
           The input with new key 'collection_concept_id' added in the payload
         """
         collection_shortname = self.config['collection_shortname']
+        collection_version = self.config['collection_version']
         cmr_provider = self.config['cmr_provider']
         cmr_environment = self.config['cmr_environment']
         dataset_config = self.input['datasetConfigurationForBIG']['config']
         # Use override for collection concept id from dataset config if provided
         collection_id = dataset_config.get('concept_id')
         if collection_id is None:
-            collection_id = get_collection_concept_id(collection_shortname, cmr_provider, cmr_environment)
+            collection_id = get_collection_concept_id(collection_shortname, collection_version, cmr_provider, cmr_environment)
         self.input['collection_concept_id'] = collection_id
         return self.input
 
 
-def get_collection_concept_id(collection_shortname: str, cmr_provider: str, cmr_environment: str) -> str:
+def get_collection_concept_id(collection_shortname: str, collection_version: str, cmr_provider: str, cmr_environment: str) -> str:
     """
     Retrieve the collection concept id from CMR
     Parameters
     ----------
     collection_shortname
       Shortname of the collection
+    collection_version
+      Version of the collection
     cmr_provider
       Collection provider
     cmr_environment
@@ -67,7 +70,8 @@ def get_collection_concept_id(collection_shortname: str, cmr_provider: str, cmr_
                                      headers={'Authorization': f'Bearer {token}'},
                                      params={
                                          'provider': cmr_provider,
-                                         'short_name': collection_shortname
+                                         'short_name': collection_shortname,
+                                         'version': collection_version
                                      },
                                      timeout=10)
     umm_json_response.raise_for_status()
