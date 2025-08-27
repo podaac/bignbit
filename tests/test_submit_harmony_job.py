@@ -36,12 +36,13 @@ class TestSubmitHarmonyJob:
         granule_concept_id = 'G1234567890-POCLOUD'
         granule_id = 'test_granule_001'
         variable = 'test_variable'
+        output_crs = 'EPSG:4326'
         big_config = {
             'config': {
                 'width': 512,
                 'height': 512,
                 'format': 'image/png',
-                'outputCrs': 'EPSG:4326'
+                'outputCrs': ['EPSG:4326']
             }
         }
         bignbit_staging_bucket = 'podaac-sit-svc-internal'
@@ -49,12 +50,13 @@ class TestSubmitHarmonyJob:
         
         result = submit_harmony_job(
             cmr_env, collection_concept_id, collection_name, granule_concept_id,
-            granule_id, variable, big_config, bignbit_staging_bucket, harmony_staging_path
+            granule_id, variable, output_crs, big_config, bignbit_staging_bucket,
+            harmony_staging_path
         )
         
         expected_destination_url = 's3://podaac-sit-svc-internal/harmony-output/test_collection/20230515'
         mock_generate_request.assert_called_once_with(
-            collection_concept_id, granule_concept_id, variable, big_config, expected_destination_url
+            collection_concept_id, granule_concept_id, variable, output_crs, big_config, expected_destination_url
         )
         mock_get_client.assert_called_once_with(cmr_env)
         mock_client.submit.assert_called_once_with(mock_request)
@@ -63,7 +65,8 @@ class TestSubmitHarmonyJob:
             'job': mock_job,
             'granule_id': granule_id,
             'granule_concept_id': granule_concept_id,
-            'variable': variable
+            'variable': variable,
+            'output_crs': output_crs
         }
 
     @patch('bignbit.submit_harmony_job.utils.get_harmony_client')
@@ -89,14 +92,14 @@ class TestSubmitHarmonyJob:
         
         submit_harmony_job(
             'OPS', 'C1234567890-POCLOUD', collection_name, 'G1234567890-POCLOUD',
-            'test_granule', 'var1', {'config': {'width': 256, 'height': 256}},
+            'test_granule', 'var1', 'EPSG:4326', {'config': {'width': 256, 'height': 256}},
             'bucket', 'path'
         )
         
         expected_destination_url = 's3://bucket/path/mixed_case_collection_name/20231225'
         mock_generate_request.assert_called_once()
         args, kwargs = mock_generate_request.call_args
-        assert args[4] == expected_destination_url
+        assert args[5] == expected_destination_url
 
     @patch('bignbit.submit_harmony_job.utils.get_harmony_client')
     def test_submit_harmony_job_client_error(self, mock_get_client):
@@ -108,7 +111,7 @@ class TestSubmitHarmonyJob:
         with pytest.raises(Exception, match="Harmony service unavailable"):
             submit_harmony_job(
                 'UAT', 'C1234567890-POCLOUD', 'test_collection', 'G1234567890-POCLOUD',
-                'test_granule', 'variable', {'config': {'width': 512, 'height': 512}},
+                'test_granule', 'variable', 'EPSG:4326', {'config': {'width': 512, 'height': 512}},
                 'bucket', 'path'
             )
 
@@ -121,6 +124,7 @@ class TestGenerateHarmonyRequest:
         collection_concept_id = 'C1234567890-POCLOUD'
         granule_concept_id = 'G1234567890-POCLOUD'
         variable = 'temperature'
+        output_crs = 'EPSG:4326'
         big_config = {
             'config': {
                 'width': 1024,
@@ -130,7 +134,7 @@ class TestGenerateHarmonyRequest:
         destination_bucket_url = 's3://test-bucket/path/collection/20230515'
         
         result = generate_harmony_request(
-            collection_concept_id, granule_concept_id, variable, big_config, destination_bucket_url
+            collection_concept_id, granule_concept_id, variable, output_crs, big_config, destination_bucket_url
         )
         
         assert isinstance(result, Request)
@@ -148,6 +152,7 @@ class TestGenerateHarmonyRequest:
         collection_concept_id = 'C9876543210-POCLOUD'
         granule_concept_id = 'G9876543210-POCLOUD'
         variable = 'chlorophyll_a'
+        output_crs = 'EPSG:3857'
         big_config = {
             'config': {
                 'width': 512,
@@ -159,7 +164,7 @@ class TestGenerateHarmonyRequest:
         destination_bucket_url = 's3://custom-bucket/custom-path/collection/20231201'
         
         result = generate_harmony_request(
-            collection_concept_id, granule_concept_id, variable, big_config, destination_bucket_url
+            collection_concept_id, granule_concept_id, variable, output_crs, big_config, destination_bucket_url
         )
         
         assert isinstance(result, Request)
@@ -177,18 +182,18 @@ class TestGenerateHarmonyRequest:
         collection_concept_id = 'C5555555555-DATACENTER'
         granule_concept_id = 'G5555555555-DATACENTER'
         variable = 'sea_surface_temperature'
+        output_crs = 'EPSG:4326'
         big_config = {
             'config': {
                 'width': 2048,
                 'height': 1536,
                 'format': 'image/tiff',
-                'outputCrs': 'EPSG:4326'
             }
         }
         destination_bucket_url = 's3://prod-bucket/harmony-results/sst_collection/20240101'
         
         result = generate_harmony_request(
-            collection_concept_id, granule_concept_id, variable, big_config, destination_bucket_url
+            collection_concept_id, granule_concept_id, variable, output_crs, big_config, destination_bucket_url
         )
 
         assert isinstance(result, Request)
@@ -206,17 +211,17 @@ class TestGenerateHarmonyRequest:
         collection_concept_id = 'C1111111111-TEST'
         granule_concept_id = 'G1111111111-TEST'
         variable = 'wind_speed'
+        output_crs = 'EPSG:4326'
         big_config = {
             'config': {
                 'width': 800,
                 'height': 600
-                # format and outputCrs are missing, should use defaults
             }
         }
         destination_bucket_url = 's3://test-bucket/results/wind/20230301'
         
         result = generate_harmony_request(
-            collection_concept_id, granule_concept_id, variable, big_config, destination_bucket_url
+            collection_concept_id, granule_concept_id, variable, output_crs, big_config, destination_bucket_url
         )
         
         assert result.format == 'image/png'  # default
@@ -229,11 +234,12 @@ class TestGenerateHarmonyRequest:
         collection_concept_id = 'C7777777777-POCLOUD'
         granule_concept_id = 'G7777777777-POCLOUD'
         variable = 'precipitation'
+        output_crs = 'EPSG:4326'
         big_config = {'config': {'width': 256, 'height': 256}}
         destination_bucket_url = 's3://bucket/path'
         
         result = generate_harmony_request(
-            collection_concept_id, granule_concept_id, variable, big_config, destination_bucket_url
+            collection_concept_id, granule_concept_id, variable, output_crs, big_config, destination_bucket_url
         )
         
         assert isinstance(result.collection, Collection)
@@ -244,11 +250,12 @@ class TestGenerateHarmonyRequest:
         collection_concept_id = 'C8888888888-POCLOUD'
         granule_concept_id = 'G8888888888-POCLOUD'
         variable = 'humidity'
+        output_crs = 'EPSG:4326'
         big_config = {'config': {'width': 128, 'height': 128}}
         destination_bucket_url = 's3://bucket/path'
         
         result = generate_harmony_request(
-            collection_concept_id, granule_concept_id, variable, big_config, destination_bucket_url
+            collection_concept_id, granule_concept_id, variable, output_crs, big_config, destination_bucket_url
         )
         
         assert isinstance(result.granule_id, list)
@@ -260,11 +267,12 @@ class TestGenerateHarmonyRequest:
         collection_concept_id = 'C9999999999-POCLOUD'
         granule_concept_id = 'G9999999999-POCLOUD'
         variable = 'salinity'
+        output_crs = 'EPSG:3857'
         big_config = {'config': {'width': 64, 'height': 64}}
         destination_bucket_url = 's3://bucket/path'
         
         result = generate_harmony_request(
-            collection_concept_id, granule_concept_id, variable, big_config, destination_bucket_url
+            collection_concept_id, granule_concept_id, variable, output_crs, big_config, destination_bucket_url
         )
         
         assert isinstance(result.variables, list)
@@ -296,12 +304,13 @@ class TestSubmitHarmonyJobIntegration:
         granule_concept_id = 'G1596878748-POCLOUD'
         granule_id = 'test_granule_integration'
         variable = 'analysed_sst'
+        output_crs = 'EPSG:4326'
         big_config = {
             'config': {
                 'width': 1024,
                 'height': 512,
                 'format': 'image/png',
-                'outputCrs': 'EPSG:4326'
+                'outputCrs': ['EPSG:4326', 'EPSG:3857']
             }
         }
         bignbit_staging_bucket = 'podaac-sit-svc-internal'
@@ -309,7 +318,7 @@ class TestSubmitHarmonyJobIntegration:
         
         result = submit_harmony_job(
             cmr_env, collection_concept_id, collection_name, granule_concept_id,
-            granule_id, variable, big_config, bignbit_staging_bucket, harmony_staging_path
+            granule_id, variable, output_crs, big_config, bignbit_staging_bucket, harmony_staging_path
         )
         
         # Verify the harmony client was called correctly
