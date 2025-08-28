@@ -43,13 +43,12 @@ class CMA(Process):
         current_item = self.config.get('current_item')
         variable = current_item.get('id')
         current_crs = self.config.get('current_crs')
-        output_crs = current_crs.get('id')
         big_config = self.config.get('big_config')
         bignbit_staging_bucket = self.config.get('bignbit_staging_bucket')
         harmony_staging_path = self.config.get('harmony_staging_path')
 
         harmony_job = submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_concept_id,
-                                         granule_id, variable, output_crs, big_config, bignbit_staging_bucket,
+                                         granule_id, variable, current_crs, big_config, bignbit_staging_bucket,
                                          harmony_staging_path)
         self.input['harmony_job'] = harmony_job
         return self.input
