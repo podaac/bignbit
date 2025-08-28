@@ -60,7 +60,7 @@ class ImageSetGenerator(Process):
 
             for big_image_set in image_sets:
                 pobit_image_set = ImageSet(
-                    name=big_image_set.name + '_' + cmr_concept_id,
+                    name=big_image_set.name + '!' + cmr_concept_id,
                     image=big_image_set.image,
                     image_metadata=big_image_set.image_metadata,
                     world_file=big_image_set.world_file)

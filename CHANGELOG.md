@@ -9,9 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - [issues/69](https://github.com/podaac/bignbit/issues/69): Added support for other projections, with the default being EPSG:4326. The projection is read from the `outputCrs` keyword in the dataset config. This likely needs refinement to account for cases when we have multiple projections per dataset.
 ### Changed
+- [issues/62](https://github.com/podaac/bignbit/issues/62): The retry policy for querying Harmony job status is now configurable as module parameters. By default, it will query for job status every 20 seconds for a maximum of 15 attempts.
 ### Deprecated
 ### Removed
 ### Fixed
+- [issues/91](https://github.com/podaac/bignbit/issues/91): Fixed bug where the CNM collection name sent to GIBS included '/' characters when dealing with certain variables. This caused processing errors in GIBS, all collection names will now replace '/' with '_' before being sent to GIBS.
+- [issues/89](https://github.com/podaac/bignbit/issues/89): Fixed bug where querying CMR for a collection could result in multiple results because collection version was not included in the query. Fix is to include the version in the CMR query, which will now return only one result.
+- [issues/96](https://github.com/podaac/bignbit/issues/96): Fixed bug causing GIBS responses to fail processing due to provider name containing an underscore `_` which collided with the delimiter used in CNM identifiers. The new delimiter for CNM identifier is now an exclamation mark `!`.
 ### Security
 
 ## [0.3.0]
