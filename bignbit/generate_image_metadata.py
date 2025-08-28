@@ -50,7 +50,8 @@ class CMA(Process):
         cma_file_list = self.input['big']
         # Flatten input list if needed
         if cma_file_list and any(isinstance(el, list) for el in cma_file_list):
-            cma_file_list = [item for sublist in cma_file_list for item in sublist]
+            # flatten triple nested loop
+            cma_file_list = [item for sublist1 in cma_file_list for sublist2 in sublist1 for item in sublist2]
         granule_umm_json = self.input['granule_umm_json']
 
         # Parse dataset-level overrides
