@@ -20,8 +20,8 @@ This terraform can be deployed from the local command line or via GitHub Actions
 ## Local Deployment
 If you are trying to deploy a local build, you must first build the docker image and tag it. For example:
 ```bash
-# If building on a newer Mac, you will need to specify the platform
-docker buildx build --platform linux/amd64 --load -t ghcr.io/podaac/bignbit/bignbit:0.4.0a2-cd2fbe2 -f docker/Dockerfile .
+# If building on a newer Mac, you will need to specify the platform and set provenance=false
+docker buildx build --provenance=false --platform linux/amd64 --load -t ghcr.io/podaac/bignbit/bignbit:0.4.0a2-cd2fbe2 -f docker/Dockerfile .
 
 # Otherwise, you can just build it directly
 docker build -t ghcr.io/podaac/bignbit/bignbit:0.4.0a2-cd2fbe2 -f docker/Dockerfile .

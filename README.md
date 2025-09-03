@@ -17,7 +17,7 @@ bignbit is a Cumulus module that can be installed as a post-ingest workflow to g
 
 In general, the high level steps are:
 
-1. For each configured variable within the granule being processed, generate browse imagery via Harmony and store it in S3.
+1. For each requested output projection and configured variable within the granule, generate browse imagery via Harmony and store it in S3.
 2. Generate a browse image metadata file for GIBS for each image produced by Harmony.
 3. Construct a CNM message for each image that includes the image, metadata, and optional world file
 4. Send the CNM messages to GIBS via SQS.
@@ -117,6 +117,7 @@ The contents of the configuration file should be a valid json object with the fo
 | dataDayStrategy    | string       | [OPTIONAL] (Default: "") If this keyword is set to "single_day_of_year", bignbit will override the date from the granule metadata with the one specified in "singleDayNumber"                                                                                        |
 | singleDayNumber    | string       | [OPTIONAL] (Default: "") If using the "dataDayStrategy" keyword, all granules in this dataset will use the day of year specified in this keyword. ex: "001" for January 1st                                                                                          |
 | subdaily           | boolean      | [OPTIONAL] (Default: False) Set to true if granules contain subdaily data. This will send `DataDateTime` metadata to GIBS as described in the GIBS ICD                                                                                                               |
+| outputCrs          | list(string) | [OPTIONAL] (Default: ["EPSG:4326"]) Specifies a list of output projections or coordinate reference systems for which to produce browse images. Applies to all variables in granule. GIBS-compatible values are EPSG:4326, EPSG:3413, or EPSG:3031                    |
 | concept_id         | string       | [OPTIONAL] (Default: "") Overrides the concept id derived from the granule metadata with this value. ex: "C1996881146-POCLOUD"                                                                                                                                       |
 
 A few example configurations can be found in the [podaac/bignbit-config](https://github.com/podaac/bignbit-config) repository. NOTE: some of the example configurations have other options specified (e.g. `variables`, `latVar`, `lonVar`, etc...) that are no longer supported by this module. The table above are the attributes that are still in use.

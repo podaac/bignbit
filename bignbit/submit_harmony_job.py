@@ -42,24 +42,26 @@ class CMA(Process):
         granule_id = granule.get('granuleId')
         current_item = self.config.get('current_item')
         variable = current_item.get('id')
+        current_crs = self.config.get('current_crs')
         big_config = self.config.get('big_config')
         bignbit_staging_bucket = self.config.get('bignbit_staging_bucket')
         harmony_staging_path = self.config.get('harmony_staging_path')
 
         harmony_job = submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_concept_id,
-                                         granule_id, variable, big_config, bignbit_staging_bucket, harmony_staging_path)
+                                         granule_id, variable, current_crs, big_config, bignbit_staging_bucket,
+                                         harmony_staging_path)
         self.input['harmony_job'] = harmony_job
         return self.input
 
 
 def submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_concept_id, granule_id, variable,
-                       big_config, bignbit_staging_bucket, harmony_staging_path):
+                       output_crs, big_config, bignbit_staging_bucket, harmony_staging_path):
     """Generate harmony job and returns harmony job id"""
 
     destination_bucket_url = f's3://{bignbit_staging_bucket}/{harmony_staging_path}/{collection_name}/{datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d")}'.lower()
     harmony_client = utils.get_harmony_client(cmr_env)
-    harmony_request = generate_harmony_request(collection_concept_id, granule_concept_id, variable, big_config,
-                                               destination_bucket_url)
+    harmony_request = generate_harmony_request(collection_concept_id, granule_concept_id, variable, output_crs,
+                                               big_config, destination_bucket_url)
 
     CUMULUS_LOGGER.info("Submitting Harmony request: {}", harmony_client.request_as_url(harmony_request))
     job = harmony_client.submit(harmony_request)
@@ -67,13 +69,14 @@ def submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_
         'job': job,
         'granule_id': granule_id,
         'granule_concept_id': granule_concept_id,
-        'variable': variable
+        'variable': variable,
+        'output_crs': output_crs,
     }
 
     return harmony_job
 
 
-def generate_harmony_request(collection_concept_id, granule_concept_id, variable, big_config, destination_bucket_url):
+def generate_harmony_request(collection_concept_id, granule_concept_id, variable, output_crs, big_config, destination_bucket_url):
     """Generate the harmony request to be made and return request object"""
 
     request = Request(
@@ -82,7 +85,8 @@ def generate_harmony_request(collection_concept_id, granule_concept_id, variable
         variables=[variable],
         width=big_config['config']['width'],
         height=big_config['config']['height'],
-        format="image/png",
+        format=big_config['config'].get('format', 'image/png'),
+        crs=output_crs,
         destination_url=destination_bucket_url
     )
     return request
