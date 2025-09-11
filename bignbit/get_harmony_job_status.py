@@ -2,6 +2,8 @@
 import json
 import logging
 import os
+from datetime import datetime
+
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 
@@ -69,6 +71,12 @@ def check_harmony_job(harmony_job_id: str, cmr_env: str = None) -> str:
     harmony_client = utils.get_harmony_client(cmr_env)
     job_status = harmony_client.status(harmony_job_id)
 
+    def datetime_serializer(obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()  # Or obj.strftime(...)
+        raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
+    job_status_json = json.dumps(job_status, default=datetime_serializer)
+
     # For a successful job, return the status; for all other states, raise an exception.
     if job_status.get('status') == 'successful':
         return job_status.get('status')
@@ -76,10 +84,10 @@ def check_harmony_job(harmony_job_id: str, cmr_env: str = None) -> str:
     # If the job is still running or accepted, raise an exception that will be retried by the step function workflow.
     if job_status.get('status') in ['accepted', 'running']:
         raise HarmonyJobIncompleteError(
-            f'Harmony job {harmony_job_id} is not complete. Status: {json.dumps(job_status)}')
+            f'Harmony job {harmony_job_id} is not complete. Status: {job_status_json}')
 
     # If the job has failed, raise an exception that will cause the step function workflow to fail.
-    raise HarmonyJobFailedError(f'Harmony job {harmony_job_id} has failed. Status: {json.dumps(job_status)}')
+    raise HarmonyJobFailedError(f'Harmony job {harmony_job_id} has failed. Status: {job_status_json}')
 
 
 def lambda_handler(event, context):
