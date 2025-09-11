@@ -29,9 +29,6 @@ locals {
     Environment = var.stage
   } : var.default_tags
 
-  current_aws_region = try(
-    data.aws_region.current.region,
-    data.aws_region.current.name
-  )
+  current_aws_region = data.aws_region.current.name
 
 }
