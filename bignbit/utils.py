@@ -319,16 +319,20 @@ def extract_mgrs_grid_code(granule_umm_json: dict) -> str:
         elif match := re.search("[_.](T\\w{5})[_.]", granule_id):
             return match.group(1)
     else:
-        raise KeyError(f'MGRS_TILE_ID could not be extracted from GranuleUR for granule {granule_umm_json["GranuleUR"]}')
+        raise KeyError(
+            f'MGRS_TILE_ID could not be extracted from GranuleUR for granule {granule_umm_json["GranuleUR"]}')
 
     raise KeyError(f'MGRS_TILE_ID was not found in AdditionalAttributes for granule {granule_umm_json["GranuleUR"]}')
 
+
 class CustomDateTimeEncoder(json.JSONEncoder):
     """Custom JSON encoder that converts datetime objects to ISO 8601 strings."""
+
     def default(self, o):
         if isinstance(o, datetime):
             return o.isoformat()
         return super().default(o)
+
 
 def json_dumps_with_datetime(obj, **kwargs):
     """Dump an object to a JSON string, handling datetime objects."""
