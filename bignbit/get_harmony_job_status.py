@@ -1,8 +1,6 @@
 """Cumulus lambda class to check harmony job status"""
-import json
 import logging
 import os
-from datetime import datetime
 
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
@@ -82,7 +80,8 @@ def check_harmony_job(harmony_job_id: str, cmr_env: str = None) -> str:
             f'Harmony job {harmony_job_id} is not complete. Status: {json_dumps_with_datetime(job_status)}')
 
     # If the job has failed, raise an exception that will cause the step function workflow to fail.
-    raise HarmonyJobFailedError(f'Harmony job {harmony_job_id} has failed. Status: {json_dumps_with_datetime(job_status)}')
+    raise HarmonyJobFailedError(
+        f'Harmony job {harmony_job_id} has failed. Status: {json_dumps_with_datetime(job_status)}')
 
 
 def lambda_handler(event, context):
