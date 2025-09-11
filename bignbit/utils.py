@@ -1,5 +1,6 @@
 """Module for functions used by more than one lambda"""
 import hashlib
+import json
 import os
 import pathlib
 import re
@@ -321,3 +322,12 @@ def extract_mgrs_grid_code(granule_umm_json: dict) -> str:
         raise KeyError(f'MGRS_TILE_ID could not be extracted from GranuleUR for granule {granule_umm_json["GranuleUR"]}')
 
     raise KeyError(f'MGRS_TILE_ID was not found in AdditionalAttributes for granule {granule_umm_json["GranuleUR"]}')
+
+class CustomDateTimeEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, datetime):
+            return obj.isoformat()
+        return super().default(obj)
+
+def json_dumps_with_datetime(obj, **kwargs):
+    return json.dumps(obj, cls=CustomDateTimeEncoder, **kwargs)
