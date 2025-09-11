@@ -42,7 +42,7 @@ resource "aws_sqs_queue" "gibs_response_deadletter" {
   redrive_allow_policy = jsonencode({
     redrivePermission = "byQueue",
     # Cannot use reference to aws_sqs_queue.gibs_response_queue.arn because it causes a cycle https://github.com/hashicorp/terraform-provider-aws/issues/22577
-    sourceQueueArns   = ["arn:aws:sqs:${data.aws_region.current.region}:${local.account_id}:${local.aws_resources_name}-gibs-response-queue"]
+    sourceQueueArns   = ["arn:aws:sqs:${local.current_aws_region}:${local.account_id}:${local.aws_resources_name}-gibs-response-queue"]
   })
 }
 
@@ -132,7 +132,7 @@ data "aws_iam_policy_document" "gibs_request_queue_policy" {
       "sqs:GetQueueUrl",
       "sqs:GetQueueAttributes",
     ]
-    resources = ["arn:aws:sqs:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:*",
+    resources = ["arn:aws:sqs:${local.current_aws_region}:${data.aws_caller_identity.current.account_id}:*",
                  "arn:aws:sqs:${var.gibs_region}:${var.gibs_account_id}:${var.gibs_queue_name}"]
   }
 }
