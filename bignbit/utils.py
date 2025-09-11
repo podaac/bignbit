@@ -324,10 +324,12 @@ def extract_mgrs_grid_code(granule_umm_json: dict) -> str:
     raise KeyError(f'MGRS_TILE_ID was not found in AdditionalAttributes for granule {granule_umm_json["GranuleUR"]}')
 
 class CustomDateTimeEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, datetime):
-            return obj.isoformat()
-        return super().default(obj)
+    """Custom JSON encoder that converts datetime objects to ISO 8601 strings."""
+    def default(self, o):
+        if isinstance(o, datetime):
+            return o.isoformat()
+        return super().default(o)
 
 def json_dumps_with_datetime(obj, **kwargs):
+    """Dump an object to a JSON string, handling datetime objects."""
     return json.dumps(obj, cls=CustomDateTimeEncoder, **kwargs)
