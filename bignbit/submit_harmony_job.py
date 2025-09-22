@@ -80,7 +80,7 @@ def determine_output_dimensions(big_config, output_crs):
     """Set the output width and height of the browse image based on config and projection."""
     big_width = big_config['config']['width']
     big_height = big_config['config']['height']
-    if (output_crs.upper() == "EPSG:4326"):
+    if output_crs.upper() == "EPSG:4326":
         if big_width == big_height or big_width < big_height:
             output_width = 2 * big_height
         else:
