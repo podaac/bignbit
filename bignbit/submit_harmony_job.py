@@ -44,23 +44,24 @@ class CMA(Process):
         variable = current_item.get('id')
         current_crs = self.config.get('current_crs')
         big_config = self.config.get('big_config')
+        output_width, output_height = determine_output_dimensions(big_config, current_crs)
         bignbit_staging_bucket = self.config.get('bignbit_staging_bucket')
         harmony_staging_path = self.config.get('harmony_staging_path')
 
         harmony_job = submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_concept_id,
-                                         granule_id, variable, current_crs, big_config, bignbit_staging_bucket,
-                                         harmony_staging_path)
+                                         granule_id, variable, output_width, output_height, current_crs, big_config,
+                                         bignbit_staging_bucket, harmony_staging_path)
         self.input['harmony_job'] = harmony_job
         return self.input
 
 
 def submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_concept_id, granule_id, variable,
-                       output_crs, big_config, bignbit_staging_bucket, harmony_staging_path):
+                       output_width, output_height, output_crs, big_config, bignbit_staging_bucket, harmony_staging_path):
     """Generate harmony job and returns harmony job id"""
 
     destination_bucket_url = f's3://{bignbit_staging_bucket}/{harmony_staging_path}/{collection_name}/{datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d")}'.lower()
     harmony_client = utils.get_harmony_client(cmr_env)
-    harmony_request = generate_harmony_request(collection_concept_id, granule_concept_id, variable, output_crs,
+    harmony_request = generate_harmony_request(collection_concept_id, granule_concept_id, variable, output_width, output_height, output_crs,
                                                big_config, destination_bucket_url)
 
     CUMULUS_LOGGER.info("Submitting Harmony request: {}", harmony_client.request_as_url(harmony_request))
@@ -76,15 +77,31 @@ def submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_
     return harmony_job
 
 
-def generate_harmony_request(collection_concept_id, granule_concept_id, variable, output_crs, big_config, destination_bucket_url):
+def determine_output_dimensions(big_config, output_crs):
+    """Set the output width and height of the browse image based on config and projection."""
+    big_width = big_config['config']['width']
+    big_height = big_config['config']['height']
+    if output_crs.upper() == "EPSG:4326":
+        if big_width == big_height or big_width < big_height:
+            output_width = 2 * big_height
+        else:
+            output_width = big_width
+        output_height = big_height
+    else:
+        output_width = min(big_width, big_height)
+        output_height = min(big_width, big_height)
+    return (output_width, output_height)
+
+
+def generate_harmony_request(collection_concept_id, granule_concept_id, variable, output_width, output_height, output_crs, big_config, destination_bucket_url):
     """Generate the harmony request to be made and return request object"""
 
     request = Request(
         collection=Collection(id=collection_concept_id),
         granule_id=[granule_concept_id],
         variables=[variable],
-        width=big_config['config']['width'],
-        height=big_config['config']['height'],
+        width=output_width,
+        height=output_height,
         format=big_config['config'].get('format', 'image/png'),
         crs=output_crs,
         destination_url=destination_bucket_url
