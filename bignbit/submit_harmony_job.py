@@ -76,6 +76,7 @@ def submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_
 
     return harmony_job
 
+
 def determine_output_dimensions(big_config, output_crs):
     """Set the output width and height of the browse image based on config and projection."""
     big_width = big_config['config']['width']
