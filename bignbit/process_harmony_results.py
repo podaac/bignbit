@@ -35,11 +35,12 @@ class CMA(Process):
         harmony_job = self.config.get("harmony_job")
         cmr_env = self.config.get("cmr_environment")
         variable = self.config.get("variable")
+        current_crs = self.config.get("current_crs")
 
-        return process_results(harmony_job, cmr_env, variable)
+        return process_results(harmony_job, cmr_env, variable, current_crs)
 
 
-def process_results(harmony_job_id: str, cmr_env: str, variable: str):
+def process_results(harmony_job_id: str, cmr_env: str, variable: str, current_crs: str):
     """
     Process the results of a Harmony job
 
@@ -51,6 +52,8 @@ def process_results(harmony_job_id: str, cmr_env: str, variable: str):
        The CMR environment to use
     variable : str
         The variable being processed
+    current_crs : str
+        The projection being processed
 
     Returns
     ----------
@@ -85,6 +88,7 @@ def process_results(harmony_job_id: str, cmr_env: str, variable: str):
         # should specify 'all' as the variable value but the GIBS message should be sent with the variable set to 'none'
         if variable.lower() != 'all':
             file_dict['variable'] = variable
+        file_dict['output_crs'] = current_crs.upper()
         file_dicts.append(file_dict)
 
     return file_dicts

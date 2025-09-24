@@ -65,8 +65,9 @@ def from_big_output(big_output: List[typing.Dict]) -> List[ImageSet]:
             # World files are not always required
             world_file = {}
 
+        image_set_name = f"{image_name}_{image_metadata['dataday']}_{image['output_crs']}" if 'output_crs' in image else f"{image_name}_{image_metadata['dataday']}"
         image_sets.append(
-            ImageSet(name=f"{image_name}_{image_metadata['dataday']}", image=image, image_metadata=image_metadata,
+            ImageSet(name=image_set_name, image=image, image_metadata=image_metadata,
                      world_file=world_file))
 
     return image_sets
