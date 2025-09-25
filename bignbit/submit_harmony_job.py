@@ -40,8 +40,8 @@ class CMA(Process):
         else:
             granule_concept_id = urllib.parse.urlparse(granule.get('cmrLink')).path.rstrip('/').split('/')[-1].split('.')[0]
         granule_id = granule.get('granuleId')
-        current_item = self.config.get('current_item')
-        variable = current_item.get('id')
+        current_variable = self.config.get('current_variable')
+        variable = current_variable.get('id')
         current_crs = self.config.get('current_crs')
         big_config = self.config.get('big_config')
         output_width, output_height = determine_output_dimensions(big_config, current_crs)
