@@ -238,7 +238,7 @@ resource "aws_lambda_function" "generate_image_metadata" {
   }
   function_name = local.generate_image_metadata_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 30
+  timeout       = 180
   memory_size   = 256
 
   environment {

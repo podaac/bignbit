@@ -1,11 +1,6 @@
 import pytest
 from bignbit.get_collection_concept_id import get_collection_concept_id
 
-
-@pytest.fixture(scope="session")
-def vcr_config():
-    return {"filter_headers": ["authorization"], "decode_compressed_response": True}
-
 @pytest.mark.vcr
 @pytest.mark.parametrize("collection_shortname, collection_version, collection_provider, expected_concept_id", [
     ("PREFIRE_SAT2_2B-FLX_COG", "R01", "LARC_CLOUD", "C1273150419-LARC_CLOUD"),
