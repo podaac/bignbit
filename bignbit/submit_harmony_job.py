@@ -87,7 +87,8 @@ def generate_harmony_request(collection_concept_id, granule_concept_id, variable
         height=big_config['config']['height'],
         format=big_config['config'].get('format', 'image/png'),
         crs=output_crs,
-        destination_url=destination_bucket_url
+        destination_url=destination_bucket_url,
+        labels=['bignbit'],
     )
     return request
 
