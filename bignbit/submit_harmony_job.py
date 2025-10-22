@@ -83,7 +83,7 @@ def determine_output_dimensions(big_config, output_crs):
     big_height = big_config['config']['height']
     if not big_width or not big_height:
         return big_width, big_height
-        
+
     if output_crs.upper() == "EPSG:4326":
         if big_width == big_height or big_width < big_height:
             output_width = 2 * big_height
