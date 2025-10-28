@@ -99,31 +99,24 @@ def determine_output_dimensions(big_config, output_crs):
 def generate_harmony_request(collection_concept_id, granule_concept_id, variable, output_width, output_height, output_crs, big_config, destination_bucket_url):
     """Generate the harmony request to be made and return request object"""
 
-    if output_crs.upper() == "EPSG:4326":
-        # Workaround to prevent sending harmony requests that are
-        # equirectangular projection through the reproject service.
-        # Avoids unnecessary processing and errors for some collections
-        # that do not support reprojection.
-        request = Request(
-            collection=Collection(id=collection_concept_id),
-            granule_id=[granule_concept_id],
-            variables=[variable],
-            width=output_width,
-            height=output_height,
-            format=big_config['config'].get('format', 'image/png'),
-            destination_url=destination_bucket_url
-        )
-    else:
-        request = Request(
-            collection=Collection(id=collection_concept_id),
-            granule_id=[granule_concept_id],
-            variables=[variable],
-            width=output_width,
-            height=output_height,
-            format=big_config['config'].get('format', 'image/png'),
-            crs=output_crs,
-            destination_url=destination_bucket_url
-        )
+    kwargs = {
+        'collection': Collection(id=collection_concept_id),
+        'granule_id': [granule_concept_id],
+        'variables': [variable],
+        'format': big_config['config'].get('format', 'image/png'),
+        'destination_url': destination_bucket_url
+    }
+    # Workaround to prevent sending harmony requests that are
+    # equirectangular projection through the reproject service.
+    # Avoids unnecessary processing and errors for some collections
+    # that do not support reprojection.
+    if output_crs.upper() != 'EPSG:4326':
+        kwargs['crs'] = output_crs
+    if output_height and output_width:
+        kwargs['height'] = output_height
+        kwargs['width'] = output_width
+
+    request = Request(**kwargs)
     return request
 
 
