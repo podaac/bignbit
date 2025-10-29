@@ -79,8 +79,8 @@ def submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_
 
 def determine_output_dimensions(big_config, output_crs):
     """Set the output width and height of the browse image based on config and projection."""
-    big_width = big_config['config']['width']
-    big_height = big_config['config']['height']
+    big_width = big_config['config'].get('width')
+    big_height = big_config['config'].get('height')
     if not big_width or not big_height:
         return big_width, big_height
 
@@ -112,6 +112,13 @@ def generate_harmony_request(collection_concept_id, granule_concept_id, variable
     # that do not support reprojection.
     if output_crs.upper() != 'EPSG:4326':
         kwargs['crs'] = output_crs
+        # Use the scaleExtent either from datasetConfig or use the
+        # default values from GIBS
+        if output_crs.upper() == "EPSG:3413" or output_crs.upper() == "EPSG:3031":
+            kwargs['scale_extent'] = big_config['config'].get(
+                'scaleExtentPolar',
+                [-4194303, -4194303, 419303, 419303]
+            )
     if output_height and output_width:
         kwargs['height'] = output_height
         kwargs['width'] = output_width
