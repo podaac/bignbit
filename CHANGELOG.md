@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.4.0]
 ### Added
 - [issues/69](https://github.com/podaac/bignbit/issues/69): Added support for other projections, with the default being EPSG:4326. The projection is read from the `outputCrs` keyword in the dataset config. This likely needs refinement to account for cases when we have multiple projections per dataset.
+- [issues/116](https://github.com/podaac/bignbit/issues/116): As part of the new projection support, it was necessary to add in a `scaleExtent` parameter for polar projected browse images. The dataset configuration file now supports a `scaleExtentPolar` keyword which is a list of four numbers specifying geographic bounds on the EPSG:3413 or EPSG:3031 outputs. This keyword only works if one of those projections is listed in the `outputCrs` keyword. If `scaleExtentPolar` is not specified, bounds are set to a default value used by GIBS ([-4194303, -4194303, 4194303, 4194303], technically this is 1m less than the bound, but this was done intentionally to avoid precision errors).
 ### Changed
 - [issues/62](https://github.com/podaac/bignbit/issues/62): The retry policy for querying Harmony job status is now configurable as module parameters. By default, it will query for job status every 20 seconds for a maximum of 15 attempts.
 ### Deprecated
@@ -24,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [issues/91](https://github.com/podaac/bignbit/issues/91): Fixed bug where the CNM collection name sent to GIBS included '/' characters when dealing with certain variables. This caused processing errors in GIBS, all collection names will now replace '/' with '_' before being sent to GIBS.
 - [issues/89](https://github.com/podaac/bignbit/issues/89): Fixed bug where querying CMR for a collection could result in multiple results because collection version was not included in the query. Fix is to include the version in the CMR query, which will now return only one result.
 - [issues/96](https://github.com/podaac/bignbit/issues/96): Fixed bug causing GIBS responses to fail processing due to provider name containing an underscore `_` which collided with the delimiter used in CNM identifiers. The new delimiter for CNM identifier is now an exclamation mark `!`.
+- [issues/113](https://github.com/podaac/bignbit/issues/113): Height and width are now optional in the dataset configuration file. If not provided, the height and width will not be passed to harmony and will be determined automatically.
 ### Security
 
 ## [0.3.0]

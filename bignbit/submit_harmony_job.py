@@ -79,8 +79,8 @@ def submit_harmony_job(cmr_env, collection_concept_id, collection_name, granule_
 
 def determine_output_dimensions(big_config, output_crs):
     """Set the output width and height of the browse image based on config and projection."""
-    big_width = big_config['config']['width']
-    big_height = big_config['config']['height']
+    big_width = big_config['config'].get('width')
+    big_height = big_config['config'].get('height')
     if not big_width or not big_height:
         return big_width, big_height
 
@@ -99,31 +99,31 @@ def determine_output_dimensions(big_config, output_crs):
 def generate_harmony_request(collection_concept_id, granule_concept_id, variable, output_width, output_height, output_crs, big_config, destination_bucket_url):
     """Generate the harmony request to be made and return request object"""
 
-    if output_crs.upper() == "EPSG:4326":
-        # Workaround to prevent sending harmony requests that are
-        # equirectangular projection through the reproject service.
-        # Avoids unnecessary processing and errors for some collections
-        # that do not support reprojection.
-        request = Request(
-            collection=Collection(id=collection_concept_id),
-            granule_id=[granule_concept_id],
-            variables=[variable],
-            width=output_width,
-            height=output_height,
-            format=big_config['config'].get('format', 'image/png'),
-            destination_url=destination_bucket_url
-        )
-    else:
-        request = Request(
-            collection=Collection(id=collection_concept_id),
-            granule_id=[granule_concept_id],
-            variables=[variable],
-            width=output_width,
-            height=output_height,
-            format=big_config['config'].get('format', 'image/png'),
-            crs=output_crs,
-            destination_url=destination_bucket_url
-        )
+    kwargs = {
+        'collection': Collection(id=collection_concept_id),
+        'granule_id': [granule_concept_id],
+        'variables': [variable],
+        'format': big_config['config'].get('format', 'image/png'),
+        'destination_url': destination_bucket_url
+    }
+    # Workaround to prevent sending harmony requests that are
+    # equirectangular projection through the reproject service.
+    # Avoids unnecessary processing and errors for some collections
+    # that do not support reprojection.
+    if output_crs.upper() != 'EPSG:4326':
+        kwargs['crs'] = output_crs
+        # Use the scaleExtent either from datasetConfig or use the
+        # default values from GIBS
+        if output_crs.upper() == "EPSG:3413" or output_crs.upper() == "EPSG:3031":
+            kwargs['scale_extent'] = big_config['config'].get(
+                'scaleExtentPolar',
+                [-4194303, -4194303, 419303, 419303]
+            )
+    if output_height and output_width:
+        kwargs['height'] = output_height
+        kwargs['width'] = output_width
+
+    request = Request(**kwargs)
     return request
 
 
