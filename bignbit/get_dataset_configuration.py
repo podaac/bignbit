@@ -42,6 +42,10 @@ class CMA(Process):
 
         self.input['datasetConfigurationForBIG'] = {}
         self.input['datasetConfigurationForBIG']['config'] = get_collection_config(config_bucket_name, config_key_name)
+
+        # Handle the default behavior when outputCrs is not supplied in the config, since we expect it to exist
+        # when running through the state machine Map loops. These loops are outside of a lambda.
+        self.input['datasetConfigurationForBIG']['config']['outputCrs'] = self.input['datasetConfigurationForBIG']['config'].get('outputCrs', ['EPSG:4326'])
         return self.input
 
 

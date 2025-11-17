@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "bignbit"
-version = "0.3.0"
+version = "0.4.0rc11"
 description = "Browse image generation and transfer"
 authors = ["PO.DAAC <podaac@jpl.nasa.gov>"]
 license = "Apache 2.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 boto3 = "^1.18"
 cumulus-message-adapter-python = "^2.1.0"
 harmony-py = "^1.0.0"
@@ -23,6 +23,9 @@ moto = "^4.1.2"
 pylint = "^2.15.8"
 flake8 = "^6.0.0"
 pytest-cov = "^4.1.0"
+boto3-stubs = "^1.40.6"
+vcrpy = "^7.0.0"
+pytest-recording = "^0.13.4"
 
 [build-system]
 requires = ["poetry-core"]

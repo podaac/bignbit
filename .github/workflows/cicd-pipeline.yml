@@ -29,7 +29,7 @@ on:
 env:
   POETRY_VERSION: "1.8.2"
   PYTHON_VERSION: "3.10"
-  TERRAFORM_VERSION: "1.3.7"
+  TERRAFORM_VERSION: "1.12.2"
   REGISTRY: ghcr.io
 jobs:
   build:
@@ -157,7 +157,7 @@ jobs:
           terraform init -backend=false -upgrade
           terraform validate -no-color
       - name: SonarCloud Scan
-        uses: sonarsource/sonarqube-scan-action@v4
+        uses: sonarsource/sonarqube-scan-action@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

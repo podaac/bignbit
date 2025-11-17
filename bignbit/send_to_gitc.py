@@ -17,6 +17,12 @@ GIBS_REGION_ENV_NAME = "GIBS_REGION"
 GIBS_SQS_URL_ENV_NAME = "GIBS_SQS_URL"
 GIBS_RESPONSE_TOPIC_ARN_ENV_NAME = "GIBS_RESPONSE_TOPIC_ARN"
 
+GIBS_CRS_NAME_TO_SUFFIX = {
+    'EPSG:4326': 'LL',
+    'EPSG:3413': 'N',
+    'EPSG:3031': 'S'
+}
+
 
 class NotifyGitc(Process):
     """
@@ -45,14 +51,13 @@ class NotifyGitc(Process):
             list of granules
         """
 
-        if self.input is not None:
-            # Send ImageSet(s) to GITC for processing
-            collection_name = self.input.get('collection_name')
-            cmr_provider = self.input.get('cmr_provider')
-            image_set = ImageSet(**self.input['image_set'])
-            gitc_id = image_set.name
+        # Send ImageSet(s) to GITC for processing
+        collection_name = self.input.get('collection_name')
+        cmr_provider = self.input.get('cmr_provider')
+        image_set = ImageSet(**self.input['image_set'])
+        gitc_id = image_set.name
 
-            cnm_message = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
+        cnm_message = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
 
         return cnm_message
 
@@ -132,7 +137,12 @@ def construct_cnm(image_set: ImageSet, cmr_provider: str, gitc_id: str, collecti
     product = to_cnm_product_dict(image_set)
     submission_time = datetime.now(timezone.utc).isoformat()[:-9] + 'Z'
     CUMULUS_LOGGER.debug(image_set.image['variable'])
-    new_collection = collection_name + "_" + image_set.image['variable']
+    if 'output_crs' in image_set.image:
+        crs_suffix = GIBS_CRS_NAME_TO_SUFFIX.get(image_set.image['output_crs'], GIBS_CRS_NAME_TO_SUFFIX["EPSG:4326"])
+        new_collection = f"{collection_name}_{image_set.image['variable']}_{crs_suffix}".replace('/', '_')
+    else:
+        new_collection = f"{collection_name}_{image_set.image['variable']}".replace('/', '_')
+
     return {
         "version": "1.5.1",
         "duplicationid": image_set.name,

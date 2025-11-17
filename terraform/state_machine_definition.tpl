@@ -200,6 +200,7 @@
           "event.$":"$",
           "task_config":{
             "collection_shortname":"{$.meta.collection.name}",
+            "collection_version":"{$.meta.collection.version}",
             "cmr_provider":"{$.meta.cmr.provider}",
             "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
             "cumulus_message":{
@@ -240,154 +241,148 @@
         "meta.$":"$.meta",
         "payload.$":"$.payload",
         "task_config.$":"$.task_config",
-        "current_item.$":"$$.Map.Item.Value"
+        "current_variable.$":"$$.Map.Item.Value"
       },
       "ItemProcessor":{
         "ProcessorConfig":{
           "Mode":"INLINE"
         },
-        "StartAt":"Submit Harmony Job",
+        "StartAt":"Convert Variable For Each Projection",
         "States":{
-          "Submit Harmony Job":{
-            "Type":"Task",
-            "Parameters":{
-              "cma":{
-                "event.$":"$",
-                "task_config":{
-                  "granule":"{$.payload.granules[0]}",
-                  "cmr_provider":"{$.cmr_provider}",
-                  "collection":"{$.meta.collection}",
-                  "collection_concept_id":"{$.payload.collection_concept_id}",
-                  "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
-                  "cmr_clientid":"{$.meta.cmr.clientId}",
-                  "current_item":"{$.current_item}",
-                  "bignbit_staging_bucket": "${StagingBucket}",
-                  "harmony_staging_path": "${HarmonyStagingPath}",
-                  "big_config":"{$.payload.datasetConfigurationForBIG}",
-                  "cumulus_message":{
-                    "input":"{$.payload}"
-                  }
-                }
-              }
+          "Convert Variable For Each Projection":{
+            "Type":"Map",
+            "ItemsPath":"$.payload.datasetConfigurationForBIG.config.outputCrs",
+            "ItemSelector":{
+              "meta.$":"$.meta",
+              "payload.$":"$.payload",
+              "task_config.$":"$.task_config",
+              "current_variable.$":"$.current_variable",
+              "current_crs.$":"$$.Map.Item.Value"
             },
-            "Resource":"${SubmitHarmonyJobLambda}",
-            "Next":"Wait 20 Seconds"
-          },
-          "Wait 20 Seconds":{
-            "Type":"Wait",
-            "Seconds":20,
-            "Next":"Get Harmony Job Status"
-          },
-          "Get Harmony Job Status":{
-            "Type":"Task",
-            "Resource":"${GetHarmonyJobStatusLambda}",
-            "Parameters":{
-              "cma":{
-                "event.$":"$",
-                "task_config":{
-                  "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
-                  "harmony_job":"{$.payload.harmony_job.job}",
-                  "cumulus_message":{
-                    "input":"{$.payload}"
-                  }
-                }
-              }
-            },
-            "Retry":[
-              {
-                "ErrorEquals":[
-                  "Lambda.ServiceException",
-                  "Lambda.AWSLambdaException",
-                  "Lambda.SdkClientException",
-                  "Lambda.TooManyRequestsException"
-                ],
-                "IntervalSeconds":2,
-                "MaxAttempts":6,
-                "BackoffRate":2
+            "ItemProcessor":{
+              "ProcessorConfig":{
+                "Mode":"INLINE"
               },
-              {
-                "ErrorEquals": [
-                  "Lambda.Unknown"
-               ],
-                "BackoffRate": 2,
-                "IntervalSeconds": 2,
-                "MaxAttempts": 2
-              }
-            ],
-            "Next":"Job Complete?"
-          },
-          "Job Complete?":{
-            "Type":"Choice",
-            "Choices":[
-              {
-                "Variable":"$.payload.harmony_job_status",
-                "StringMatches":"successful",
-                "Next":"Process Harmony Job Output",
-                "Comment":"Job successful"
-              },
-              {
-                "And":[
-                  {
-                    "Not":{
-                      "Variable":"$.payload.harmony_job_status",
-                      "StringMatches":"running"
-                    }
+              "StartAt":"Submit Harmony Job",
+              "States":{
+                  "Submit Harmony Job":{
+                    "Type":"Task",
+                    "Parameters":{
+                      "cma":{
+                        "event.$":"$",
+                        "task_config":{
+                          "granule":"{$.payload.granules[0]}",
+                          "cmr_provider":"{$.cmr_provider}",
+                          "collection":"{$.meta.collection}",
+                          "collection_concept_id":"{$.payload.collection_concept_id}",
+                          "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
+                          "cmr_clientid":"{$.meta.cmr.clientId}",
+                          "current_variable":"{$.current_variable}",
+                          "current_crs":"{$.current_crs}",
+                          "bignbit_staging_bucket": "${StagingBucket}",
+                          "harmony_staging_path": "${HarmonyStagingPath}",
+                          "big_config":"{$.payload.datasetConfigurationForBIG}",
+                          "cumulus_message":{
+                            "input":"{$.payload}"
+                          }
+                        }
+                      }
+                    },
+                    "Resource":"${SubmitHarmonyJobLambda}",
+                    "Next":"Get Harmony Job Status"
                   },
-                  {
-                    "Not":{
-                      "Variable":"$.payload.harmony_job_status",
-                      "StringMatches":"accepted"
-                    }
-                  }
-                ],
-                "Next":"Fail",
-                "Comment":"Job not successful"
-              }
-            ],
-            "Default":"Wait 20 Seconds"
-          },
-          "Process Harmony Job Output":{
-            "Type":"Task",
-            "Resource":"${ProcessHarmonyJobOutputLambda}",
-            "OutputPath": "$.payload",
-            "Parameters":{
-              "cma":{
-                "event.$":"$",
-                "task_config":{
-                  "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
-                  "harmony_job":"{$.payload.harmony_job.job}",
-                  "variable":"{$.current_item.id}",
-                  "cumulus_message":{
-                    "input":"{$.payload}"
+                  "Get Harmony Job Status":{
+                    "Type":"Task",
+                    "Resource":"${GetHarmonyJobStatusLambda}",
+                    "Parameters":{
+                      "cma":{
+                        "event.$":"$",
+                        "task_config":{
+                          "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
+                          "harmony_job":"{$.payload.harmony_job.job}",
+                          "cumulus_message":{
+                            "input":"{$.payload}"
+                          }
+                        }
+                      }
+                    },
+                    "Retry":[
+                      {
+                        "ErrorEquals":[
+                          "HarmonyJobIncompleteError"
+                        ],
+                        "IntervalSeconds":${HarmonyJobStatusIntervalSeconds},
+                        "MaxAttempts":${HarmonyJobStatusMaxAttempts},
+                        "BackoffRate":${HarmonyJobStatusBackoffRate},
+                        "MaxDelaySeconds":${HarmonyJobStatusMaxDelaySeconds}
+                      },
+                      {
+                        "ErrorEquals":[
+                          "Lambda.ServiceException",
+                          "Lambda.AWSLambdaException",
+                          "Lambda.SdkClientException",
+                          "Lambda.TooManyRequestsException"
+                        ],
+                        "IntervalSeconds":2,
+                        "MaxAttempts":6,
+                        "BackoffRate":2
+                      },
+                      {
+                        "ErrorEquals": [
+                          "Lambda.Unknown"
+                       ],
+                        "BackoffRate": 2,
+                        "IntervalSeconds": 2,
+                        "MaxAttempts": 2
+                      }
+                    ],
+                    "Next":"Process Harmony Job Output"
+                  },
+                  "Process Harmony Job Output":{
+                    "Type":"Task",
+                    "Resource":"${ProcessHarmonyJobOutputLambda}",
+                    "OutputPath": "$.payload",
+                    "Parameters":{
+                      "cma":{
+                        "event.$":"$",
+                        "task_config":{
+                          "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
+                          "harmony_job":"{$.payload.harmony_job.job}",
+                          "variable":"{$.current_variable.id}",
+                          "current_crs":"{$.current_crs}",
+                          "cumulus_message":{
+                            "input":"{$.payload}"
+                          }
+                        }
+                      }
+                    },
+                    "Retry":[
+                      {
+                        "ErrorEquals":[
+                          "Lambda.ServiceException",
+                          "Lambda.AWSLambdaException",
+                          "Lambda.SdkClientException",
+                          "Lambda.TooManyRequestsException"
+                        ],
+                        "IntervalSeconds":2,
+                        "MaxAttempts":6,
+                        "BackoffRate":2
+                      },
+                      {
+                        "ErrorEquals": [
+                          "Lambda.Unknown"
+                       ],
+                        "BackoffRate": 2,
+                        "IntervalSeconds": 2,
+                        "MaxAttempts": 2
+                      }
+                    ],
+                    "End":true
                   }
                 }
-              }
             },
-            "Retry":[
-              {
-                "ErrorEquals":[
-                  "Lambda.ServiceException",
-                  "Lambda.AWSLambdaException",
-                  "Lambda.SdkClientException",
-                  "Lambda.TooManyRequestsException"
-                ],
-                "IntervalSeconds":2,
-                "MaxAttempts":6,
-                "BackoffRate":2
-              },
-              {
-                "ErrorEquals": [
-                  "Lambda.Unknown"
-               ],
-                "BackoffRate": 2,
-                "IntervalSeconds": 2,
-                "MaxAttempts": 2
-              }
-            ],
+            "MaxConcurrency":5,
             "End":true
-          },
-          "Fail":{
-            "Type":"Fail"
           }
         }
       },

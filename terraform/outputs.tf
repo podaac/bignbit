@@ -80,24 +80,28 @@ output "pobit_save_cnm_message_arn" {
 
 output "workflow_definition" {
   value = templatefile("${path.module}/state_machine_definition.tpl", {
-    GetDatasetConfigurationLambda = aws_lambda_function.get_dataset_configuration.arn,
-    ConfigBucket                  = var.config_bucket,
-    ConfigDir                     = var.config_dir,
-    GetGranuleUmmJsonLambda       = aws_lambda_function.get_granule_umm_json.arn,
-    IdentifyImageFileLambda       = aws_lambda_function.identify_image_file.arn,
-    ApplyOperaHLSTreatmentLambda  = aws_lambda_function.apply_opera_hls_treatment.arn,
-    GetCollectionConceptIdLambda  = aws_lambda_function.get_collection_concept_id.arn,
-    SubmitHarmonyJobLambda        = aws_lambda_function.submit_harmony_job.arn,
-    GetHarmonyJobStatusLambda     = aws_lambda_function.get_harmony_job_status.arn,
-    ProcessHarmonyJobOutputLambda = aws_lambda_function.process_harmony_results.arn,
-    GenerateImageMetadataLambda   = aws_lambda_function.generate_image_metadata.arn,
-    BuildImageSetsLambda          = aws_lambda_function.build_image_sets.arn,
-    SendToGITCLambda              = aws_lambda_function.send_to_gitc.arn,
-    SaveCNMMessageLambda          = aws_lambda_function.save_cnm_message.arn,
-    BignbitAuditBucket            = var.bignbit_audit_bucket,
-    BignbitAuditPath              = var.bignbit_audit_path,
-    StagingBucket                 = local.staging_bucket_name,
-    HarmonyStagingPath            = var.harmony_staging_path
+    GetDatasetConfigurationLambda   = aws_lambda_function.get_dataset_configuration.arn,
+    ConfigBucket                    = var.config_bucket,
+    ConfigDir                       = var.config_dir,
+    GetGranuleUmmJsonLambda         = aws_lambda_function.get_granule_umm_json.arn,
+    IdentifyImageFileLambda         = aws_lambda_function.identify_image_file.arn,
+    ApplyOperaHLSTreatmentLambda    = aws_lambda_function.apply_opera_hls_treatment.arn,
+    GetCollectionConceptIdLambda    = aws_lambda_function.get_collection_concept_id.arn,
+    SubmitHarmonyJobLambda          = aws_lambda_function.submit_harmony_job.arn,
+    GetHarmonyJobStatusLambda       = aws_lambda_function.get_harmony_job_status.arn,
+    ProcessHarmonyJobOutputLambda   = aws_lambda_function.process_harmony_results.arn,
+    GenerateImageMetadataLambda     = aws_lambda_function.generate_image_metadata.arn,
+    BuildImageSetsLambda            = aws_lambda_function.build_image_sets.arn,
+    SendToGITCLambda                = aws_lambda_function.send_to_gitc.arn,
+    SaveCNMMessageLambda            = aws_lambda_function.save_cnm_message.arn,
+    BignbitAuditBucket              = var.bignbit_audit_bucket,
+    BignbitAuditPath                = var.bignbit_audit_path,
+    StagingBucket                   = local.staging_bucket_name,
+    HarmonyStagingPath              = var.harmony_staging_path,
+    HarmonyJobStatusIntervalSeconds = var.harmony_job_status_interval_seconds,
+    HarmonyJobStatusMaxAttempts     = var.harmony_job_status_max_attempts,
+    HarmonyJobStatusBackoffRate     = var.harmony_job_status_backoff_rate,
+    HarmonyJobStatusMaxDelaySeconds = var.harmony_job_status_max_delay_seconds
   })
 }
 
