@@ -17,20 +17,22 @@ def cnm_v151_schema():
 
 def test_get_image_sets():
     image_set_1 = bignbit.image_set.ImageSet(
-        name='test_1992001',
+        name='test_1992001_EPSG:4326',
         image={
             'name': 'test.png',
             'fileName': 'test.png',
             'type': 'browse',
             'subtype': 'png',
-            "variable": "analysed_sst"
+            "variable": "analysed_sst",
+            "output_crs": "EPSG:4326"
         },
         world_file={
             'name': 'test.wld',
             'fileName': 'test.wld',
             'type': 'metadata',
             'subtype': 'world file',
-            "variable": "analysed_sst"
+            "variable": "analysed_sst",
+            "output_crs": "EPSG:4326"
         },
         image_metadata={
             'name': 'test.xml',
@@ -38,24 +40,27 @@ def test_get_image_sets():
             'type': 'metadata',
             'subtype': 'ImageMetadata-v1.2',
             'dataday': '1992001',
-            "variable": "analysed_sst"
+            "variable": "analysed_sst",
+            "output_crs": "EPSG:4326"
         })
 
     image_set_2 = bignbit.image_set.ImageSet(
-        name='test2_1992002',
+        name='test2_1992002_EPSG:4326',
         image={
             'name': 'test2.png',
             'fileName': 'test2.png',
             'type': 'browse',
             'subtype': 'png',
-            "variable": "analysed_sst"
+            "variable": "analysed_sst",
+            "output_crs": "EPSG:4326"
         },
         world_file={
             'name': 'test2.wld',
             'fileName': 'test2.wld',
             'type': 'metadata',
             'subtype': 'world file',
-            "variable": "analysed_sst"
+            "variable": "analysed_sst",
+            "output_crs": "EPSG:4326"
         },
         image_metadata={
             'name': 'test2.xml',
@@ -63,7 +68,8 @@ def test_get_image_sets():
             'type': 'metadata',
             'subtype': 'ImageMetadata-v1.2',
             'dataday': '1992002',
-            "variable": "analysed_sst"
+            "variable": "analysed_sst",
+            "output_crs": "EPSG:4326"
         })
     test_input = [
         image_set_1.image, image_set_1.image_metadata, image_set_1.world_file,
@@ -88,7 +94,8 @@ def test_construct_cnm(cnm_v151_schema):
             'subtype': 'png',
             'key': 'test.png',
             'bucket': 'test',
-            "variable": "analysed_sst"
+            "variable": "analysed_sst",
+            "output_crs": "EPSG:4326"
         },
         world_file={
             'name': 'test.wld',
@@ -98,7 +105,8 @@ def test_construct_cnm(cnm_v151_schema):
             'subtype': 'world file',
             'key': 'test.png',
             'bucket': 'test',
-            "variable": "analysed_sst"
+            "variable": "analysed_sst",
+            "output_crs": "EPSG:4326"
         },
         image_metadata={
             'name': 'test.xml',
@@ -109,7 +117,8 @@ def test_construct_cnm(cnm_v151_schema):
             'dataday': '1992001',
             'key': 'test.xml',
             'bucket': 'test',
-            "variable": "analysed_sst"
+            "variable": "analysed_sst",
+            "output_crs": "EPSG:4326"
         })
 
     test_input = [
@@ -132,7 +141,8 @@ def test_construct_cnm_no_wld(cnm_v151_schema):
             'subtype': 'png',
             'key': 'test.png',
             'bucket': 'test',
-            "variable": "analysed_sst"
+            "variable": "analysed_sst",
+            "output_crs": "EPSG:4326"
         },
         {
             'name': 'test.xml',
@@ -143,7 +153,8 @@ def test_construct_cnm_no_wld(cnm_v151_schema):
             'dataday': '1992001',
             'key': 'test.xml',
             'bucket': 'test',
-            "variable": "analysed_sst"
+            "variable": "analysed_sst",
+            "output_crs": "EPSG:4326"
         }
     ]
 
@@ -151,6 +162,79 @@ def test_construct_cnm_no_wld(cnm_v151_schema):
 
     cnm = bignbit.send_to_gitc.construct_cnm(image_sets[0], 'pytest', 'token', 'testcollection')
     jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
+
+def test_construct_cnm_variable_with_slash(cnm_v151_schema):
+    test_input = [
+        {
+            'name': 'test.png',
+            'fileName': 's3://test.png',
+            'type': 'browse',
+            'size': 512,
+            'subtype': 'png',
+            'key': 'test.png',
+            'bucket': 'test',
+            "variable": "groupA/analysed_sst",
+            "output_crs": "EPSG:4326"
+        },
+        {
+            'name': 'test.xml',
+            'fileName': 's3://test.xml',
+            'type': 'metadata',
+            'size': 30,
+            'subtype': 'ImageMetadata-v1.2',
+            'dataday': '1992001',
+            'key': 'test.xml',
+            'bucket': 'test',
+            "variable": "groupA/analysed_sst",
+            "output_crs": "EPSG:4326"
+        }
+    ]
+
+    image_sets = bignbit.image_set.from_big_output(test_input)
+
+    cnm = bignbit.send_to_gitc.construct_cnm(image_sets[0], 'pytest', 'token', 'testcollection')
+    jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
+    assert cnm['collection'] == 'testcollection_groupA_analysed_sst_LL'
+
+@pytest.mark.parametrize("output_crs", ["EPSG:4326", "EPSG:3031", "EPSG:3413"])
+def test_construct_cnm_with_projection(output_crs: str, cnm_v151_schema):
+    test_input = [
+        {
+            'name': 'test.png',
+            'fileName': 's3://test.png',
+            'type': 'browse',
+            'size': 512,
+            'subtype': 'png',
+            'key': 'test.png',
+            'bucket': 'test',
+            "variable": "groupA/analysed_sst",
+            "output_crs": output_crs
+        },
+        {
+            'name': 'test.xml',
+            'fileName': 's3://test.xml',
+            'type': 'metadata',
+            'size': 30,
+            'subtype': 'ImageMetadata-v1.2',
+            'dataday': '1992001',
+            'key': 'test.xml',
+            'bucket': 'test',
+            "variable": "groupA/analysed_sst",
+            "output_crs": output_crs
+        }
+    ]
+
+    image_sets = bignbit.image_set.from_big_output(test_input)
+
+    cnm = bignbit.send_to_gitc.construct_cnm(image_sets[0], 'pytest', 'token', 'testcollection')
+    jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
+
+    if output_crs == "EPSG:4326":
+        assert cnm['collection'] == 'testcollection_groupA_analysed_sst_LL'
+    elif output_crs == "EPSG:3031":
+        assert cnm['collection'] == 'testcollection_groupA_analysed_sst_S'
+    elif output_crs == "EPSG:3413":
+        assert cnm['collection'] == 'testcollection_groupA_analysed_sst_N'
 
 def test_construct_cnm_variable_with_slash(cnm_v151_schema):
     test_input = [

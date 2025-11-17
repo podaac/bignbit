@@ -201,6 +201,7 @@
           "task_config":{
             "collection_shortname":"{$.meta.collection.name}",
             "collection_version":"{$.meta.collection.version}",
+            "collection_version":"{$.meta.collection.version}",
             "cmr_provider":"{$.meta.cmr.provider}",
             "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
             "cumulus_message":{
@@ -241,7 +242,7 @@
         "meta.$":"$.meta",
         "payload.$":"$.payload",
         "task_config.$":"$.task_config",
-        "current_item.$":"$$.Map.Item.Value"
+        "current_variable.$":"$$.Map.Item.Value"
       },
       "ItemProcessor":{
         "ProcessorConfig":{
@@ -256,7 +257,7 @@
               "meta.$":"$.meta",
               "payload.$":"$.payload",
               "task_config.$":"$.task_config",
-              "current_item.$":"$.current_item",
+              "current_variable.$":"$.current_variable",
               "current_crs.$":"$$.Map.Item.Value"
             },
             "ItemProcessor":{
@@ -277,7 +278,7 @@
                           "collection_concept_id":"{$.payload.collection_concept_id}",
                           "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
                           "cmr_clientid":"{$.meta.cmr.clientId}",
-                          "current_item":"{$.current_item}",
+                          "current_variable":"{$.current_variable}",
                           "current_crs":"{$.current_crs}",
                           "bignbit_staging_bucket": "${StagingBucket}",
                           "harmony_staging_path": "${HarmonyStagingPath}",
@@ -348,7 +349,8 @@
                         "task_config":{
                           "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
                           "harmony_job":"{$.payload.harmony_job.job}",
-                          "variable":"{$.current_item.id}",
+                          "variable":"{$.current_variable.id}",
+                          "current_crs":"{$.current_crs}",
                           "cumulus_message":{
                             "input":"{$.payload}"
                           }
