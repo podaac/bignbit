@@ -1,5 +1,4 @@
 """Cumulus lambda class to check harmony job status"""
-import json
 import logging
 import os
 
