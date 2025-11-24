@@ -36,7 +36,7 @@ locals {
   # Account ID used for getting the ECR host
   account_id = data.aws_caller_identity.current.account_id
 
-  current_aws_region = data.aws_region.current.name
+  current_aws_region = data.aws_region.current.region
 
   default_tags = {
     team: "TVA",
