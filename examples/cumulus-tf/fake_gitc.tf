@@ -19,7 +19,7 @@ resource "aws_sqs_queue" "gitc_input_deadletter" {
   content_based_deduplication = true
   redrive_allow_policy = jsonencode({
     redrivePermission = "byQueue",
-    sourceQueueArns   = ["arn:aws:sqs:${local.current_aws_region}:${local.account_id}:${local.ec2_resources_name}-fake-gitc-IN.fifo"]
+    sourceQueueArns   = ["arn:aws:sqs:${data.aws_region.current.region}:${local.account_id}:${local.ec2_resources_name}-fake-gitc-IN.fifo"]
   })
 }
 
