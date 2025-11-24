@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 5.100, < 6.13.0"
+      version = ">= 5.100, < 6.0.0"
     }
     null = {
       source  = "hashicorp/null"
@@ -36,7 +36,7 @@ locals {
   # Account ID used for getting the ECR host
   account_id = data.aws_caller_identity.current.account_id
 
-  current_aws_region = data.aws_region.current.region
+  current_aws_region = data.aws_region.current.name
 
   default_tags = {
     team: "TVA",

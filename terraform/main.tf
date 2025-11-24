@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 5.100, < 6.13.0"
+      version = ">= 5.100, < 6.0.0"
     }
     null = {
       source  = "hashicorp/null"
@@ -29,6 +29,6 @@ locals {
     Environment = var.stage
   } : var.default_tags
 
-  current_aws_region = data.aws_region.current.region
+  current_aws_region = data.aws_region.current.name
 
 }
