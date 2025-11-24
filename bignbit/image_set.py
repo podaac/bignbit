@@ -47,12 +47,14 @@ def from_big_output(big_output: List[typing.Dict]) -> List[ImageSet]:
     image_sets = []
     for image in images:
         image_name = pathlib.Path(image['fileName']).stem
+        crs = image['output_crs']
 
         try:
             image_metadata = next(iter([g for g in big_output
                                         if g['type'] == 'metadata'
                                         and g.get('subtype', None) == 'ImageMetadata-v1.2'
-                                        and pathlib.Path(g['fileName']).stem == image_name]))
+                                        and pathlib.Path(g['fileName']).stem == image_name
+                                        and g.get('output_crs', None) == crs]))
         except StopIteration as ex:
             raise IncompleteImageSet(f"Missing image metadata for {image}") from ex
 
@@ -60,13 +62,15 @@ def from_big_output(big_output: List[typing.Dict]) -> List[ImageSet]:
             world_file = next(iter([g for g in big_output
                                     if g['type'] == 'metadata'
                                     and g.get('subtype', None) == 'world file'
-                                    and pathlib.Path(g['fileName']).stem == image_name]))
+                                    and pathlib.Path(g['fileName']).stem == image_name
+                                    and g.get('output_crs', None) == crs]))
         except StopIteration:
             # World files are not always required
             world_file = {}
 
+        image_set_name = f"{image_name}_{image_metadata['dataday']}_{image['output_crs']}" if 'output_crs' in image else f"{image_name}_{image_metadata['dataday']}"
         image_sets.append(
-            ImageSet(name=f"{image_name}_{image_metadata['dataday']}", image=image, image_metadata=image_metadata,
+            ImageSet(name=image_set_name, image=image, image_metadata=image_metadata,
                      world_file=world_file))
 
     return image_sets

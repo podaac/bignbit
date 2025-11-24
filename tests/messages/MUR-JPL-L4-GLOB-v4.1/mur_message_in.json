@@ -248,7 +248,8 @@
                   "checksum":"5241690fb50957d5350f4aa79ca0907744ea87b43bef34497089b17cbc137366ab6b3840c8a203e8ba2fb70f26ef3350f1f12bf251d303fa991fbd4cd203fee9",
                   "type":"browse",
                   "key":"MUR-JPL-L4-GLOB-v4.1/20210102090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_analysed_sst_regridded_subsetted.png",
-                  "variable": "analysed_sst"
+                  "variable": "analysed_sst",
+                  "output_crs": "EPSG:4326"
                },
                {
                   "fileName":"20210102090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_analysed_sst_regridded_subsetted.xml",
@@ -260,7 +261,8 @@
                   "checksum":"e28f32fc8bf960473004709f4433b483ed113774c38a0272cfe74b58700a154c3a48f979d21a9f132eaa5f4a90d46fcb7418ab66a977e8dac4783872d1313c66",
                   "type":"metadata",
                   "key":"MUR-JPL-L4-GLOB-v4.1/20210102090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_analysed_sst_regridded_subsetted.xml",
-                  "variable": "analysed_sst"
+                  "variable": "analysed_sst",
+                  "output_crs": "EPSG:4326"
                },
                {
                   "fileName":"20210102090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_analysed_sst_regridded_subsetted.wld",
@@ -271,7 +273,8 @@
                   "checksum":"e28f32fc8bf960473004709f4433b483ed113774c38a0272cfe74b58700a154c3a48f979d21a9f132eaa5f4a90d46fcb7418ab66a977e8dac4783872d1313c66",
                   "type":"metadata",
                   "key":"MUR-JPL-L4-GLOB-v4.1/20210102090000-JPL-L4_GHRSST-SSTfnd-MUR-GLOB-v02.0-fv04.1_analysed_sst_regridded_subsetted.wld",
-                  "variable": "analysed_sst"
+                  "variable": "analysed_sst",
+                  "output_crs": "EPSG:4326"
                }
             ]
          }
