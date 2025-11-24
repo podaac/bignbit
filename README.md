@@ -5,6 +5,7 @@ bignbit is a Cumulus module that can be installed as a post-ingest workflow to g
 In general, the high level steps are:
 
 1. For each requested output projection and configured variable within the granule, generate browse imagery via Harmony and store it in S3.
+1. For each requested output projection and configured variable within the granule, generate browse imagery via Harmony and store it in S3.
 2. Generate a browse image metadata file for GIBS for each image produced by Harmony.
 3. Construct a CNM message for each image that includes the image, metadata, and optional world file
 4. Send the CNM messages to GIBS via SQS.
