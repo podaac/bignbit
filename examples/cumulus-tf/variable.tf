@@ -80,3 +80,27 @@ variable "cma_version" {
   type    = string
   default = "v2.0.4"
 }
+
+variable "harmony_job_status_interval_seconds" {
+    type = number
+    description = "Interval in seconds for checking Harmony job status"
+    default = 20
+}
+
+variable "harmony_job_status_max_attempts" {
+    type = number
+    description = "Maximum number of attempts to check Harmony job status"
+    default = 15
+}
+
+variable "harmony_job_status_backoff_rate" {
+    type = number
+    description = "Backoff rate for Harmony job status checks"
+    default = 1.0
+}
+
+variable "harmony_job_status_max_delay_seconds" {
+    type = number
+    description = "Maximum delay in seconds for Harmony job status checks"
+    default = 20
+}
