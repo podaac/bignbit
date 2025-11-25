@@ -29,7 +29,7 @@ on:
 env:
   POETRY_VERSION: "1.8.2"
   PYTHON_VERSION: "3.10"
-  TERRAFORM_VERSION: "1.12.2"
+  TERRAFORM_VERSION: "1.14.0"
   REGISTRY: ghcr.io
 jobs:
   build:
