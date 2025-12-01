@@ -13,6 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.4.1]
+### Added
+- [issues/97](https://github.com/podaac/bignbit/issues/97): Added the "bignbit" label to all `harmony-py` requests.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- [issues/127](https://github.com/podaac/bignbit/issues/127): Merged 0.4.0 changes into develop, updated harmony-py version, fixed conflict in terraform lock file.
+### Security
+
 ## [0.4.0]
 ### Added
 - [issues/69](https://github.com/podaac/bignbit/issues/69): Added support for other projections, with the default being EPSG:4326. The projection is read from the `outputCrs` keyword in the dataset config. This likely needs refinement to account for cases when we have multiple projections per dataset.

@@ -215,6 +215,7 @@ class TestGenerateHarmonyRequest:
         assert result.format == 'image/tiff'
         assert result.crs == 'EPSG:3413'
         assert result.destination_url == destination_bucket_url
+        assert result.labels == ['bignbit']
 
     def test_generate_harmony_request_missing_config_keys(self):
         """Test harmony request generation with missing optional config keys uses defaults"""
@@ -280,6 +281,7 @@ class TestGenerateHarmonyRequest:
         assert isinstance(result.granule_id, list)
         assert len(result.granule_id) == 1
         assert result.granule_id[0] == granule_concept_id
+        assert result.labels == ['bignbit']
 
     def test_generate_harmony_request_variables_list(self):
         """Test that variables parameter is properly converted to list"""
@@ -300,6 +302,7 @@ class TestGenerateHarmonyRequest:
         assert isinstance(result.variables, list)
         assert len(result.variables) == 1
         assert result.variables[0] == variable
+        assert result.labels == ['bignbit']
 
 
 class TestSubmitHarmonyJobIntegration:

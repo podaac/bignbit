@@ -89,7 +89,7 @@ resource "aws_lambda_function" "get_dataset_configuration" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = local.current_aws_region
+      REGION                      = data.aws_region.current.name
     }
   }
 
@@ -121,7 +121,7 @@ resource "aws_lambda_function" "get_granule_umm_json" {
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = local.current_aws_region
+      REGION                      = data.aws_region.current.name
     }
   }
 
@@ -153,7 +153,7 @@ resource "aws_lambda_function" "get_collection_concept_id" {
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = local.current_aws_region
+      REGION                      = data.aws_region.current.name
     }
   }
 
@@ -183,7 +183,7 @@ resource "aws_lambda_function" "identify_image_file" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = local.current_aws_region
+      REGION                      = data.aws_region.current.name
     }
   }
 
@@ -213,7 +213,7 @@ resource "aws_lambda_function" "submit_harmony_job" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = local.current_aws_region
+      REGION                      = data.aws_region.current.name
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
     }
@@ -245,7 +245,7 @@ resource "aws_lambda_function" "generate_image_metadata" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = local.current_aws_region
+      REGION                      = data.aws_region.current.name
     }
   }
 
@@ -275,7 +275,7 @@ resource "aws_lambda_function" "get_harmony_job_status" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = local.current_aws_region
+      REGION                      = data.aws_region.current.name
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
     }
@@ -307,7 +307,7 @@ resource "aws_lambda_function" "process_harmony_results" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = local.current_aws_region
+      REGION                      = data.aws_region.current.name
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
     }
@@ -339,7 +339,7 @@ resource "aws_lambda_function" "apply_opera_hls_treatment" {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = local.current_aws_region
+      REGION                      = data.aws_region.current.name
       EDL_USER_SSM                = var.edl_user_ssm
       EDL_PASS_SSM                = var.edl_pass_ssm
     }
@@ -374,7 +374,7 @@ resource "aws_lambda_function" "build_image_sets" {
     variables = {
       STACK_NAME                  = local.aws_resources_name
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = local.current_aws_region
+      REGION                      = data.aws_region.current.name
       GIBS_REGION                 = var.gibs_region
       GIBS_SQS_URL                = "https://sqs.${var.gibs_region}.amazonaws.com/${var.gibs_account_id}/${var.gibs_queue_name}"
     }
@@ -406,7 +406,7 @@ resource "aws_lambda_function" "send_to_gitc" {
     variables = {
       STACK_NAME                  = local.aws_resources_name
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = local.current_aws_region
+      REGION                      = data.aws_region.current.name
       GIBS_REGION                 = var.gibs_region
       GIBS_SQS_URL                = "https://sqs.${var.gibs_region}.amazonaws.com/${var.gibs_account_id}/${var.gibs_queue_name}"
       GIBS_RESPONSE_TOPIC_ARN     = aws_sns_topic.gibs_response_topic.arn
@@ -440,7 +440,7 @@ resource "aws_lambda_function" "handle_gitc_response" {
     variables = {
       STACK_NAME                  = local.aws_resources_name
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = local.current_aws_region
+      REGION                      = data.aws_region.current.name
       BIGNBIT_AUDIT_BUCKET_NAME   = var.bignbit_audit_bucket
       BIGNBIT_AUDIT_PATH_NAME     = var.bignbit_audit_path
       CMR_ENVIRONMENT             = local.cmr_environment
@@ -475,7 +475,7 @@ resource "aws_lambda_function" "save_cnm_message" {
     variables = {
       STACK_NAME                  = local.aws_resources_name
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = local.current_aws_region
+      REGION                      = data.aws_region.current.name
     }
   }
 
