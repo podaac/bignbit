@@ -56,13 +56,7 @@ class NotifyGitc(Process):
         cmr_provider = self.input.get('cmr_provider')
         image_set = ImageSet(**self.input['image_set'])
         gitc_id = image_set.name
-        # Send ImageSet(s) to GITC for processing
-        collection_name = self.input.get('collection_name')
-        cmr_provider = self.input.get('cmr_provider')
-        image_set = ImageSet(**self.input['image_set'])
-        gitc_id = image_set.name
 
-        cnm_message = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
         cnm_message = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
 
         return cnm_message
