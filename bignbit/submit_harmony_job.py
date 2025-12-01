@@ -104,7 +104,8 @@ def generate_harmony_request(collection_concept_id, granule_concept_id, variable
         'granule_id': [granule_concept_id],
         'variables': [variable],
         'format': big_config['config'].get('format', 'image/png'),
-        'destination_url': destination_bucket_url
+        'destination_url': destination_bucket_url,
+        'labels': ['bignbit']
     }
     # Workaround to prevent sending harmony requests that are
     # equirectangular projection through the reproject service.
