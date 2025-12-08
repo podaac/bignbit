@@ -242,6 +242,7 @@ class TestGenerateHarmonyRequest:
         # assert result.crs == 'EPSG:4326'  # default
         assert result.width == 1024
         assert result.height == 512
+        assert result.labels == ['bignbit']
 
     def test_generate_harmony_request_collection_object(self):
         """Test that harmony request creates proper Collection object"""
@@ -363,6 +364,7 @@ class TestSubmitHarmonyJobIntegration:
         assert submitted_request.height == 512
         assert submitted_request.format == 'image/png'
         assert submitted_request.crs == 'EPSG:3413'
+        assert submitted_request.labels == ['bignbit']
         
         expected_destination_url = 's3://podaac-sit-svc-internal/bignbit-cnm-output/mur-jpl-l4-glob-v4.1/20230601'
         assert submitted_request.destination_url == expected_destination_url
