@@ -86,12 +86,12 @@ def get_cmr_user_token(edl_user: str, edl_pass: str, cmr_env: str) -> str:
         tokens = get_tokens_response.json()
 
         # Convert new string format (%Y-%m-%dT%H:%M:%S.%fZ) into acceptable (%m/%d/%Y) format
-        for t in tokens:
+        for token in tokens:
             # Parse timestamp into a datetime object
-            dt = datetime.strptime(t['expiration_date'], '%Y-%m-%dT%H:%M:%S.%fZ')
+            expiration_dt = datetime.strptime(token['expiration_date'], '%Y-%m-%dT%H:%M:%S.%fZ')
 
             # Reformat datetime to match '%m/%d/%Y' expected in the filter step
-            t['expiration_date'] = dt.strftime('%m/%d/%Y')
+            token['expiration_date'] = expiration_dt.strftime('%m/%d/%Y')
 
         # Filter expired tokens
         tokens = [{
