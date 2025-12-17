@@ -17,6 +17,8 @@ HARMONY_CLIENT: Client or None = None
 
 HARMONY_SHOULD_VALIDATE_AUTH = os.environ.get('HARMONY_SHOULD_VALIDATE_AUTH', default='False').upper() == 'TRUE'
 
+_ISO_EXPIRATION_RE = re.compile(r'^(\d{4})-(\d{2})-(\d{2})T\d{2}:\d{2}:\d{2}\.\d+Z$')
+
 
 def get_edl_creds() -> (str, str):
     """
@@ -85,18 +87,25 @@ def get_cmr_user_token(edl_user: str, edl_pass: str, cmr_env: str) -> str:
         get_tokens_response.raise_for_status()
         tokens = get_tokens_response.json()
 
-        # Convert new string format (%Y-%m-%dT%H:%M:%S.%fZ) into acceptable (%m/%d/%Y) format
-        for token in tokens:
-            # Parse timestamp into a datetime object
-            expiration_dt = datetime.strptime(token['expiration_date'], '%Y-%m-%dT%H:%M:%S.%fZ')
+        def normalize_expiration_date(value: str) -> str:
+            """
+            Convert ISO expiration date (%Y-%m-%dT%H:%M:%S.%fZ)
+            to %m/%d/%Y format. Leave unchanged if not matching.
+            """
+            if not isinstance(value, str):
+                return value
 
-            # Reformat datetime to match '%m/%d/%Y' expected in the filter step
-            token['expiration_date'] = expiration_dt.strftime('%m/%d/%Y')
+            match = _ISO_EXPIRATION_RE.match(value)
+            if match:
+                year, month, day = match.groups()
+                return f"{month}/{day}/{year}"
+
+            return value
 
         # Filter expired tokens
         tokens = [{
             "access_token": t["access_token"],
-            "expiration_date": datetime.strptime(t['expiration_date'], '%m/%d/%Y')
+            "expiration_date": datetime.strptime(normalize_expiration_date(t['expiration_date']), '%m/%d/%Y')
         } for t in tokens]
         valid_tokens = list(filter(lambda t: datetime.now() < t['expiration_date'], tokens))
         expired_tokens = list(filter(lambda t: datetime.now() >= t['expiration_date'], tokens))
