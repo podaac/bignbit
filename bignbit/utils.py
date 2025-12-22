@@ -9,6 +9,8 @@ from datetime import datetime
 import boto3
 import harmony.config
 import requests
+from typing import Union
+from dateutil import parser
 from harmony import Environment, Client
 
 ED_USER = ED_PASS = None
@@ -16,8 +18,6 @@ EDL_USER_TOKEN = {}
 HARMONY_CLIENT: Client or None = None
 
 HARMONY_SHOULD_VALIDATE_AUTH = os.environ.get('HARMONY_SHOULD_VALIDATE_AUTH', default='False').upper() == 'TRUE'
-
-_ISO_EXPIRATION_RE = re.compile(r'^(\d{4})-(\d{2})-(\d{2})T\d{2}:\d{2}:\d{2}\.\d+Z$')
 
 
 def get_edl_creds() -> (str, str):
@@ -50,6 +50,33 @@ def get_edl_creds() -> (str, str):
         ED_PASS = ssm_edl_pass
 
     return ED_USER, ED_PASS
+
+
+def format_iso_expiration_date(value: Union[str, datetime]) -> str:
+    """
+    Convert a date/time string or datetime object to MM/DD/YYYY format.
+
+    - Accepts ISO 8601, MM/DD/YYYY, or other common date/time strings.
+    - Accepts a datetime object.
+    - Returns a string in '%m/%d/%Y' format.
+    - Raises ValueError if the input cannot be parsed.
+    """
+    if isinstance(value, datetime):
+        return value.strftime("%m/%d/%Y")
+
+    if not isinstance(value, str):
+        raise TypeError(f"Input must be a string or datetime, got {type(value).__name__}")
+
+    # Try parsing the string
+    try:
+        dt = parser.isoparse(value)  # fast path for ISO 8601
+    except (ValueError, TypeError):
+        try:
+            dt = parser.parse(value)  # general date/time parsing
+        except (ValueError, TypeError) as exc:
+            raise ValueError(f"Cannot parse date/time from input: '{value}'") from exc
+
+    return dt.strftime("%m/%d/%Y")
 
 
 def get_cmr_user_token(edl_user: str, edl_pass: str, cmr_env: str) -> str:
@@ -87,25 +114,10 @@ def get_cmr_user_token(edl_user: str, edl_pass: str, cmr_env: str) -> str:
         get_tokens_response.raise_for_status()
         tokens = get_tokens_response.json()
 
-        def normalize_expiration_date(value: str) -> str:
-            """
-            Convert ISO expiration date (%Y-%m-%dT%H:%M:%S.%fZ)
-            to %m/%d/%Y format. Leave unchanged if not matching.
-            """
-            if not isinstance(value, str):
-                return value
-
-            match = _ISO_EXPIRATION_RE.match(value)
-            if match:
-                year, month, day = match.groups()
-                return f"{month}/{day}/{year}"
-
-            return value
-
         # Filter expired tokens
         tokens = [{
             "access_token": t["access_token"],
-            "expiration_date": datetime.strptime(normalize_expiration_date(t['expiration_date']), '%m/%d/%Y')
+            "expiration_date": datetime.strptime(format_iso_expiration_date(t['expiration_date']), '%m/%d/%Y')
         } for t in tokens]
         valid_tokens = list(filter(lambda t: datetime.now() < t['expiration_date'], tokens))
         expired_tokens = list(filter(lambda t: datetime.now() >= t['expiration_date'], tokens))
