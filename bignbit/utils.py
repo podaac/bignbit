@@ -6,9 +6,11 @@ import pathlib
 import re
 from datetime import datetime
 
+from typing import Union
 import boto3
 import harmony.config
 import requests
+from dateutil import parser
 from harmony import Environment, Client
 
 ED_USER = ED_PASS = None
@@ -50,6 +52,33 @@ def get_edl_creds() -> (str, str):
     return ED_USER, ED_PASS
 
 
+def format_iso_expiration_date(value: Union[str, datetime]) -> str:
+    """
+    Convert a date/time string or datetime object to MM/DD/YYYY format.
+
+    - Accepts ISO 8601, MM/DD/YYYY, or other common date/time strings.
+    - Accepts a datetime object.
+    - Returns a string in '%m/%d/%Y' format.
+    - Raises ValueError if the input cannot be parsed.
+    """
+    if isinstance(value, datetime):
+        return value.strftime("%m/%d/%Y")
+
+    if not isinstance(value, str):
+        raise TypeError(f"Input must be a string or datetime, got {type(value).__name__}")
+
+    # Try parsing the string
+    try:
+        new_stamp = parser.isoparse(value)  # fast path for ISO 8601
+    except (ValueError, TypeError):
+        try:
+            new_stamp = parser.parse(value)  # general date/time parsing
+        except (ValueError, TypeError) as exc:
+            raise ValueError(f"Cannot parse date/time from input: '{value}'") from exc
+
+    return new_stamp.strftime("%m/%d/%Y")
+
+
 def get_cmr_user_token(edl_user: str, edl_pass: str, cmr_env: str) -> str:
     """
     Get a valid user token for the given user
@@ -88,7 +117,7 @@ def get_cmr_user_token(edl_user: str, edl_pass: str, cmr_env: str) -> str:
         # Filter expired tokens
         tokens = [{
             "access_token": t["access_token"],
-            "expiration_date": datetime.strptime(t['expiration_date'], '%m/%d/%Y')
+            "expiration_date": datetime.strptime(format_iso_expiration_date(t['expiration_date']), '%m/%d/%Y')
         } for t in tokens]
         valid_tokens = list(filter(lambda t: datetime.now() < t['expiration_date'], tokens))
         expired_tokens = list(filter(lambda t: datetime.now() >= t['expiration_date'], tokens))
