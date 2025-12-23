@@ -6,10 +6,10 @@ import pathlib
 import re
 from datetime import datetime
 
+from typing import Union
 import boto3
 import harmony.config
 import requests
-from typing import Union
 from dateutil import parser
 from harmony import Environment, Client
 
