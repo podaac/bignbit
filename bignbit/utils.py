@@ -69,14 +69,14 @@ def format_iso_expiration_date(value: Union[str, datetime]) -> str:
 
     # Try parsing the string
     try:
-        dt = parser.isoparse(value)  # fast path for ISO 8601
+        new_stamp = parser.isoparse(value)  # fast path for ISO 8601
     except (ValueError, TypeError):
         try:
-            dt = parser.parse(value)  # general date/time parsing
+            new_stamp = parser.parse(value)  # general date/time parsing
         except (ValueError, TypeError) as exc:
             raise ValueError(f"Cannot parse date/time from input: '{value}'") from exc
 
-    return dt.strftime("%m/%d/%Y")
+    return new_stamp.strftime("%m/%d/%Y")
 
 
 def get_cmr_user_token(edl_user: str, edl_pass: str, cmr_env: str) -> str:
