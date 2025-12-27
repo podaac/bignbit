@@ -9,6 +9,8 @@ from datetime import datetime
 import boto3
 import harmony.config
 import requests
+import json
+
 from harmony import Environment, Client
 
 ED_USER = ED_PASS = None
@@ -18,7 +20,7 @@ HARMONY_CLIENT: Client or None = None
 HARMONY_SHOULD_VALIDATE_AUTH = os.environ.get('HARMONY_SHOULD_VALIDATE_AUTH', default='False').upper() == 'TRUE'
 
 
-def get_edl_creds() -> (str, str):
+def get_edl_creds() -> tuple[str, str]:
     """
     Get EDL username and password from SSM.
 
@@ -216,7 +218,7 @@ def upload_to_s3(filepath: pathlib.Path, bucket_name: str, object_key: str):
     return f's3://{bucket_name}/{object_key}'
 
 
-def checksum_and_upload(filepath: pathlib.Path, bucket_name: str, object_key: str) -> (str, str, str):
+def checksum_and_upload(filepath: pathlib.Path, bucket_name: str, object_key: str) -> tuple[str, str, str]:
     """
     Create a checksum for the given file then upload it to s3
 
@@ -278,9 +280,36 @@ def get_harmony_client(environment_str: str) -> harmony.Client:
         HARMONY_CLIENT = None
 
     if not HARMONY_CLIENT:
+        # Create a boto3 Lambda client for token retrieval
+        lambda_client = boto3.client('lambda', region_name='us-west-2')
+
+        # Retrieve EDL credentials (username/password)
+        edl_user, edl_pass = get_edl_creds()
+
+        # Prepare payload to request an access token from the Lambda "token-dispenser"
+        payload = {
+            "action": "edl",
+            "edl_user": edl_user,
+            "edl_pass": edl_pass,
+            "edl_env": environment_str,
+            "minimum_alive_secs": 300  # keep token valid for at least 5 minutes
+        }
+
+        # Invoke the Lambda synchronously and get the token
+        response = lambda_client.invoke(
+            FunctionName='token-dispenser',
+            InvocationType='RequestResponse',  # wait for response
+            Payload=json.dumps(payload).encode('utf-8')
+        )
+
+        # Read the payload from Lambda response and parse JSON
+        response_payload = response['Payload'].read()
+        token = json.loads(response_payload)['access-token']
+
+        # Instantiate Harmony client with retrieved token
         HARMONY_CLIENT = Client(
             env=harmony_environ,
-            auth=get_edl_creds(),
+            token=token,
             should_validate_auth=HARMONY_SHOULD_VALIDATE_AUTH
         )
 
