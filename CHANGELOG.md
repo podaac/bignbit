@@ -7,10 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- [issues/109](https://github.com/podaac/bignbit/issues/109): Handle new format of EDL token expiration datetime, also backwards compatible with old date format.
 ### Changed
 ### Deprecated
 ### Removed
 ### Fixed
+- [issues/138](https://github.com/podaac/bignbit/issues/138): Fix key error when building image sets from OPERA HLS imagery.
+### Security
+
+## [0.5.0]
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- [issues/127](https://github.com/podaac/bignbit/issues/127): Additional hotfix to allow for deployment in PODAAC environments with their version of cumulus
 ### Security
 
 ## [0.4.1]
