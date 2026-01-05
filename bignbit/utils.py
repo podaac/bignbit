@@ -9,7 +9,6 @@ from datetime import datetime
 import boto3
 import harmony.config
 import requests
-import json
 
 from harmony import Environment, Client
 
