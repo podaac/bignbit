@@ -1,0 +1,204 @@
+{
+  "meta": {
+    "stack": "podaac-uat-cumulus",
+    "provider": {},
+    "buckets": {},
+    "cmr": {
+      "clientId": "POCLOUD",
+      "cmrEnvironment": "UAT",
+      "provider": "POCLOUD"
+    },
+    "collection": {
+      "name": "OPERA_L3_DSWX-HLS_V1"
+    }
+  },
+  "payload": {
+    "big": [
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_167131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260105/OPERA_L3_DSWx-HLS_T32VMJ_167131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "local_filepath": "/tmp/tmpva4cvydi/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/167131/OPERA_L3_DSWx-HLS_T32VMJ_167131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "19e9802c817c862c0689f9039847459eb1127ca92d9e0105761326cdea2bf5037a96dd4b5f835611f065e3389b6c57ced67472af6fb49745714a739360650251",
+        "checksumType": "SHA512",
+        "type": "browse",
+        "subtype": "geotiff",
+        "variable": "none",
+        "dataday": "2025263"
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_167131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.xml",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260105/OPERA_L3_DSWx-HLS_T32VMJ_167131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.xml",
+        "local_filepath": "/tmp/tmpva4cvydi/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/167131/OPERA_L3_DSWx-HLS_T32VMJ_167131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "633cc1372a65545b945b29813852888e7632c79a92a6e0dafc86691900b8c0b52caa1b4532e5a9d15accbe5a0a3c57a4b05cd2c8dead1217c3fc6e481dfda446",
+        "checksumType": "SHA512",
+        "type": "metadata",
+        "subtype": "ImageMetadata-v1.2",
+        "variable": "none",
+        "dataday": "2025263",
+        "size": 364
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_167132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260105/OPERA_L3_DSWx-HLS_T32VMJ_167132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "local_filepath": "/tmp/tmpva4cvydi/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/167132/OPERA_L3_DSWx-HLS_T32VMJ_167132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "1e1b0480482a757076762e60ec16fe6ea9fb75bc4095129311ab93a49f270be29c0831a2d4133c826a2ad18352ec8d9e32cdbfbd0f4db09e722e443cc7fd7f5b",
+        "checksumType": "SHA512",
+        "type": "browse",
+        "subtype": "geotiff",
+        "variable": "none",
+        "dataday": "2025263"
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_167132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.xml",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260105/OPERA_L3_DSWx-HLS_T32VMJ_167132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.xml",
+        "local_filepath": "/tmp/tmpva4cvydi/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/167132/OPERA_L3_DSWx-HLS_T32VMJ_167132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "aae0b0d70b20a3a5b6d2c817ece47a29595fbac831d5b402cca960e3a817c2b42157e0681ad7c8c090f1689ef9b886709365e9fc7bded46a7aa7383ba121959d",
+        "checksumType": "SHA512",
+        "type": "metadata",
+        "subtype": "ImageMetadata-v1.2",
+        "variable": "none",
+        "dataday": "2025263",
+        "size": 364
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_168131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260105/OPERA_L3_DSWx-HLS_T32VMJ_168131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "local_filepath": "/tmp/tmpva4cvydi/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/168131/OPERA_L3_DSWx-HLS_T32VMJ_168131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "a0dfa003546741323ba711453afe476405a37e8e412f28e286fbada07c2568a255b2747a32e4d236ed5d98b545335240f5ad2a5f2fbd49ef813a021ea5aeceb6",
+        "checksumType": "SHA512",
+        "type": "browse",
+        "subtype": "geotiff",
+        "variable": "none",
+        "dataday": "2025263"
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_168131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.xml",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260105/OPERA_L3_DSWx-HLS_T32VMJ_168131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.xml",
+        "local_filepath": "/tmp/tmpva4cvydi/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/168131/OPERA_L3_DSWx-HLS_T32VMJ_168131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "dab574ccb69200c227f8fe96681685549ae0ba0ff38a114e65a0548cb2e9e6cdd58df70b6dd74861bc1c0b2695ad2d34616798214bb0d5409db1bb0bb3ce4c0a",
+        "checksumType": "SHA512",
+        "type": "metadata",
+        "subtype": "ImageMetadata-v1.2",
+        "variable": "none",
+        "dataday": "2025263",
+        "size": 364
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_168132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260105/OPERA_L3_DSWx-HLS_T32VMJ_168132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "local_filepath": "/tmp/tmpva4cvydi/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/168132/OPERA_L3_DSWx-HLS_T32VMJ_168132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "7ba75e5471dc99bf608c0acf7932689d2e2bda5b035c48c6278f5a94c4d6f7941fb8d412b0890018b119f8cdc32a46ac17fb220e4872af5b6b14d30edc15e70d",
+        "checksumType": "SHA512",
+        "type": "browse",
+        "subtype": "geotiff",
+        "variable": "none",
+        "dataday": "2025263"
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_168132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.xml",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260105/OPERA_L3_DSWx-HLS_T32VMJ_168132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.xml",
+        "local_filepath": "/tmp/tmpva4cvydi/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/168132/OPERA_L3_DSWx-HLS_T32VMJ_168132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "72023f54185df0edce7354f7cc60e975b0d11707c155a12b0aaa936aa651b663b6a75c5bea31130eb7cdba1278dda5213bf7de13c92fa3e56f31c8819c6bde51",
+        "checksumType": "SHA512",
+        "type": "metadata",
+        "subtype": "ImageMetadata-v1.2",
+        "variable": "none",
+        "dataday": "2025263",
+        "size": 364
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_169131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260105/OPERA_L3_DSWx-HLS_T32VMJ_169131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "local_filepath": "/tmp/tmpva4cvydi/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/169131/OPERA_L3_DSWx-HLS_T32VMJ_169131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "ad73c48118db04ccc7e123a66a610f90cb3362329fe33bf75b951ec6255de1a105cb7995cb232f692decaacde81a1dc2ead1ab90f8281c99636c049065911bf8",
+        "checksumType": "SHA512",
+        "type": "browse",
+        "subtype": "geotiff",
+        "variable": "none",
+        "dataday": "2025263"
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_169131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.xml",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260105/OPERA_L3_DSWx-HLS_T32VMJ_169131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.xml",
+        "local_filepath": "/tmp/tmpva4cvydi/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/169131/OPERA_L3_DSWx-HLS_T32VMJ_169131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "526eef52fadfc6d78d3d2d4abda07493275d31830d0895fab0f4c8b977420794e68d83c8d81da770939248a1f539b2c91c6dbc4d90bda0b467206086d6560533",
+        "checksumType": "SHA512",
+        "type": "metadata",
+        "subtype": "ImageMetadata-v1.2",
+        "variable": "none",
+        "dataday": "2025263",
+        "size": 364
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_169132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260105/OPERA_L3_DSWx-HLS_T32VMJ_169132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "local_filepath": "/tmp/tmpva4cvydi/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/169132/OPERA_L3_DSWx-HLS_T32VMJ_169132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "4d0def12bd2746a606e64f80163f326cac2daf71305a4823c31ff691eb234b101e53fb93e1bd7fb69b27864b1f8c95b7b9e1474a193621f4c558c8b3481227c9",
+        "checksumType": "SHA512",
+        "type": "browse",
+        "subtype": "geotiff",
+        "variable": "none",
+        "dataday": "2025263"
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_169132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.xml",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260105/OPERA_L3_DSWx-HLS_T32VMJ_169132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.xml",
+        "local_filepath": "/tmp/tmpva4cvydi/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/169132/OPERA_L3_DSWx-HLS_T32VMJ_169132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "0c53a80de164868026060536839a19738813b7bdb8768dc53d499a8d88e3c028befe762d16f64fb42f50e704f2a9d56776fee8a08042f52285f8fc62448e154c",
+        "checksumType": "SHA512",
+        "type": "metadata",
+        "subtype": "ImageMetadata-v1.2",
+        "variable": "none",
+        "dataday": "2025263",
+        "size": 364
+      }
+    ],
+    "granules": [
+      {
+        "createdAt": 1766160852904,
+        "granuleId": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0",
+        "provider": "opera",
+        "dataType": "OPERA_L3_DSWX-HLS_V1",
+        "sync_granule_duration": 1829,
+        "cmrLink": "https://cmr.uat.earthdata.nasa.gov/search/concepts/G1276618252-POCLOUD.umm_json",
+        "cmrConceptId": "G1276618252-POCLOUD",
+        "files": [
+          {
+            "bucket": "podaac-sit-svc-public",
+            "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.png",
+            "size": 19595,
+            "checksumType": "md5",
+            "checksum": "eddbaf010fe166bdb32aabd2375ea54c",
+            "source": "OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.png",
+            "type": "browse",
+            "key": "OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.png"
+          },
+          {
+            "bucket": "podaac-sit-svc-private",
+            "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+            "size": 160804,
+            "checksumType": "md5",
+            "checksum": "351789c61b221f1d30469c6de091aec4",
+            "source": "OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+            "type": "data",
+            "key": "OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif"
+          }
+        ]
+      }
+    ]
+  },
+  "exception": "None",
+  "cumulus_meta": {}
+}
