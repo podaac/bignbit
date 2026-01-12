@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Fixed
 - [issues/127](https://github.com/podaac/bignbit/issues/127): Additional hotfix to allow for deployment in PODAAC environments with their version of cumulus
+- [features/old_null](https://github.com/podaac/bignbit/pull/134) Updated null provider version to > 2.1 for PODAAC cumulus compatibility
 ### Security
 
 ## [0.4.1]
