@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+[Unreleased]
+### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.6.0]
 ### Added
 - [issues/109](https://github.com/podaac/bignbit/issues/109): Handle new format of EDL token expiration datetime, also backwards compatible with old date format.
 ### Changed
@@ -22,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Fixed
 - [issues/127](https://github.com/podaac/bignbit/issues/127): Additional hotfix to allow for deployment in PODAAC environments with their version of cumulus
+- [features/old_null](https://github.com/podaac/bignbit/pull/134) Updated null provider version to > 2.1 for PODAAC cumulus compatibility
 ### Security
 
 ## [0.4.1]
