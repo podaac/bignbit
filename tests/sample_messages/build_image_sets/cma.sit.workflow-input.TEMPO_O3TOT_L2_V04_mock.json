@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "stack": "podaac-uat-cumulus",
+    "provider": {},
+    "buckets": {},
+    "cmr": {
+      "clientId": "POCLOUD",
+      "cmrEnvironment": "UAT",
+      "provider": "LARC_CLOUD"
+    },
+    "collection": {
+      "name": "TEMPO_O3TOT_L2"
+    }
+  },
+  "payload": {
+    "big": [
+      {
+        "fileName": "TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_column_amount_o3_reformatted.png",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_o3tot_l2/20260105/2db6248f-bfde-4f82-bd1b-9a48ab6966e9/8903857/TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_column_amount_o3_reformatted.png",
+        "checksum": "2ce4415ffe390a4602a52a230a7bb246",
+        "checksumType": "md5",
+        "variable": "product/column_amount_o3",
+        "output_crs": "EPSG:4326",
+        "type": "browse",
+        "subtype": "png",
+        "dataday": "2025256"
+      },
+      {
+        "fileName": "TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_column_amount_o3_reformatted.xml",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_o3tot_l2/20260105/2db6248f-bfde-4f82-bd1b-9a48ab6966e9/8903857/TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_column_amount_o3_reformatted.xml",
+        "checksum": "ff3ced6491e8efff03db6194c12c60dbfa1edcf23b0734f02f7b4e7306d45831326ad7e4a4d2f824d7712632dfdb249d8b9289c9307f916868f8dc31f22f5bf8",
+        "checksumType": "SHA512",
+        "variable": "product/column_amount_o3",
+        "output_crs": "EPSG:4326",
+        "type": "metadata",
+        "subtype": "ImageMetadata-v1.2",
+        "dataday": "2025256",
+        "size": 365
+      },
+      {
+        "fileName": "TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_column_amount_o3_reformatted.pgw",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_o3tot_l2/20260105/2db6248f-bfde-4f82-bd1b-9a48ab6966e9/8903857/TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_column_amount_o3_reformatted.pgw",
+        "checksum": "9c046aae31658304a52445711972c854",
+        "checksumType": "md5",
+        "variable": "product/column_amount_o3",
+        "output_crs": "EPSG:4326",
+        "type": "metadata",
+        "subtype": "world file",
+        "dataday": "2025256"
+      },
+      {
+        "fileName": "TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_column_amount_o3_reformatted.png.aux.xml",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_o3tot_l2/20260105/2db6248f-bfde-4f82-bd1b-9a48ab6966e9/8903857/TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_column_amount_o3_reformatted.png.aux.xml",
+        "checksum": "9f2bdb87c1b0a22d7bcdff451f6959e0",
+        "checksumType": "md5",
+        "variable": "product/column_amount_o3",
+        "output_crs": "EPSG:4326",
+        "type": "metadata",
+        "dataday": "2025256"
+      },
+      {
+        "fileName": "TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_fc_reformatted.png",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_o3tot_l2/20260105/c1f756b8-f355-471f-9ae8-8214d6be2a1f/8903858/TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_fc_reformatted.png",
+        "checksum": "6b3b57f535cfe0524f6ba465ed69727c",
+        "checksumType": "md5",
+        "variable": "product/fc",
+        "output_crs": "EPSG:4326",
+        "type": "browse",
+        "subtype": "png",
+        "dataday": "2025256"
+      },
+      {
+        "fileName": "TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_fc_reformatted.xml",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_o3tot_l2/20260105/c1f756b8-f355-471f-9ae8-8214d6be2a1f/8903858/TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_fc_reformatted.xml",
+        "checksum": "1ea3613cf8f664f12a071bbe7498723dee0f7285183b1dd09d352c3479dbbd2fb3db6424de4510946d2c2652a5086e05ef365b0edfa0ef85ad17e813438a3222",
+        "checksumType": "SHA512",
+        "variable": "product/fc",
+        "output_crs": "EPSG:4326",
+        "type": "metadata",
+        "subtype": "ImageMetadata-v1.2",
+        "dataday": "2025256",
+        "size": 365
+      },
+      {
+        "fileName": "TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_fc_reformatted.pgw",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_o3tot_l2/20260105/c1f756b8-f355-471f-9ae8-8214d6be2a1f/8903858/TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_fc_reformatted.pgw",
+        "checksum": "9c046aae31658304a52445711972c854",
+        "checksumType": "md5",
+        "variable": "product/fc",
+        "output_crs": "EPSG:4326",
+        "type": "metadata",
+        "subtype": "world file",
+        "dataday": "2025256"
+      },
+      {
+        "fileName": "TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_fc_reformatted.png.aux.xml",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_o3tot_l2/20260105/c1f756b8-f355-471f-9ae8-8214d6be2a1f/8903858/TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_fc_reformatted.png.aux.xml",
+        "checksum": "9f2bdb87c1b0a22d7bcdff451f6959e0",
+        "checksumType": "md5",
+        "variable": "product/fc",
+        "output_crs": "EPSG:4326",
+        "type": "metadata",
+        "dataday": "2025256"
+      },
+      {
+        "fileName": "TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_uv_aerosol_index_reformatted.png",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_o3tot_l2/20260105/c93e2c18-970f-4cb1-b12e-872c3c8fd88d/8903860/TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_uv_aerosol_index_reformatted.png",
+        "checksum": "71496147e2efd31ee74e8d7bd6a017db",
+        "checksumType": "md5",
+        "variable": "product/uv_aerosol_index",
+        "output_crs": "EPSG:4326",
+        "type": "browse",
+        "subtype": "png",
+        "dataday": "2025256"
+      },
+      {
+        "fileName": "TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_uv_aerosol_index_reformatted.xml",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_o3tot_l2/20260105/c93e2c18-970f-4cb1-b12e-872c3c8fd88d/8903860/TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_uv_aerosol_index_reformatted.xml",
+        "checksum": "78c39d524e575ff782b6f077a52cae9e0785e5217856ea4b5f7e820c80ebdb2c1e76b1f40d233f387b8000fa2e0b26d1af2fa94a44e320f6842501cece632c6e",
+        "checksumType": "SHA512",
+        "variable": "product/uv_aerosol_index",
+        "output_crs": "EPSG:4326",
+        "type": "metadata",
+        "subtype": "ImageMetadata-v1.2",
+        "dataday": "2025256",
+        "size": 365
+      },
+      {
+        "fileName": "TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_uv_aerosol_index_reformatted.pgw",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_o3tot_l2/20260105/c93e2c18-970f-4cb1-b12e-872c3c8fd88d/8903860/TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_uv_aerosol_index_reformatted.pgw",
+        "checksum": "9c046aae31658304a52445711972c854",
+        "checksumType": "md5",
+        "variable": "product/uv_aerosol_index",
+        "output_crs": "EPSG:4326",
+        "type": "metadata",
+        "subtype": "world file",
+        "dataday": "2025256"
+      },
+      {
+        "fileName": "TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_uv_aerosol_index_reformatted.png.aux.xml",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_o3tot_l2/20260105/c93e2c18-970f-4cb1-b12e-872c3c8fd88d/8903860/TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04_regridded_filtered_product_uv_aerosol_index_reformatted.png.aux.xml",
+        "checksum": "9f2bdb87c1b0a22d7bcdff451f6959e0",
+        "checksumType": "md5",
+        "variable": "product/uv_aerosol_index",
+        "output_crs": "EPSG:4326",
+        "type": "metadata",
+        "dataday": "2025256"
+      }
+    ],
+    "granules": [
+      {
+        "granuleId": "TEMPO_O3TOT_L2_V04_20250913T000441Z_S015G04",
+        "provider": "larc",
+        "cmrLink": "https://cmr.uat.earthdata.nasa.gov/search/concepts/G1276518029-LARC_CLOUD.umm_json",
+        "cmrConceptId": "G1276518029-LARC_CLOUD"
+      }
+    ]
+  },
+  "exception": "None",
+  "cumulus_meta": {}
+}
