@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
-- [issues/138](https://github.com/podaac/bignbit/issues/138): Fix key error when building image sets from OPERA HLS imagery.
+- [issues/138](https://github.com/podaac/bignbit/issues/138): Fix key error when building image sets from OPERA HLS imagery. 
 ### Security
 
 ## [0.5.0]
