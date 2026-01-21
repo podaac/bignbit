@@ -1,0 +1,325 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.4
+    method: GET
+    uri: https://harmony.earthdata.nasa.gov/jobs/60c6de41-a51a-4283-aa7c-2d530ebab8d9?linktype=https
+  response:
+    body:
+      string: See Other. Redirecting to https://urs.earthdata.nasa.gov/oauth/authorize?response_type=code&client_id=WocHIn_ABQ9FFxjAKTF5LQ&redirect_uri=https%3A%2F%2Fharmony.earthdata.nasa.gov%2Foauth2%2Fredirect&state=5307d80894924127eb3344a6110da833
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '237'
+      Content-Type:
+      - text/plain; charset=utf-8
+      Date:
+      - Wed, 24 Sep 2025 20:27:30 GMT
+      Location:
+      - https://urs.earthdata.nasa.gov/oauth/authorize?response_type=code&client_id=WocHIn_ABQ9FFxjAKTF5LQ&redirect_uri=https%3A%2F%2Fharmony.earthdata.nasa.gov%2Foauth2%2Fredirect&state=5307d80894924127eb3344a6110da833
+      Server:
+      - CloudFront
+      Set-Cookie:
+      - redirect=s%3Ahttps%3A%2F%2Fharmony.earthdata.nasa.gov%2Fjobs%2F60c6de41-a51a-4283-aa7c-2d530ebab8d9%3Flinktype%3Dhttps.8qdDeCEkecb6Q3mIGMPbp%2F4l3cveeYHjyxPgWDcsQxQ;
+        Path=/; SameSite=Lax
+      - state=s%3A5307d80894924127eb3344a6110da833.77J7ReEjRC%2FJQBGt739zh1AYf1X2KFPkPjtoHEfohDE;
+        Path=/; SameSite=Lax
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Vary:
+      - Accept
+      Via:
+      - 1.1 dc1a987d649e26c30b46018807322438.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - yvXZLZe-NH1jvGmIbE7i33M8Vs2PgM3f8qDs5nedruD5k3WRXF2vNQ==
+      X-Amz-Cf-Pop:
+      - LAX53-P4
+      X-Cache:
+      - Miss from cloudfront
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Powered-By:
+      - Express
+      X-Request-Id:
+      - yvXZLZe-NH1jvGmIbE7i33M8Vs2PgM3f8qDs5nedruD5k3WRXF2vNQ==
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 303
+      message: See Other
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.4
+    method: GET
+    uri: https://urs.earthdata.nasa.gov/oauth/authorize?response_type=code&client_id=WocHIn_ABQ9FFxjAKTF5LQ&redirect_uri=https%3A%2F%2Fharmony.earthdata.nasa.gov%2Foauth2%2Fredirect&state=5307d80894924127eb3344a6110da833
+  response:
+    body:
+      string: You are being redirected to https://harmony.earthdata.nasa.gov/oauth2/redirect?code=M417hAOHuBAocfq1XhWDRdlkwINxor4kRyGv8nTtwwNNon7sw5CZwT3s4tPSNXd3FZUsK6H_uHRPpLI43cpch6vdO4pslanV-A&state=5307d80894924127eb3344a6110da833
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST
+      Access-Control-Allow-Origin:
+      - 'null'
+      Access-Control-Expose-Headers:
+      - 'true'
+      Cache-Control:
+      - no-store
+      Connection:
+      - keep-alive
+      Content-Type:
+      - text/html; charset=utf-8
+      Date:
+      - Wed, 24 Sep 2025 20:27:31 GMT
+      Expires:
+      - Fri, 01 Jan 1990 00:00:00 GMT
+      Location:
+      - https://harmony.earthdata.nasa.gov/oauth2/redirect?code=M417hAOHuBAocfq1XhWDRdlkwINxor4kRyGv8nTtwwNNon7sw5CZwT3s4tPSNXd3FZUsK6H_uHRPpLI43cpch6vdO4pslanV-A&state=5307d80894924127eb3344a6110da833
+      Pragma:
+      - no-cache
+      Referrer-Policy:
+      - strict-origin-when-cross-origin
+      Server:
+      - nginx/1.22.1
+      Set-Cookie:
+      - urs_user_already_logged=yes; domain=earthdata.nasa.gov; path=/; expires=Thu,
+        25 Sep 2025 20:27:31 GMT; secure; HttpOnly; SameSite=Lax
+      - _urs-gui_session=6bc6a0a702d890b35d960d213053ec0b; path=/; expires=Thu, 25
+        Sep 2025 20:27:31 GMT; secure; HttpOnly
+      Strict-Transport-Security:
+      - max-age=31536000
+      Transfer-Encoding:
+      - chunked
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Permitted-Cross-Domain-Policies:
+      - none
+      X-Request-Id:
+      - 3a4bca3c-24fb-4741-88a8-3f263348240b
+      X-Runtime:
+      - '0.036687'
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 302
+      message: Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - redirect=s%3Ahttps%3A%2F%2Fharmony.earthdata.nasa.gov%2Fjobs%2F60c6de41-a51a-4283-aa7c-2d530ebab8d9%3Flinktype%3Dhttps.8qdDeCEkecb6Q3mIGMPbp%2F4l3cveeYHjyxPgWDcsQxQ;
+        state=s%3A5307d80894924127eb3344a6110da833.77J7ReEjRC%2FJQBGt739zh1AYf1X2KFPkPjtoHEfohDE;
+        urs_user_already_logged=yes
+      User-Agent:
+      - python-requests/2.32.4
+    method: GET
+    uri: https://harmony.earthdata.nasa.gov/oauth2/redirect?code=M417hAOHuBAocfq1XhWDRdlkwINxor4kRyGv8nTtwwNNon7sw5CZwT3s4tPSNXd3FZUsK6H_uHRPpLI43cpch6vdO4pslanV-A&state=5307d80894924127eb3344a6110da833
+  response:
+    body:
+      string: Temporary Redirect. Redirecting to https://harmony.earthdata.nasa.gov/jobs/60c6de41-a51a-4283-aa7c-2d530ebab8d9?linktype=https
+    headers:
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '126'
+      Content-Type:
+      - text/plain; charset=utf-8
+      Date:
+      - Wed, 24 Sep 2025 20:27:32 GMT
+      Location:
+      - https://harmony.earthdata.nasa.gov/jobs/60c6de41-a51a-4283-aa7c-2d530ebab8d9?linktype=https
+      Server:
+      - CloudFront
+      Set-Cookie:
+      - token=s%3Aj%3A%7B%22access_token%22%3A%22eyJ0eXAiOiJKV1QiLCJvcmlnaW4iOiJFYXJ0aGRhdGEgTG9naW4iLCJzaWciOiJlZGxqd3RwdWJrZXlfb3BzIiwiYWxnIjoiUlMyNTYifQ.eyJ0eXBlIjoiT0F1dGgiLCJjbGllbnRfaWQiOiJXb2NISW5fQUJROUZGeGpBS1RGNUxRIiwiZXhwIjoxNzYxMzM3NjUyLCJpYXQiOjE3NTg3NDU2NTIsImlzcyI6Imh0dHBzOi8vdXJzLmVhcnRoZGF0YS5uYXNhLmdvdiIsInVpZCI6ImdyZWd1c2thIiwiaWRlbnRpdHlfcHJvdmlkZXIiOiJlZGxfb3BzIiwiYXNzdXJhbmNlX2xldmVsIjozLCJhY3IiOiJlZGwifQ.VWMIubGDDXePgD8Xhpgd_V9jnXazyXbWlX6mqlKZenjIXp8BRqxc1ejmIRyUVzM42uvvm9UynApYyCFndRnsfI4CWDDoW_87Som2fL1AtA_7E4nTSoPPEhIJ4MteL5nUMZhauoRGziVraHxHC4Uop7uwJLYUogAsX91961XhVifdVPqgj0cRmAxPIE3xQohdx9htPBjKz7LPN-spHdS7X5Tvi1Y83Ez2Ce6ErCNxTc4N3QouvhwWyq085lt7SDnW-dKsDhl3fD4cDmY6Qe33jITL7eWl3NUBwjbYe4sBfzxs0lmldzST5s5O4Gp1AeWhR5WSHFP3l1fSCtUf0qvaHg%22%2C%22token_type%22%3A%22Bearer%22%2C%22expires_in%22%3A2592000%2C%22endpoint%22%3A%22%2Fapi%2Fusers%2Fgreguska%22%2C%22refresh_token%22%3A%22eyJ0eXAiOiJKV1QiLCJvcmlnaW4iOiJFYXJ0aGRhdGEgTG9naW4iLCJzaWciOiJlZGxqd3RwdWJrZXlfb3BzIiwiYWxnIjoiUlMyNTYifQ.eyJ0eXBlIjoiUmVmcmVzaF9PQXV0aCIsImNsaWVudF9pZCI6IldvY0hJbl9BQlE5RkZ4akFLVEY1TFEiLCJleHAiOjE3NjEzMzc2NTIsImlhdCI6MTc1ODc0NTY1MiwiaXNzIjoiaHR0cHM6Ly91cnMuZWFydGhkYXRhLm5hc2EuZ292IiwidWlkIjoiZ3JlZ3Vza2EiLCJpZGVudGl0eV9wcm92aWRlciI6ImVkbF9vcHMiLCJhc3N1cmFuY2VfbGV2ZWwiOjMsImFjciI6ImVkbCJ9.kalLnkXrfECMjurHvkboAjop4htmzirE6xVZ8zlZ-C_tyBGRtnhIrT4GB8sfvwzmKFLTI_fVMmz6sFga_nJ6x_khiH1tuv2DnUbU2sf3ML5fBp3gRotxL48sN4Of91GZua1w_BqK_nTb4kavKv44Bw2qSv88EfSF9rKXTONo4x863Lp8suMFa49Pr1VROanYoWZSzdpA29DINHpABxAWtMneAfQK9B3dDLQ0pBMplFFtpauFMXGzJAFcCJHDowEk5cKEYZjYC4z4VLJbmEyZ64bnRB1hzkUiYtme6L5fTCDrqyMKv2GayMvK1iez7h6VYWcM4nnuoIwzWDOrKhJEOQ%22%2C%22id_token%22%3A%22eyJ0eXAiOiJKV1QiLCJvcmlnaW4iOiJFYXJ0aGRhdGEgTG9naW4iLCJzaWciOiJlZGxqd3RwdWJrZXlfb3BzIiwiYWxnIjoiUlMyNTYifQ.eyJ0b2tlbl91c2UiOiJpZCIsInN1YiI6ImdyZWd1c2thIiwiYXVkIjoiV29jSEluX0FCUTlGRnhqQUtURjVMUSIsImlkZW50aXRpZXMiOlt7InVzZXJJZCI6ImdyZWd1c2thIiwicHJvdmlkZXJOYW1lIjoiRWFydGhkYXRhIExvZ2luIG9wcyIsInByaW1hcnkiOnRydWV9XSwiZW1haWwiOiJncmVndXNrYUBqcGwubmFzYS5nb3YiLCJmaXJzdF9uYW1lIjoiRnJhbmsiLCJsYXN0X25hbWUiOiJHcmVndXNrYSIsImV4cCI6MTc2MTMzNzY1MiwiaWF0IjoxNzU4NzQ1NjUyLCJpc3MiOiJodHRwczovL3Vycy5lYXJ0aGRhdGEubmFzYS5nb3YiLCJpZGVudGl0eV9wcm92aWRlciI6ImVkbF9vcHMiLCJhc3N1cmFuY2VfbGV2ZWwiOjMsImFjciI6ImVkbCJ9.3-LAUGj5rOQwXvZLQSusv8FCrSF2XD1JOk4M03vfkoEqDpPgWmxqW4Eob_8684J4k6num_gjkapW8CeRcQXw9Pc5SM5oPViewIfDGPTE_VtBTirul0OGhAU8-07ts_JzkSj7TPHnItajMHupAvO25aMy2VoAZoIsH70lVPHA7r7EzN8i5HdCPo1I87zMuzpcvdCwFwCVHP-xR96Qj6IWO9A5-RHDuRRP4gpMmI_9jaEJP1n1qp4Mf08SvJXtauFmsOdINefXNmb3YdeBA53jn0rFPbqVAvAcRyf3xyQhvdzdA6oxPeDXrJWBMpLu4zeYHoLSpYtqd11t75QjZUZJdA%22%2C%22expires_at%22%3A%222025-10-24T20%3A27%3A32.154Z%22%7D.RNzx4QHT7jlmg1KxCaDd72uUuWChnqVGqJ4n52ZEykg;
+        Path=/; SameSite=Lax
+      - redirect=s%3A.lODioiXH674eckguzAzoZwxNwONzJNc8en8B72Mf6xY; Path=/; Expires=Thu,
+        01 Jan 1970 00:00:00 GMT; SameSite=Lax
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Vary:
+      - Accept
+      Via:
+      - 1.1 dc1a987d649e26c30b46018807322438.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 3KavYlAW4Wm9h9tsKeY4tbwK2llnEajQd7vFPr8Yyy9vrt1mbKpJxw==
+      X-Amz-Cf-Pop:
+      - LAX53-P4
+      X-Cache:
+      - Miss from cloudfront
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Powered-By:
+      - Express
+      X-Request-Id:
+      - 3KavYlAW4Wm9h9tsKeY4tbwK2llnEajQd7vFPr8Yyy9vrt1mbKpJxw==
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 307
+      message: Temporary Redirect
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - urs_user_already_logged=yes; state=s%3A5307d80894924127eb3344a6110da833.77J7ReEjRC%2FJQBGt739zh1AYf1X2KFPkPjtoHEfohDE;
+        token=s%3Aj%3A%7B%22access_token%22%3A%22eyJ0eXAiOiJKV1QiLCJvcmlnaW4iOiJFYXJ0aGRhdGEgTG9naW4iLCJzaWciOiJlZGxqd3RwdWJrZXlfb3BzIiwiYWxnIjoiUlMyNTYifQ.eyJ0eXBlIjoiT0F1dGgiLCJjbGllbnRfaWQiOiJXb2NISW5fQUJROUZGeGpBS1RGNUxRIiwiZXhwIjoxNzYxMzM3NjUyLCJpYXQiOjE3NTg3NDU2NTIsImlzcyI6Imh0dHBzOi8vdXJzLmVhcnRoZGF0YS5uYXNhLmdvdiIsInVpZCI6ImdyZWd1c2thIiwiaWRlbnRpdHlfcHJvdmlkZXIiOiJlZGxfb3BzIiwiYXNzdXJhbmNlX2xldmVsIjozLCJhY3IiOiJlZGwifQ.VWMIubGDDXePgD8Xhpgd_V9jnXazyXbWlX6mqlKZenjIXp8BRqxc1ejmIRyUVzM42uvvm9UynApYyCFndRnsfI4CWDDoW_87Som2fL1AtA_7E4nTSoPPEhIJ4MteL5nUMZhauoRGziVraHxHC4Uop7uwJLYUogAsX91961XhVifdVPqgj0cRmAxPIE3xQohdx9htPBjKz7LPN-spHdS7X5Tvi1Y83Ez2Ce6ErCNxTc4N3QouvhwWyq085lt7SDnW-dKsDhl3fD4cDmY6Qe33jITL7eWl3NUBwjbYe4sBfzxs0lmldzST5s5O4Gp1AeWhR5WSHFP3l1fSCtUf0qvaHg%22%2C%22token_type%22%3A%22Bearer%22%2C%22expires_in%22%3A2592000%2C%22endpoint%22%3A%22%2Fapi%2Fusers%2Fgreguska%22%2C%22refresh_token%22%3A%22eyJ0eXAiOiJKV1QiLCJvcmlnaW4iOiJFYXJ0aGRhdGEgTG9naW4iLCJzaWciOiJlZGxqd3RwdWJrZXlfb3BzIiwiYWxnIjoiUlMyNTYifQ.eyJ0eXBlIjoiUmVmcmVzaF9PQXV0aCIsImNsaWVudF9pZCI6IldvY0hJbl9BQlE5RkZ4akFLVEY1TFEiLCJleHAiOjE3NjEzMzc2NTIsImlhdCI6MTc1ODc0NTY1MiwiaXNzIjoiaHR0cHM6Ly91cnMuZWFydGhkYXRhLm5hc2EuZ292IiwidWlkIjoiZ3JlZ3Vza2EiLCJpZGVudGl0eV9wcm92aWRlciI6ImVkbF9vcHMiLCJhc3N1cmFuY2VfbGV2ZWwiOjMsImFjciI6ImVkbCJ9.kalLnkXrfECMjurHvkboAjop4htmzirE6xVZ8zlZ-C_tyBGRtnhIrT4GB8sfvwzmKFLTI_fVMmz6sFga_nJ6x_khiH1tuv2DnUbU2sf3ML5fBp3gRotxL48sN4Of91GZua1w_BqK_nTb4kavKv44Bw2qSv88EfSF9rKXTONo4x863Lp8suMFa49Pr1VROanYoWZSzdpA29DINHpABxAWtMneAfQK9B3dDLQ0pBMplFFtpauFMXGzJAFcCJHDowEk5cKEYZjYC4z4VLJbmEyZ64bnRB1hzkUiYtme6L5fTCDrqyMKv2GayMvK1iez7h6VYWcM4nnuoIwzWDOrKhJEOQ%22%2C%22id_token%22%3A%22eyJ0eXAiOiJKV1QiLCJvcmlnaW4iOiJFYXJ0aGRhdGEgTG9naW4iLCJzaWciOiJlZGxqd3RwdWJrZXlfb3BzIiwiYWxnIjoiUlMyNTYifQ.eyJ0b2tlbl91c2UiOiJpZCIsInN1YiI6ImdyZWd1c2thIiwiYXVkIjoiV29jSEluX0FCUTlGRnhqQUtURjVMUSIsImlkZW50aXRpZXMiOlt7InVzZXJJZCI6ImdyZWd1c2thIiwicHJvdmlkZXJOYW1lIjoiRWFydGhkYXRhIExvZ2luIG9wcyIsInByaW1hcnkiOnRydWV9XSwiZW1haWwiOiJncmVndXNrYUBqcGwubmFzYS5nb3YiLCJmaXJzdF9uYW1lIjoiRnJhbmsiLCJsYXN0X25hbWUiOiJHcmVndXNrYSIsImV4cCI6MTc2MTMzNzY1MiwiaWF0IjoxNzU4NzQ1NjUyLCJpc3MiOiJodHRwczovL3Vycy5lYXJ0aGRhdGEubmFzYS5nb3YiLCJpZGVudGl0eV9wcm92aWRlciI6ImVkbF9vcHMiLCJhc3N1cmFuY2VfbGV2ZWwiOjMsImFjciI6ImVkbCJ9.3-LAUGj5rOQwXvZLQSusv8FCrSF2XD1JOk4M03vfkoEqDpPgWmxqW4Eob_8684J4k6num_gjkapW8CeRcQXw9Pc5SM5oPViewIfDGPTE_VtBTirul0OGhAU8-07ts_JzkSj7TPHnItajMHupAvO25aMy2VoAZoIsH70lVPHA7r7EzN8i5HdCPo1I87zMuzpcvdCwFwCVHP-xR96Qj6IWO9A5-RHDuRRP4gpMmI_9jaEJP1n1qp4Mf08SvJXtauFmsOdINefXNmb3YdeBA53jn0rFPbqVAvAcRyf3xyQhvdzdA6oxPeDXrJWBMpLu4zeYHoLSpYtqd11t75QjZUZJdA%22%2C%22expires_at%22%3A%222025-10-24T20%3A27%3A32.154Z%22%7D.RNzx4QHT7jlmg1KxCaDd72uUuWChnqVGqJ4n52ZEykg
+      User-Agent:
+      - python-requests/2.32.4
+    method: GET
+    uri: https://harmony.earthdata.nasa.gov/jobs/60c6de41-a51a-4283-aa7c-2d530ebab8d9?linktype=https
+  response:
+    body:
+      string: '{"username":"podaaccloud","status":"successful","message":"The job has completed successfully",
+        "progress":100,"createdAt":"2026-01-20T20:45:22.704Z","updatedAt":"2026-01-20T20:45:49.079Z","dataExpiration":"2026-02-19T20:45:22.704Z",
+        "links":[{"href":"https://harmony.uat.earthdata.nasa.gov/jobs/60c6de41-a51a-4283-aa7c-2d530ebab8d9?page=1&limit=2000",
+        "title":"The current page","type":"application/json","rel":"self"}],"labels":[],
+        "request":"https://harmony.uat.earthdata.nasa.gov/C1274178386-LARC_CLOUD/ogc-api-coverages/1.0.0/collections/parameter_vars/coverage/rangeset?forceAsync=true&granuleId=G1275705373-LARC_CLOUD&format=image%2Fpng&variable=product%2Fcolumn_amount_o3",
+        "numInputGranules":1,"jobID":"60c6de41-a51a-4283-aa7c-2d530ebab8d9"}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Wed, 24 Sep 2025 20:27:32 GMT
+      ETag:
+      - W/"ad4-AXmH4jrbT+uF0MaaazqWmPrdUdI"
+      Server:
+      - CloudFront
+      Set-Cookie:
+      - shapefile=s%3A.lODioiXH674eckguzAzoZwxNwONzJNc8en8B72Mf6xY; Path=/; Expires=Thu,
+        01 Jan 1970 00:00:00 GMT; SameSite=Lax
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 dc1a987d649e26c30b46018807322438.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - Pw0mlifErvC5PdwiTChdIKN3Y6UaC_to6ZVfGdG3IOJ3xb1fYqRh6Q==
+      X-Amz-Cf-Pop:
+      - LAX53-P4
+      X-Cache:
+      - Miss from cloudfront
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Powered-By:
+      - Express
+      X-Request-Id:
+      - Pw0mlifErvC5PdwiTChdIKN3Y6UaC_to6ZVfGdG3IOJ3xb1fYqRh6Q==
+      X-XSS-Protection:
+      - 1; mode=block
+      content-length:
+      - '2772'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Cookie:
+      - urs_user_already_logged=yes; state=s%3A5307d80894924127eb3344a6110da833.77J7ReEjRC%2FJQBGt739zh1AYf1X2KFPkPjtoHEfohDE;
+        token=s%3Aj%3A%7B%22access_token%22%3A%22eyJ0eXAiOiJKV1QiLCJvcmlnaW4iOiJFYXJ0aGRhdGEgTG9naW4iLCJzaWciOiJlZGxqd3RwdWJrZXlfb3BzIiwiYWxnIjoiUlMyNTYifQ.eyJ0eXBlIjoiT0F1dGgiLCJjbGllbnRfaWQiOiJXb2NISW5fQUJROUZGeGpBS1RGNUxRIiwiZXhwIjoxNzYxMzM3NjUyLCJpYXQiOjE3NTg3NDU2NTIsImlzcyI6Imh0dHBzOi8vdXJzLmVhcnRoZGF0YS5uYXNhLmdvdiIsInVpZCI6ImdyZWd1c2thIiwiaWRlbnRpdHlfcHJvdmlkZXIiOiJlZGxfb3BzIiwiYXNzdXJhbmNlX2xldmVsIjozLCJhY3IiOiJlZGwifQ.VWMIubGDDXePgD8Xhpgd_V9jnXazyXbWlX6mqlKZenjIXp8BRqxc1ejmIRyUVzM42uvvm9UynApYyCFndRnsfI4CWDDoW_87Som2fL1AtA_7E4nTSoPPEhIJ4MteL5nUMZhauoRGziVraHxHC4Uop7uwJLYUogAsX91961XhVifdVPqgj0cRmAxPIE3xQohdx9htPBjKz7LPN-spHdS7X5Tvi1Y83Ez2Ce6ErCNxTc4N3QouvhwWyq085lt7SDnW-dKsDhl3fD4cDmY6Qe33jITL7eWl3NUBwjbYe4sBfzxs0lmldzST5s5O4Gp1AeWhR5WSHFP3l1fSCtUf0qvaHg%22%2C%22token_type%22%3A%22Bearer%22%2C%22expires_in%22%3A2592000%2C%22endpoint%22%3A%22%2Fapi%2Fusers%2Fgreguska%22%2C%22refresh_token%22%3A%22eyJ0eXAiOiJKV1QiLCJvcmlnaW4iOiJFYXJ0aGRhdGEgTG9naW4iLCJzaWciOiJlZGxqd3RwdWJrZXlfb3BzIiwiYWxnIjoiUlMyNTYifQ.eyJ0eXBlIjoiUmVmcmVzaF9PQXV0aCIsImNsaWVudF9pZCI6IldvY0hJbl9BQlE5RkZ4akFLVEY1TFEiLCJleHAiOjE3NjEzMzc2NTIsImlhdCI6MTc1ODc0NTY1MiwiaXNzIjoiaHR0cHM6Ly91cnMuZWFydGhkYXRhLm5hc2EuZ292IiwidWlkIjoiZ3JlZ3Vza2EiLCJpZGVudGl0eV9wcm92aWRlciI6ImVkbF9vcHMiLCJhc3N1cmFuY2VfbGV2ZWwiOjMsImFjciI6ImVkbCJ9.kalLnkXrfECMjurHvkboAjop4htmzirE6xVZ8zlZ-C_tyBGRtnhIrT4GB8sfvwzmKFLTI_fVMmz6sFga_nJ6x_khiH1tuv2DnUbU2sf3ML5fBp3gRotxL48sN4Of91GZua1w_BqK_nTb4kavKv44Bw2qSv88EfSF9rKXTONo4x863Lp8suMFa49Pr1VROanYoWZSzdpA29DINHpABxAWtMneAfQK9B3dDLQ0pBMplFFtpauFMXGzJAFcCJHDowEk5cKEYZjYC4z4VLJbmEyZ64bnRB1hzkUiYtme6L5fTCDrqyMKv2GayMvK1iez7h6VYWcM4nnuoIwzWDOrKhJEOQ%22%2C%22id_token%22%3A%22eyJ0eXAiOiJKV1QiLCJvcmlnaW4iOiJFYXJ0aGRhdGEgTG9naW4iLCJzaWciOiJlZGxqd3RwdWJrZXlfb3BzIiwiYWxnIjoiUlMyNTYifQ.eyJ0b2tlbl91c2UiOiJpZCIsInN1YiI6ImdyZWd1c2thIiwiYXVkIjoiV29jSEluX0FCUTlGRnhqQUtURjVMUSIsImlkZW50aXRpZXMiOlt7InVzZXJJZCI6ImdyZWd1c2thIiwicHJvdmlkZXJOYW1lIjoiRWFydGhkYXRhIExvZ2luIG9wcyIsInByaW1hcnkiOnRydWV9XSwiZW1haWwiOiJncmVndXNrYUBqcGwubmFzYS5nb3YiLCJmaXJzdF9uYW1lIjoiRnJhbmsiLCJsYXN0X25hbWUiOiJHcmVndXNrYSIsImV4cCI6MTc2MTMzNzY1MiwiaWF0IjoxNzU4NzQ1NjUyLCJpc3MiOiJodHRwczovL3Vycy5lYXJ0aGRhdGEubmFzYS5nb3YiLCJpZGVudGl0eV9wcm92aWRlciI6ImVkbF9vcHMiLCJhc3N1cmFuY2VfbGV2ZWwiOjMsImFjciI6ImVkbCJ9.3-LAUGj5rOQwXvZLQSusv8FCrSF2XD1JOk4M03vfkoEqDpPgWmxqW4Eob_8684J4k6num_gjkapW8CeRcQXw9Pc5SM5oPViewIfDGPTE_VtBTirul0OGhAU8-07ts_JzkSj7TPHnItajMHupAvO25aMy2VoAZoIsH70lVPHA7r7EzN8i5HdCPo1I87zMuzpcvdCwFwCVHP-xR96Qj6IWO9A5-RHDuRRP4gpMmI_9jaEJP1n1qp4Mf08SvJXtauFmsOdINefXNmb3YdeBA53jn0rFPbqVAvAcRyf3xyQhvdzdA6oxPeDXrJWBMpLu4zeYHoLSpYtqd11t75QjZUZJdA%22%2C%22expires_at%22%3A%222025-10-24T20%3A27%3A32.154Z%22%7D.RNzx4QHT7jlmg1KxCaDd72uUuWChnqVGqJ4n52ZEykg
+      User-Agent:
+      - python-requests/2.32.4
+    method: GET
+    uri: https://harmony.earthdata.nasa.gov/jobs/60c6de41-a51a-4283-aa7c-2d530ebab8d9?linktype=s3
+  response:
+    body:
+      string: '{"username":"podaaccloud","status":"successful","message":"The job has completed successfully",
+        "progress":100,"createdAt":"2026-01-20T20:45:22.704Z","updatedAt":"2026-01-20T20:45:49.079Z","dataExpiration":"2026-02-19T20:45:22.704Z",
+        "links":[{"href":"https://harmony.uat.earthdata.nasa.gov/jobs/60c6de41-a51a-4283-aa7c-2d530ebab8d9?page=1&limit=2000",
+        "title":"The current page","type":"application/json","rel":"self"}],"labels":[],
+        "request":"https://harmony.uat.earthdata.nasa.gov/C1274178386-LARC_CLOUD/ogc-api-coverages/1.0.0/collections/parameter_vars/coverage/rangeset?forceAsync=true&granuleId=G1275705373-LARC_CLOUD&format=image%2Fpng&variable=product%2Fcolumn_amount_o3",
+        "numInputGranules":1,"jobID":"60c6de41-a51a-4283-aa7c-2d530ebab8d9"}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Wed, 24 Sep 2025 20:27:36 GMT
+      ETag:
+      - W/"ad1-/Y8E2g3/QLIji83lhQVzOxZUgII"
+      Server:
+      - CloudFront
+      Set-Cookie:
+      - shapefile=s%3A.lODioiXH674eckguzAzoZwxNwONzJNc8en8B72Mf6xY; Path=/; Expires=Thu,
+        01 Jan 1970 00:00:00 GMT; SameSite=Lax
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 dc1a987d649e26c30b46018807322438.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 1aZblUeVBmzXocDBpylnjCNx-qw_hV98PeiHqsHlj3lCKy8WDXHjNQ==
+      X-Amz-Cf-Pop:
+      - LAX53-P4
+      X-Cache:
+      - Miss from cloudfront
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Powered-By:
+      - Express
+      X-Request-Id:
+      - 1aZblUeVBmzXocDBpylnjCNx-qw_hV98PeiHqsHlj3lCKy8WDXHjNQ==
+      X-XSS-Protection:
+      - 1; mode=block
+      content-length:
+      - '2769'
+    status:
+      code: 200
+      message: OK
+version: 1

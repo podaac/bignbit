@@ -14,6 +14,13 @@ from bignbit import utils
 CUMULUS_LOGGER = CumulusLogger('process_harmony_results')
 
 
+class HarmonyJobNoDataError(Exception):
+    """Exception raised when a harmony job completes successfully but returns no data"""
+
+    def __init__(self, message):
+        super().__init__(message)
+
+
 class CMA(Process):
     """Cumulus class to read the output from a harmony job"""
 
@@ -59,6 +66,11 @@ def process_results(harmony_job_id: str, cmr_env: str, variable: str, current_cr
     ----------
         dict
             A list of CMA file dictionaries pointing to the transformed image(s)
+
+    Raises
+    ----------
+    HarmonyJobNoDataError
+        When the Harmony job completes successfully but returns no data
     """
     s3_client = boto3.client('s3')
     harmony_client = utils.get_harmony_client(cmr_env)
@@ -66,6 +78,12 @@ def process_results(harmony_job_id: str, cmr_env: str, variable: str, current_cr
 
     CUMULUS_LOGGER.info("Processing {} result files for {}", len(result_urls), variable)
     CUMULUS_LOGGER.debug("Results: {}", result_urls)
+
+    # Check if Harmony returned no data
+    if not result_urls:
+        error_msg = f"Harmony job {harmony_job_id} completed successfully but returned no data for variable '{variable}' and CRS '{current_crs}'"
+        CUMULUS_LOGGER.warning(error_msg)
+        raise HarmonyJobNoDataError(error_msg)
 
     file_dicts = []
     for url in result_urls:

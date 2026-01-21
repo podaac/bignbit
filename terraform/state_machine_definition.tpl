@@ -378,6 +378,21 @@
                         "MaxAttempts": 2
                       }
                     ],
+                    "Catch":[
+                      {
+                        "ErrorEquals":[
+                          "HarmonyJobNoDataError"
+                        ],
+                        "ResultPath":"$.harmonyNoDataError",
+                        "Next":"Handle No Data Result"
+                      }
+                    ],
+                    "End":true
+                  },
+                  "Handle No Data Result":{
+                    "Type":"Pass",
+                    "Comment":"Handles cases where Harmony job succeeded but returned no data",
+                    "Result":[],
                     "End":true
                   }
                 }
