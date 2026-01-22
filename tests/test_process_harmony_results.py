@@ -8,7 +8,7 @@ import pytest
 from harmony import Collection, Request
 from moto import mock_s3
 
-from bignbit.process_harmony_results import process_results
+from bignbit.process_harmony_results import process_results, HarmonyJobNoDataError
 
 @pytest.mark.vcr
 @mock_s3
@@ -31,3 +31,21 @@ def test_process_results():
     assert len(results) == 3
     assert 'output_crs' in next(iter(results))
     assert 'EPSG:TEST' == next(iter(results))['output_crs']
+
+
+@pytest.mark.vcr
+@mock_s3
+def test_process_results_no_data():
+    """Test that HarmonyJobNoDataError is raised when Harmony returns no data"""
+    import bignbit.utils
+    bignbit.utils.ED_USER = 'test'
+    bignbit.utils.ED_PASS = 'test'
+
+    # Note: This test uses VCR to record the Harmony API response
+    # The cassette should show a successful job with no result URLs
+    with pytest.raises(HarmonyJobNoDataError) as exc_info:
+        process_results('60c6de41-a51a-4283-aa7c-2d530ebab8d9', 'ops', 'test_variable', 'EPSG:4326')
+
+    assert 'no data' in str(exc_info.value).lower()
+    assert 'test_variable' in str(exc_info.value)
+    assert 'EPSG:4326' in str(exc_info.value)
