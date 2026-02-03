@@ -4,6 +4,7 @@ import os
 
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
+from harmony import LinkType
 
 from bignbit import utils
 from bignbit.utils import json_dumps_with_datetime
@@ -20,6 +21,12 @@ class HarmonyJobIncompleteError(Exception):
 
 class HarmonyJobFailedError(Exception):
     """Exception raised when a harmony job has failed"""
+
+    def __init__(self, message):
+        super().__init__(message)
+
+class HarmonyJobNoDataError(Exception):
+    """Exception raised when a harmony job completes successfully but returns no data"""
 
     def __init__(self, message):
         super().__init__(message)
@@ -42,15 +49,28 @@ class CMA(Process):
         """
 
         harmony_job_id = self.config.get("harmony_job")
-        cmr_environment = self.config.get("cmr_environment")
+        cmr_environment = self.config.get("cmr_environment", "UAT")
+        current_variable = self.config.get("current_variable", "")
+        current_crs = self.config.get("current_crs", "")
 
-        job_status = check_harmony_job(harmony_job_id, cmr_environment)
-        self.input['harmony_job_status'] = job_status
-        self.logger.info(job_status)
-        return self.input
+        job_status = check_harmony_job(
+            harmony_job_id,
+            cmr_environment,
+            current_variable,
+            current_crs
+        )
+        harmony_job_info = self.input.get("harmony_job", {})
+        harmony_job_info["status"] = job_status
+        self.logger.info(f"Harmony job {harmony_job_id} was {job_status}")
+        return harmony_job_info
 
 
-def check_harmony_job(harmony_job_id: str, cmr_env: str = None) -> str:
+def check_harmony_job(
+        harmony_job_id: str,
+        cmr_env: str,
+        variable: str,
+        crs: str
+) -> str:
     """
     Function to check a harmony job id status and returns the status
 
@@ -65,6 +85,15 @@ def check_harmony_job(harmony_job_id: str, cmr_env: str = None) -> str:
     str
         The status of the harmony job if 'successful' or
         raises an exception if the job has failed or is incomplete.
+
+    Raises
+    ----------
+    HarmonyJobNoDataError
+        When the Harmony job completes successfully but returns no data, moves to a pass state
+    HarmonyJobIncompleteError
+        When the Harmony job is incomplete, triggers a retry
+    HarmonyJobFailedError
+        When the Harmony job fails, fails the workflow run
     """
 
     harmony_client = utils.get_harmony_client(cmr_env)
@@ -72,7 +101,15 @@ def check_harmony_job(harmony_job_id: str, cmr_env: str = None) -> str:
 
     # For a successful job, return the status; for all other states, raise an exception.
     if job_status.get('status') == 'successful':
-        return job_status.get('status')
+        # Check that the harmony job returned data to confirm that the job was successful
+        result_urls = list(harmony_client.result_urls(harmony_job_id, link_type=LinkType.s3))
+        if not result_urls or len(result_urls) == 0:
+            error_msg = (
+                f'Harmony job {harmony_job_id} completed successfully but returned no data for {variable} and {crs}'
+            )
+            CUMULUS_LOGGER.warning(error_msg)
+            raise HarmonyJobNoDataError(error_msg)
+        return job_status.get('status', 'successful')
 
     # If the job is still running or accepted, raise an exception that will be retried by the step function workflow.
     if job_status.get('status') in ['accepted', 'running']:

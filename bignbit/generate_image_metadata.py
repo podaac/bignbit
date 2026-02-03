@@ -1,6 +1,7 @@
 """
 Creates and uploads to s3 an ImageMetadata-v1.2 xml file for each image in the input
 """
+import hashlib
 import logging
 import os
 import pathlib
@@ -8,9 +9,12 @@ import uuid
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from typing import Dict, List
+from urllib.parse import urlparse
 
+import boto3
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
+from harmony import LinkType
 
 from bignbit import utils
 
@@ -47,11 +51,21 @@ class CMA(Process):
         List[Dict]
           A list of CNM-ready file dicts for all image, wld, and ImageMetadata-v1.2 xml files
         """
-        cma_file_list = self.input['big']
-        # Flatten input list if needed
-        if cma_file_list and any(isinstance(el, list) for el in cma_file_list):
-            # flatten triple nested loop
-            cma_file_list = [item for sublist1 in cma_file_list for sublist2 in sublist1 for item in sublist2]
+        # If the result list comes from the Harmony branch path, this will be a nested list of harmony job
+        # dictionaries, and we need to retrieve the file information from harmony job status page.
+        # If the result list comes from Apply OPERA HLS Treatment, it is already a list of files.
+        result_list = self.input['big']
+
+        if result_list and any(isinstance(el, list) for el in result_list):
+            cmr_env = self.config.get("cmr_environment", "UAT")
+
+            harmony_job_refs = [item for sublist in result_list for item in sublist]
+            cma_file_list = []
+            for ref in harmony_job_refs:
+                file_sublist = process_harmony_results(ref, cmr_env)
+                cma_file_list.extend(file_sublist)
+        else:
+            cma_file_list = result_list
         granule_umm_json = self.input['granule_umm_json']
 
         # Parse dataset-level overrides
@@ -76,6 +90,66 @@ class CMA(Process):
         del self.input['big']
         self.input['big'] = file_metadata_list
         return self.input
+
+
+def process_harmony_results(harmony_job: Dict, cmr_env: str) -> List[Dict]:
+    """
+    Process the results of a Harmony job
+
+    Parameters
+    ----------
+    harmony_job : Dict[str, Any]
+       The result dictionary from a successful Harmony job. Contains job id, variable, and output crs
+    cmr_env : str
+       The CMR environment to use
+
+    Returns
+    ----------
+        List[Dict[str, Any]]
+            A list of CMA file dictionaries pointing to the transformed image(s)
+
+
+    """
+    job_id = harmony_job.get('job', '')
+    variable = harmony_job.get('variable', 'all')
+    current_crs = harmony_job.get('output_crs', 'EPSG:4326')
+
+    s3_client = boto3.client('s3')
+    harmony_client = utils.get_harmony_client(cmr_env)
+    result_urls = list(harmony_client.result_urls(job_id, link_type=LinkType.s3))
+
+    CUMULUS_LOGGER.info("Processing {} result files for {}", len(result_urls), variable)
+    CUMULUS_LOGGER.debug("Results: {}", result_urls)
+
+    # Check if Harmony returned no data
+    if not result_urls:
+        return []
+
+    file_dicts = []
+    for url in result_urls:
+        bucket, key = urlparse(url).netloc, urlparse(url).path.lstrip("/")
+
+        response = s3_client.get_object(Bucket=bucket, Key=key)
+        md5_hash = hashlib.new('md5')
+        for chunk in response['Body'].iter_chunks(chunk_size=100 * 1024 * 1024):  # 100 MB chunk size
+            md5_hash.update(chunk)
+
+        filename = key.split("/")[-1]
+        file_dict = {
+            "fileName": filename,
+            "bucket": bucket,
+            "key": key,
+            "checksum": md5_hash.hexdigest(),
+            "checksumType": 'md5'
+        }
+        # Weird quirk where if we are working with a collection that doesn't define variables, the Harmony request
+        # should specify 'all' as the variable value but the GIBS message should be sent with the variable set to 'none'
+        if variable.lower() != 'all':
+            file_dict['variable'] = variable
+        file_dict['output_crs'] = current_crs.upper()
+        file_dicts.append(file_dict)
+
+    return file_dicts
 
 
 def generate_metadata(

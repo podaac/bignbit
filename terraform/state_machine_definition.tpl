@@ -295,12 +295,15 @@
                   "Get Harmony Job Status":{
                     "Type":"Task",
                     "Resource":"${GetHarmonyJobStatusLambda}",
+                    "OutputPath":"$.payload",
                     "Parameters":{
                       "cma":{
                         "event.$":"$",
                         "task_config":{
                           "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
                           "harmony_job":"{$.payload.harmony_job.job}",
+                          "variable":"{$.current_variable.id}",
+                          "current_crs":"{$.current_crs}",
                           "cumulus_message":{
                             "input":"{$.payload}"
                           }
@@ -337,47 +340,6 @@
                         "MaxAttempts": 2
                       }
                     ],
-                    "Next":"Process Harmony Job Output"
-                  },
-                  "Process Harmony Job Output":{
-                    "Type":"Task",
-                    "Resource":"${ProcessHarmonyJobOutputLambda}",
-                    "OutputPath": "$.payload",
-                    "Parameters":{
-                      "cma":{
-                        "event.$":"$",
-                        "task_config":{
-                          "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
-                          "harmony_job":"{$.payload.harmony_job.job}",
-                          "variable":"{$.current_variable.id}",
-                          "current_crs":"{$.current_crs}",
-                          "cumulus_message":{
-                            "input":"{$.payload}"
-                          }
-                        }
-                      }
-                    },
-                    "Retry":[
-                      {
-                        "ErrorEquals":[
-                          "Lambda.ServiceException",
-                          "Lambda.AWSLambdaException",
-                          "Lambda.SdkClientException",
-                          "Lambda.TooManyRequestsException"
-                        ],
-                        "IntervalSeconds":2,
-                        "MaxAttempts":6,
-                        "BackoffRate":2
-                      },
-                      {
-                        "ErrorEquals": [
-                          "Lambda.Unknown"
-                       ],
-                        "BackoffRate": 2,
-                        "IntervalSeconds": 2,
-                        "MaxAttempts": 2
-                      }
-                    ],
                     "Catch":[
                       {
                         "ErrorEquals":[
@@ -392,7 +354,7 @@
                   "Handle No Data Result":{
                     "Type":"Pass",
                     "Comment":"Handles cases where Harmony job succeeded but returned no data",
-                    "Result":[],
+                    "Result":{},
                     "End":true
                   }
                 }
@@ -413,6 +375,7 @@
         "cma":{
           "event.$":"$",
           "task_config":{
+            "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
             "cumulus_message":{
               "input":"{$.payload}"
             }
