@@ -246,6 +246,8 @@ resource "aws_lambda_function" "generate_image_metadata" {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
       REGION                      = data.aws_region.current.name
+      EDL_USER_SSM                = var.edl_user_ssm
+      EDL_PASS_SSM                = var.edl_pass_ssm
     }
   }
 
@@ -267,38 +269,6 @@ resource "aws_lambda_function" "get_harmony_job_status" {
     command = ["bignbit.get_harmony_job_status.lambda_handler"]
   }
   function_name = local.get_harmony_job_status_function_name
-  role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 30
-  memory_size   = 256
-
-  environment {
-    variables = {
-      STACK_NAME                  = var.prefix
-      CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = data.aws_region.current.name
-      EDL_USER_SSM                = var.edl_user_ssm
-      EDL_PASS_SSM                = var.edl_pass_ssm
-    }
-  }
-
-  vpc_config {
-    subnet_ids         = var.subnet_ids
-    security_group_ids = var.security_group_ids
-  }
-
-}
-
-resource "aws_lambda_function" "process_harmony_results" {
-  depends_on = [
-    null_resource.upload_ecr_image
-  ]
-
-  package_type = "Image"
-  image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
-  image_config {
-    command = ["bignbit.process_harmony_results.lambda_handler"]
-  }
-  function_name = local.process_harmony_results_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
   timeout       = 30
   memory_size   = 256

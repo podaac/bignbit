@@ -58,10 +58,6 @@ output "get_harmony_job_status_arn" {
   value = aws_lambda_function.get_harmony_job_status.arn
 }
 
-output "process_harmony_results_arn" {
-  value = aws_lambda_function.process_harmony_results.arn
-}
-
 output "apply_opera_hls_treatment_arn"{
   value = aws_lambda_function.apply_opera_hls_treatment.arn
 }
@@ -89,7 +85,6 @@ output "workflow_definition" {
     GetCollectionConceptIdLambda    = aws_lambda_function.get_collection_concept_id.arn,
     SubmitHarmonyJobLambda          = aws_lambda_function.submit_harmony_job.arn,
     GetHarmonyJobStatusLambda       = aws_lambda_function.get_harmony_job_status.arn,
-    ProcessHarmonyJobOutputLambda   = aws_lambda_function.process_harmony_results.arn,
     GenerateImageMetadataLambda     = aws_lambda_function.generate_image_metadata.arn,
     BuildImageSetsLambda            = aws_lambda_function.build_image_sets.arn,
     SendToGITCLambda                = aws_lambda_function.send_to_gitc.arn,
