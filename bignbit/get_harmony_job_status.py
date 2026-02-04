@@ -25,6 +25,7 @@ class HarmonyJobFailedError(Exception):
     def __init__(self, message):
         super().__init__(message)
 
+
 class HarmonyJobNoDataError(Exception):
     """Exception raised when a harmony job completes successfully but returns no data"""
 
