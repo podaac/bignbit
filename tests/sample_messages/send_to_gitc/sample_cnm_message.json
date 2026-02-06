@@ -1,0 +1,57 @@
+{
+  "version": "1.5.1",
+  "duplicationid": "TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted_2025112_EPSG:4326!G1273455903-LARC_CLOUD",
+  "collection": "TEMPO_NO2_L3_product_vertical_column_stratosphere_LL",
+  "submissionTime": "2026-02-04T17:51:25.858Z",
+  "identifier": "TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted_2025112_EPSG:4326!G1273455903-LARC_CLOUD",
+  "product": {
+    "name": "TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted_2025112_EPSG:4326!G1273455903-LARC_CLOUD",
+    "dataVersion": "1.5",
+    "files": [
+      {
+        "fileName": "TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted.png",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_no2_l3/20260204/e8f972c5-6b0b-4293-b264-7e35bb8e1d9c/9175295/TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted.png",
+        "checksum": "37b714ed02fca9de4355803e0d86656f",
+        "checksumType": "MD5",
+        "variable": "product/vertical_column_stratosphere",
+        "output_crs": "EPSG:4326",
+        "type": "browse",
+        "subtype": "png",
+        "dataday": "2025112",
+        "uri": "s3://svc-bignbit-podaac-sit-svc-staging/bignbit-harmony-output/tempo_no2_l3/20260204/e8f972c5-6b0b-4293-b264-7e35bb8e1d9c/9175295/TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted.png",
+        "name": "TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted.png"
+      },
+      {
+        "fileName": "TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted.xml",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_no2_l3/20260204/e8f972c5-6b0b-4293-b264-7e35bb8e1d9c/9175295/TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted.xml",
+        "checksum": "134169f8f803e636a14c8b7792eb245962594bad305b1ba38a75731b16507c259515303e71eeb092abdfca77b09ef8569883025c5ea41047e9bca758a4bdfc17",
+        "checksumType": "SHA512",
+        "variable": "product/vertical_column_stratosphere",
+        "output_crs": "EPSG:4326",
+        "type": "metadata",
+        "subtype": "ImageMetadata-v1.2",
+        "dataday": "2025112",
+        "size": 365,
+        "uri": "s3://svc-bignbit-podaac-sit-svc-staging/bignbit-harmony-output/tempo_no2_l3/20260204/e8f972c5-6b0b-4293-b264-7e35bb8e1d9c/9175295/TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted.xml",
+        "name": "TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted.xml"
+      },
+      {
+        "fileName": "TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted.pgw",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "bignbit-harmony-output/tempo_no2_l3/20260204/e8f972c5-6b0b-4293-b264-7e35bb8e1d9c/9175295/TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted.pgw",
+        "checksum": "06e5a176d36fd83c51f296b5c04b7462",
+        "checksumType": "MD5",
+        "variable": "product/vertical_column_stratosphere",
+        "output_crs": "EPSG:4326",
+        "type": "metadata",
+        "subtype": "world file",
+        "dataday": "2025112",
+        "uri": "s3://svc-bignbit-podaac-sit-svc-staging/bignbit-harmony-output/tempo_no2_l3/20260204/e8f972c5-6b0b-4293-b264-7e35bb8e1d9c/9175295/TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted.pgw",
+        "name": "TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted.pgw"
+      }
+    ]
+  },
+  "provider": "LARC_CLOUD"
+}

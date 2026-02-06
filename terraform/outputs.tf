@@ -42,8 +42,8 @@ output "identify_image_file_arn" {
   value = aws_lambda_function.identify_image_file.arn
 }
 
-output "generate_image_metadata_arn" {
-  value = aws_lambda_function.generate_image_metadata.arn
+output "handle_big_result_arn" {
+  value = aws_lambda_function.handle_big_result.arn
 }
 
 output "submit_harmony_job_arn" {
@@ -62,16 +62,8 @@ output "apply_opera_hls_treatment_arn"{
   value = aws_lambda_function.apply_opera_hls_treatment.arn
 }
 
-output "pobit_build_image_sets_arn" {
-  value = aws_lambda_function.build_image_sets.arn
-}
-
 output "pobit_send_to_gitc_arn" {
   value = aws_lambda_function.send_to_gitc.arn
-}
-
-output "pobit_save_cnm_message_arn" {
-  value = aws_lambda_function.save_cnm_message.arn
 }
 
 output "workflow_definition" {
@@ -85,10 +77,8 @@ output "workflow_definition" {
     GetCollectionConceptIdLambda    = aws_lambda_function.get_collection_concept_id.arn,
     SubmitHarmonyJobLambda          = aws_lambda_function.submit_harmony_job.arn,
     GetHarmonyJobStatusLambda       = aws_lambda_function.get_harmony_job_status.arn,
-    GenerateImageMetadataLambda     = aws_lambda_function.generate_image_metadata.arn,
-    BuildImageSetsLambda            = aws_lambda_function.build_image_sets.arn,
+    HandleBigResultLambda           = aws_lambda_function.handle_big_result.arn,
     SendToGITCLambda                = aws_lambda_function.send_to_gitc.arn,
-    SaveCNMMessageLambda            = aws_lambda_function.save_cnm_message.arn,
     BignbitAuditBucket              = var.bignbit_audit_bucket,
     BignbitAuditPath                = var.bignbit_audit_path,
     StagingBucket                   = local.staging_bucket_name,

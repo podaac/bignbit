@@ -146,7 +146,7 @@ def lambda_handler(event, context):
     }
 
     logging_level = os.environ.get('LOGGING_LEVEL', 'info')
-    CUMULUS_LOGGER.logger.level = levels.get(logging_level, 'info')
+    CUMULUS_LOGGER.logger.setLevel(levels.get(logging_level, 'info'))
     CUMULUS_LOGGER.setMetadata(event, context)
 
     return CMA.cumulus_handler(event, context=context)
