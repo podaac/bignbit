@@ -407,14 +407,15 @@ def write_cnm_message(
     cnm_message = construct_cnm(image_set, cmr_provider, collection_name)
     cnm_bytes = json.dumps(cnm_message).encode()
     submission_time = cnm_message.get('submissionTime')
-    cnm_key = f'{bignbit_audit_path}/{collection_name}/{granule_id}.{submission_time}.cnm.json'
-    s3_uri = utils.upload_object(
+    collection_fullname = cnm_message.get('collection')
+    cnm_key = f'{bignbit_audit_path}/{collection_fullname}/{granule_id}.{submission_time}.cnm.json'
+    utils.upload_object(
         cnm_bytes,
         bignbit_audit_bucket,
         cnm_key,
         'application/json'
     )
-    return s3_uri.strip(f's3://{bignbit_audit_bucket}/')
+    return cnm_key
 
 
 def construct_cnm(

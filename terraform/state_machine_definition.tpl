@@ -397,7 +397,7 @@
             "bignbit_audit_path": "${BignbitAuditPath}",
             "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
             "cmr_provider": "{$.meta.cmr.provider}",
-            "collection": "{$.meta.collection}",
+            "collection": "{$.meta.collection.name}",
             "cumulus_message":{
               "input":"{$.payload}"
             }
