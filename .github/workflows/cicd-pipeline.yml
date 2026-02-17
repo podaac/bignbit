@@ -264,6 +264,7 @@ jobs:
           push: true
           pull: true
           platforms: linux/amd64
+          provenance: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Set output
