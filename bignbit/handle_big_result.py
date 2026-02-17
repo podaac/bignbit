@@ -263,7 +263,8 @@ def generate_metadata(
     ImageSet
       The ImageSet object from the input with the metadata xml field populated
     """
-    if image_set.image == {} or image_set.world_file == {}:
+    # World file is allowed to be excluded as it is not present when performing OPERA HLS Treatment
+    if image_set.image == {}:
         raise IncompleteImageSetError(f'Missing one or more components of GIBS image set: {image_set.name}')
     image_mdxml = create_metadata_xml(
         begin_time,

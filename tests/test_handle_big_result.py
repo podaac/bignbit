@@ -336,19 +336,14 @@ def test_construct_cnm_with_crs():
 
 
 def test_construct_cnm_without_crs():
-    """Test constructing CNM message without output CRS"""
+    """Test constructing CNM message without output CRS and no world file"""
     image_set = ImageSet(
         name='test_image_2021202!G1234567890-TESTPROV',
         image={
-            'fileName': 'test_image.png',
+            'fileName': 'test_image.tif',
             'bucket': 'test-bucket',
-            'key': 'path/to/test_image.png',
-            'variable': 'brightness'
-        },
-        world_file={
-            'fileName': 'test_image.pgw',
-            'bucket': 'test-bucket',
-            'key': 'path/to/test_image.pgw'
+            'key': 'path/to/test_image.tif',
+            'variable': 'water_index'
         },
         image_metadata={
             'fileName': 'test_image.xml',
@@ -365,7 +360,7 @@ def test_construct_cnm_without_crs():
     cnm = construct_cnm(image_set, cmr_provider, collection_name)
 
     # Verify collection name doesn't have CRS suffix when output_crs is not present
-    assert cnm['collection'] == 'OPERA_L3_DSWX-HLS_brightness'
+    assert cnm['collection'] == 'OPERA_L3_DSWX-HLS_water_index'
 
 
 def test_construct_cnm_crs_suffixes():
