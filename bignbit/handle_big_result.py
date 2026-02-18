@@ -111,7 +111,6 @@ class CMA(Process):
         # ------------------------------------------------------------------------------------------
         # Retrieve list of files resulting from BIG process
         # ------------------------------------------------------------------------------------------
-        partial_id = None
         if result_list and any(isinstance(el, list) for el in result_list):
             # flatten list of lists from Harmony map state (per variable, per output crs)
             harmony_job_refs = [item for sublist in result_list for item in sublist]
@@ -453,7 +452,7 @@ def construct_cnm(
     submission_time = datetime.now(timezone.utc).isoformat()[:-9] + 'Z'
     CUMULUS_LOGGER.debug(image_set.image['variable'])
     if 'output_crs' in image_set.image:
-        crs_suffix = GIBS_CRS_NAME_TO_SUFFIX.get(image_set.image.get('output_crs', 'EPSG:4326'))
+        crs_suffix = GIBS_CRS_NAME_TO_SUFFIX.get(image_set.image.get('output_crs', 'EPSG:4326'), 'LL')
         new_collection = f"{collection_name}_{image_set.image['variable']}_{crs_suffix}".replace('/', '_')
     else:
         new_collection = f"{collection_name}_{image_set.image['variable']}".replace('/', '_')

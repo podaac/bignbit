@@ -104,7 +104,7 @@ def check_harmony_job(
     if job_status.get('status') == 'successful':
         # Check that the harmony job returned data to confirm that the job was successful
         result_urls = list(harmony_client.result_urls(harmony_job_id, link_type=LinkType.s3))
-        if not result_urls or len(result_urls) == 0:
+        if not result_urls:
             error_msg = (
                 f'Harmony job {harmony_job_id} completed successfully but returned no data for {variable} and {crs}'
             )
