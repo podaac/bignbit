@@ -62,6 +62,17 @@ def test_process_harmony_results():
         assert file['output_crs'] == 'EPSG:3413'
         assert file['variable'] == 'flx'
 
+@pytest.mark.vcr
+def test_process_harmony_results_no_data():
+    """Test case where a harmony job returned no data and was passed empty."""
+    bignbit.utils.ED_USER = 'test'
+    bignbit.utils.ED_PASS = 'test'
+
+    harmony_job = {}
+    cmr_environment = 'UAT'
+    file_dicts = process_harmony_results(harmony_job, cmr_environment)
+    assert file_dicts == []
+
 @mock_s3
 def test_generate_metadata():
     """Test generating image metadata xml end-to-end for a single image set."""

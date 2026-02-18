@@ -117,8 +117,14 @@ class CMA(Process):
             harmony_job_refs = [item for sublist in result_list for item in sublist]
             cma_file_list = []
             for ref in harmony_job_refs:
+                if ref == {} or ref is None:
+                    # Skip harmony jobs that failed with HarmonyJobNoDataError, the pass state
+                    continue
                 file_sublist = process_harmony_results(ref, cmr_environment)
                 cma_file_list.extend(file_sublist)
+            # If there is truly no data, return no CNM URLs and finish the workflow.
+            if not cma_file_list:
+                return {'pobit': []}
         else:
             cma_file_list = result_list
             partial_id = utils.extract_mgrs_grid_code(granule_umm_json)
@@ -186,6 +192,8 @@ def process_harmony_results(harmony_job: dict[str, str], cmr_env: str) -> list[d
             A list of CMA file dictionaries pointing to the transformed image(s)
     """
     job_id = harmony_job.get('job', '')
+    if job_id == '':
+        return []
     variable = harmony_job.get('variable', 'all')
     current_crs = harmony_job.get('output_crs', 'EPSG:4326')
 
