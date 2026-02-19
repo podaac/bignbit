@@ -12,15 +12,13 @@ locals {
   get_collection_concept_id_function_name = substr("${local.aws_resources_name}-get_collection_concept_id", 0, 64)
   identify_image_file_function_name = substr("${local.aws_resources_name}-identify_image_file", 0, 64)
   submit_harmony_job_function_name = substr("${local.aws_resources_name}-submit_harmony_job", 0, 64)
-  generate_image_metadata_function_name = substr("${local.aws_resources_name}-generate_image_metadata", 0, 64)
+  handle_big_result_function_name = substr("${local.aws_resources_name}-handle_big_result", 0, 64)
   get_harmony_job_status_function_name = substr("${local.aws_resources_name}-get_harmony_job_status", 0, 64)
-  process_harmony_results_function_name = substr("${local.aws_resources_name}-process_harmony_output", 0, 64)
   apply_opera_hls_treatment_function_name = substr("${local.aws_resources_name}-apply_opera_hls_treatment", 0, 64)
-  build_image_sets_function_name = substr("${local.aws_resources_name}-build_image_sets", 0, 64)
   send_to_gitc_function_name = substr("${local.aws_resources_name}-send_to_gitc", 0, 64)
   handle_gitc_response_function_name = substr("${local.aws_resources_name}-handle_gitc_response", 0, 64)
-  save_cnm_message_function_name = substr("${local.aws_resources_name}-save_cnm_message", 0, 64)
 }
+
 
 resource aws_ecr_repository "lambda-image-repo" {
   name = local.ecr_image_name
@@ -40,6 +38,7 @@ resource null_resource ecr_login {
   }
 }
 
+
 resource null_resource upload_ecr_image {
   depends_on = [null_resource.ecr_login]
   triggers = {
@@ -58,6 +57,7 @@ resource null_resource upload_ecr_image {
   }
 }
 
+
 # This doesn't work in terraform 0.13.x because it tries to resolve the image during the plan phase instead of the
 # apply phase. Once IA updates to a newer terraform version, this can be used instead of having every lambda
 # function depend on the null_resource.upload_ecr_image resource.
@@ -69,6 +69,7 @@ resource null_resource upload_ecr_image {
 #  image_tag       = local.ecr_image_tag
 #
 #}
+
 
 resource "aws_lambda_function" "get_dataset_configuration" {
   depends_on = [
@@ -99,6 +100,7 @@ resource "aws_lambda_function" "get_dataset_configuration" {
   }
 
 }
+
 
 resource "aws_lambda_function" "get_granule_umm_json" {
   depends_on = [
@@ -132,6 +134,7 @@ resource "aws_lambda_function" "get_granule_umm_json" {
 
 }
 
+
 resource "aws_lambda_function" "get_collection_concept_id" {
   depends_on = [
     null_resource.upload_ecr_image
@@ -164,6 +167,7 @@ resource "aws_lambda_function" "get_collection_concept_id" {
 
 }
 
+
 resource "aws_lambda_function" "identify_image_file" {
   depends_on = [
     null_resource.upload_ecr_image
@@ -193,6 +197,7 @@ resource "aws_lambda_function" "identify_image_file" {
   }
 
 }
+
 
 resource "aws_lambda_function" "submit_harmony_job" {
   depends_on = [
@@ -226,7 +231,8 @@ resource "aws_lambda_function" "submit_harmony_job" {
 
 }
 
-resource "aws_lambda_function" "generate_image_metadata" {
+
+resource "aws_lambda_function" "handle_big_result" {
   depends_on = [
     null_resource.upload_ecr_image
   ]
@@ -234,18 +240,20 @@ resource "aws_lambda_function" "generate_image_metadata" {
   package_type = "Image"
   image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
   image_config {
-    command = ["bignbit.generate_image_metadata.lambda_handler"]
+    command = ["bignbit.handle_big_result.lambda_handler"]
   }
-  function_name = local.generate_image_metadata_function_name
+  function_name = local.handle_big_result_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
   timeout       = 180
-  memory_size   = 256
+  memory_size   = 512
 
   environment {
     variables = {
       STACK_NAME                  = var.prefix
       CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
       REGION                      = data.aws_region.current.name
+      EDL_USER_SSM                = var.edl_user_ssm
+      EDL_PASS_SSM                = var.edl_pass_ssm
     }
   }
 
@@ -255,6 +263,7 @@ resource "aws_lambda_function" "generate_image_metadata" {
   }
 
 }
+
 
 resource "aws_lambda_function" "get_harmony_job_status" {
   depends_on = [
@@ -288,37 +297,6 @@ resource "aws_lambda_function" "get_harmony_job_status" {
 
 }
 
-resource "aws_lambda_function" "process_harmony_results" {
-  depends_on = [
-    null_resource.upload_ecr_image
-  ]
-
-  package_type = "Image"
-  image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
-  image_config {
-    command = ["bignbit.process_harmony_results.lambda_handler"]
-  }
-  function_name = local.process_harmony_results_function_name
-  role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 30
-  memory_size   = 256
-
-  environment {
-    variables = {
-      STACK_NAME                  = var.prefix
-      CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = data.aws_region.current.name
-      EDL_USER_SSM                = var.edl_user_ssm
-      EDL_PASS_SSM                = var.edl_pass_ssm
-    }
-  }
-
-  vpc_config {
-    subnet_ids         = var.subnet_ids
-    security_group_ids = var.security_group_ids
-  }
-
-}
 
 resource "aws_lambda_function" "apply_opera_hls_treatment" {
   depends_on = [
@@ -352,40 +330,6 @@ resource "aws_lambda_function" "apply_opera_hls_treatment" {
 
 }
 
-
-resource "aws_lambda_function" "build_image_sets" {
-
-  depends_on = [
-    null_resource.upload_ecr_image
-  ]
-
-  package_type = "Image"
-  image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
-  image_config {
-    command = ["bignbit.build_image_sets.lambda_handler"]
-  }
-
-  function_name = local.build_image_sets_function_name
-  role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 15
-  memory_size   = 128
-
-  environment {
-    variables = {
-      STACK_NAME                  = local.aws_resources_name
-      CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = data.aws_region.current.name
-      GIBS_REGION                 = var.gibs_region
-      GIBS_SQS_URL                = "https://sqs.${var.gibs_region}.amazonaws.com/${var.gibs_account_id}/${var.gibs_queue_name}"
-    }
-  }
-
-  vpc_config {
-    subnet_ids         = var.subnet_ids
-    security_group_ids = var.security_group_ids
-  }
-
-}
 
 resource "aws_lambda_function" "send_to_gitc" {
   depends_on = [
@@ -456,35 +400,6 @@ resource "aws_lambda_function" "handle_gitc_response" {
 
 }
 
-resource "aws_lambda_function" "save_cnm_message" {
-  depends_on = [
-    null_resource.upload_ecr_image
-  ]
-
-  package_type = "Image"
-  image_uri    = "${aws_ecr_repository.lambda-image-repo.repository_url}:${local.ecr_image_tag}"
-  image_config {
-    command = ["bignbit.save_cnm_message.lambda_handler"]
-  }
-  function_name = local.save_cnm_message_function_name
-  role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 15
-  memory_size   = 128
-
-  environment {
-    variables = {
-      STACK_NAME                  = local.aws_resources_name
-      CUMULUS_MESSAGE_ADAPTER_DIR = "/opt/"
-      REGION                      = data.aws_region.current.name
-    }
-  }
-
-  vpc_config {
-    subnet_ids         = var.subnet_ids
-    security_group_ids = var.security_group_ids
-  }
-
-}
 
 # Lambda IAM setup below
 

@@ -1,0 +1,203 @@
+{
+  "cumulus_meta": {},
+  "meta": {
+    "buckets": {},
+    "cmr": {
+      "clientId": "POCLOUD",
+      "cmrEnvironment": "UAT",
+      "provider": "EEDTEST"
+    },
+    "collection": {
+      "name": "PREFIRE_SAT2_2B-FLX_EEDTEST"
+    },
+    "stack": "podaac-ops-cumulus",
+    "provider": {},
+    "workflow_tasks": {
+      "0": {
+        "name": "svc-bignbit-podaac-sit-svc-get_dataset_configuration",
+        "version": "$LATEST",
+        "arn": "arn:aws:lambda:us-west-2:206226843404:function:svc-bignbit-podaac-sit-svc-get_dataset_configuration"
+      },
+      "1": {
+        "name": "svc-bignbit-podaac-sit-svc-get_granule_umm_json",
+        "version": "$LATEST",
+        "arn": "arn:aws:lambda:us-west-2:206226843404:function:svc-bignbit-podaac-sit-svc-get_granule_umm_json"
+      },
+      "2": {
+        "name": "svc-bignbit-podaac-sit-svc-get_collection_concept_id",
+        "version": "$LATEST",
+        "arn": "arn:aws:lambda:us-west-2:206226843404:function:svc-bignbit-podaac-sit-svc-get_collection_concept_id"
+      }
+    }
+  },
+  "payload": {
+    "granules": [
+      {
+        "granuleId": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif",
+        "provider": "EEDTEST",
+        "cmrLink": "https://cmr.uat.earthdata.nasa.gov/search/concepts/G1263096192-EEDTEST.umm_json",
+        "cmrConceptId": "G1263096192-EEDTEST"
+      }
+    ],
+    "datasetConfigurationForBIG": {
+      "config": {
+        "sendToHarmony": true,
+        "operaHLSTreatment": false,
+        "subdaily":true,
+        "concept_id": "C1263096190-EEDTEST",
+        "outputCrs": [
+          "EPSG:4326",
+          "EPSG:3413"
+        ],
+        "scaleExtentPolar": [
+          -4194304,
+          -4194304,
+          4194304,
+          4194304
+        ],
+        "imageFilenameRegex": ".*.nc.G00.tif",
+        "imgVariables": [
+          {
+            "id": "flx"
+          }
+        ],
+        "variables": []
+      }
+    },
+    "granule_umm_json": {
+      "RelatedUrls": [
+        {
+          "URL": "https://data.asdc.sit.earthdata.nasa.gov/asdc2-sit-protected/browse/PREFIRE/PREFIRE_SAT2_2B-FLX_R00/2021.07.21/PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif",
+          "Description": "Download PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif",
+          "Type": "GET DATA"
+        },
+        {
+          "URL": "s3://harmony-uat-eedtest-data/C1263096190-EEDTEST/PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif",
+          "Type": "GET DATA VIA DIRECT ACCESS",
+          "Description": "This link provides direct download access to the granule"
+        },
+        {
+          "URL": "https://data.asdc.sit.earthdata.nasa.gov/asdc2-sit-protected/PREFIRE/PREFIRE_SAT2_2B-FLX_R00/2021.07.21/PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif.cmr.json",
+          "Description": "Download PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif.cmr.json",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "s3://asdc2-sit-protected/PREFIRE/PREFIRE_SAT2_2B-FLX_R00/2021.07.21/PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif.cmr.json",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "https://data.asdc.sit.earthdata.nasa.gov/s3credentials",
+          "Description": "api endpoint to retrieve temporary credentials valid for same-region direct s3 access",
+          "Type": "VIEW RELATED INFORMATION"
+        },
+        {
+          "URL": "https://opendap.uat.earthdata.nasa.gov/collections/C1263096190-EEDTEST/granules/PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif",
+          "Type": "USE SERVICE API",
+          "Subtype": "OPENDAP DATA"
+        }
+      ],
+      "SpatialExtent": {
+        "HorizontalSpatialDomain": {
+          "Geometry": {
+            "BoundingRectangles": [
+              {
+                "WestBoundingCoordinate": -180,
+                "NorthBoundingCoordinate": 90,
+                "EastBoundingCoordinate": 180,
+                "SouthBoundingCoordinate": -90
+              }
+            ]
+          }
+        }
+      },
+      "ProviderDates": [
+        {
+          "Date": "2024-02-26T16:51:13.403Z",
+          "Type": "Create"
+        }
+      ],
+      "CollectionReference": {
+        "ShortName": "PREFIRE_SAT2_2B-FLX",
+        "Version": "R00"
+      },
+      "DataGranule": {
+        "ArchiveAndDistributionInformation": [
+          {
+            "Name": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif"
+          },
+          {
+            "Checksum": {
+              "Algorithm": "SHA-256",
+              "Value": "edc51d4caf7be52a9c1bc53f0aa7d920ccc32190f12108eca46bb9243e9f14d9"
+            },
+            "Name": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif",
+            "Size": 986.883,
+            "SizeUnit": "KB"
+          }
+        ],
+        "DayNightFlag": "Unspecified",
+        "Identifiers": [
+          {
+            "Identifier": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif",
+            "IdentifierType": "ProducerGranuleId"
+          }
+        ],
+        "ProductionDateTime": "2024-02-26T16:51:13.403Z"
+      },
+      "Platforms": [
+        {
+          "ShortName": "PREFIRE-SAT2"
+        }
+      ],
+      "TemporalExtent": {
+        "RangeDateTime": {
+          "BeginningDateTime": "2021-07-21T01:34:13.165Z",
+          "EndingDateTime": "2021-07-21T03:09:30.805Z"
+        }
+      },
+      "GranuleUR": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif",
+      "Projects": [
+        {
+          "ShortName": "PREFIRE"
+        }
+      ],
+      "MetadataSpecification": {
+        "URL": "https://cdn.earthdata.nasa.gov/umm/granule/v1.6.6",
+        "Name": "UMM-G",
+        "Version": "1.6.6"
+      }
+    },
+    "collection_concept_id": "C1263096190-EEDTEST",
+    "big": [
+      [
+        {
+          "job": "f6b63608-45de-49b6-bbdd-49fc0da724af",
+          "granule_id": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif",
+          "granule_concept_id": "G1263096192-EEDTEST",
+          "variable": "flx",
+          "output_crs": "EPSG:4326",
+          "status": "successful"
+        },
+        {
+          "job": "2f4d8bbc-8a1d-43d0-8ee5-50da3086fcea",
+          "granule_id": "PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.tif",
+          "granule_concept_id": "G1263096192-EEDTEST",
+          "variable": "flx",
+          "output_crs": "EPSG:3413",
+          "status": "successful"
+        }
+      ]
+    ]
+  },
+  "task_config": {
+    "collection_shortname": "{$.meta.collection.name}",
+    "collection_version": "{$.meta.collection.version}",
+    "cmr_provider": "{$.meta.cmr.provider}",
+    "cmr_environment": "{$.meta.cmr.cmrEnvironment}",
+    "cumulus_message": {
+      "input": "{$.payload}"
+    }
+  },
+  "exception": "None"
+}
