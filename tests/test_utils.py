@@ -487,7 +487,7 @@ def mock_lambda():
 
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
-def test_get_harmony_client_uat(mock_get_edl_creds, mock_client):
+def test_get_harmony_client_uat(mock_get_edl_creds, mock_client, mock_lambda):
     """Test getting Harmony client for UAT environment."""
     mock_get_edl_creds.return_value = ('test_user', 'test_pass')
     mock_client_instance = MagicMock()
@@ -527,7 +527,7 @@ def test_get_harmony_client_uat(mock_get_edl_creds, mock_client):
 
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
-def test_get_harmony_client_prod(mock_get_edl_creds, mock_client):
+def test_get_harmony_client_prod(mock_get_edl_creds, mock_client, mock_lambda):
     """Test getting Harmony client for PROD environment."""
     mock_get_edl_creds.return_value = ('test_user', 'test_pass')
     mock_client_instance = MagicMock()
@@ -567,7 +567,7 @@ def test_get_harmony_client_prod(mock_get_edl_creds, mock_client):
 
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
-def test_get_harmony_client_sit_defaults_to_uat(mock_get_edl_creds, mock_client):
+def test_get_harmony_client_sit_defaults_to_uat(mock_get_edl_creds, mock_client, mock_lambda):
     """Test that SIT environment defaults to UAT."""
     mock_get_edl_creds.return_value = ('test_user', 'test_pass')
     mock_client_instance = MagicMock()
