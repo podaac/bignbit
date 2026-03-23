@@ -468,6 +468,23 @@ def test_parse_doy_leap_day():
 # Tests for get_harmony_client()
 # ---------------------------------------------------------------------------
 
+@pytest.fixture
+def mock_lambda():
+    fake_token = "mocked-token-123"
+
+    payload_stream = MagicMock()
+    payload_stream.read.return_value = json.dumps({
+        "access-token": fake_token
+    }).encode("utf-8")
+
+    lambda_client = MagicMock()
+    lambda_client.invoke.return_value = {
+        "Payload": payload_stream
+    }
+
+    return lambda_client
+
+
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
 def test_get_harmony_client_uat(mock_get_edl_creds, mock_client):
@@ -480,10 +497,32 @@ def test_get_harmony_client_uat(mock_get_edl_creds, mock_client):
     import bignbit.utils
     bignbit.utils.HARMONY_CLIENT = None
 
-    result = get_harmony_client('UAT')
+    # Patch boto3.client to return the mock_lambda fixture
+    with patch("bignbit.utils.boto3.client", return_value=mock_lambda):
 
-    assert result == mock_client_instance
-    mock_client.assert_called_once()
+        # Reset global client
+        import bignbit.utils
+        bignbit.utils.HARMONY_CLIENT = None
+
+        result = get_harmony_client('UAT')
+
+        # ---- Assertions ----
+        assert result == mock_client_instance
+
+        # Ensure Harmony client was constructed
+        mock_client.assert_called_once()
+
+        # Ensure Lambda was invoked
+        mock_lambda.invoke.assert_called_once()
+
+        # Validate payload sent to Lambda
+        _, kwargs = mock_lambda.invoke.call_args
+        sent_payload = json.loads(kwargs["Payload"].decode("utf-8"))
+    
+        assert result == mock_client_instance
+        assert sent_payload["edl_user"] == "test_user"
+        assert sent_payload["edl_pass"] == "test_pass"
+        assert sent_payload["edl_env"] == "UAT"
 
 
 @patch('bignbit.utils.Client')
@@ -498,9 +537,32 @@ def test_get_harmony_client_prod(mock_get_edl_creds, mock_client):
     import bignbit.utils
     bignbit.utils.HARMONY_CLIENT = None
 
-    result = get_harmony_client('PROD')
+    # Patch boto3.client to return the mock_lambda fixture
+    with patch("bignbit.utils.boto3.client", return_value=mock_lambda):
 
-    assert result == mock_client_instance
+        # Reset global client
+        import bignbit.utils
+        bignbit.utils.HARMONY_CLIENT = None
+
+        result = get_harmony_client('PROD')
+
+        # ---- Assertions ----
+        assert result == mock_client_instance
+
+        # Ensure Harmony client was constructed
+        mock_client.assert_called_once()
+
+        # Ensure Lambda was invoked
+        mock_lambda.invoke.assert_called_once()
+
+        # Validate payload sent to Lambda
+        _, kwargs = mock_lambda.invoke.call_args
+        sent_payload = json.loads(kwargs["Payload"].decode("utf-8"))
+    
+        assert result == mock_client_instance
+        assert sent_payload["edl_user"] == "test_user"
+        assert sent_payload["edl_pass"] == "test_pass"
+        assert sent_payload["edl_env"] == "PROD"
 
 
 @patch('bignbit.utils.Client')
@@ -515,6 +577,29 @@ def test_get_harmony_client_sit_defaults_to_uat(mock_get_edl_creds, mock_client)
     import bignbit.utils
     bignbit.utils.HARMONY_CLIENT = None
 
-    result = get_harmony_client('SIT')
+    # Patch boto3.client to return the mock_lambda fixture
+    with patch("bignbit.utils.boto3.client", return_value=mock_lambda):
 
-    assert result == mock_client_instance
+        # Reset global client
+        import bignbit.utils
+        bignbit.utils.HARMONY_CLIENT = None
+
+        result = get_harmony_client('SIT')
+
+        # ---- Assertions ----
+        assert result == mock_client_instance
+
+        # Ensure Harmony client was constructed
+        mock_client.assert_called_once()
+
+        # Ensure Lambda was invoked
+        mock_lambda.invoke.assert_called_once()
+
+        # Validate payload sent to Lambda
+        _, kwargs = mock_lambda.invoke.call_args
+        sent_payload = json.loads(kwargs["Payload"].decode("utf-8"))
+    
+        assert result == mock_client_instance
+        assert sent_payload["edl_user"] == "test_user"
+        assert sent_payload["edl_pass"] == "test_pass"
+        assert sent_payload["edl_env"] == "SIT"
