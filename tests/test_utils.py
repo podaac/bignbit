@@ -520,35 +520,105 @@ def test_get_harmony_client_uat(mock_get_edl_creds, mock_client, mock_boto_clien
     assert sent_payload["edl_env"] == "UAT"
 
 
+@patch('bignbit.utils.boto3.client')
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
-def test_get_harmony_client_prod(mock_get_edl_creds, mock_client):
+def test_get_harmony_client_prod(mock_get_edl_creds, mock_client, mock_boto_client):
     """Test getting Harmony client for PROD environment."""
+
+    # Mock credentials
     mock_get_edl_creds.return_value = ('test_user', 'test_pass')
+
+    # Mock Harmony client instance
     mock_client_instance = MagicMock()
     mock_client.return_value = mock_client_instance
+
+    # ---- Mock Lambda response ----
+    fake_token = "mocked-token-123"
+
+    mock_payload_stream = MagicMock()
+    mock_payload_stream.read.return_value = json.dumps({
+        "access-token": fake_token
+    }).encode("utf-8")
+
+    mock_lambda = MagicMock()
+    mock_lambda.invoke.return_value = {
+        "Payload": mock_payload_stream
+    }
+
+    # boto3.client() should return our mock lambda
+    mock_boto_client.return_value = mock_lambda
 
     # Reset global client
     import bignbit.utils
     bignbit.utils.HARMONY_CLIENT = None
 
+    # Run function
     result = get_harmony_client('PROD')
 
+    # ---- Assertions ----
     assert result == mock_client_instance
 
+    mock_client.assert_called_once()
+    mock_boto_client.assert_called_once_with('lambda', region_name='us-west-2')
+    mock_lambda.invoke.assert_called_once()
 
+    # Optional: validate payload
+    _, kwargs = mock_lambda.invoke.call_args
+    sent_payload = json.loads(kwargs["Payload"].decode("utf-8"))
+
+    assert sent_payload["edl_user"] == "test_user"
+    assert sent_payload["edl_pass"] == "test_pass"
+    assert sent_payload["edl_env"] == "PROD"
+
+
+@patch('bignbit.utils.boto3.client')
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
-def test_get_harmony_client_sit_defaults_to_uat(mock_get_edl_creds, mock_client):
+def test_get_harmony_client_sit_defaults_to_uat(mock_get_edl_creds, mock_client, mock_boto_client):
     """Test that SIT environment defaults to UAT."""
+
+    # Mock credentials
     mock_get_edl_creds.return_value = ('test_user', 'test_pass')
+
+    # Mock Harmony client instance
     mock_client_instance = MagicMock()
     mock_client.return_value = mock_client_instance
+
+    # ---- Mock Lambda response ----
+    fake_token = "mocked-token-123"
+
+    mock_payload_stream = MagicMock()
+    mock_payload_stream.read.return_value = json.dumps({
+        "access-token": fake_token
+    }).encode("utf-8")
+
+    mock_lambda = MagicMock()
+    mock_lambda.invoke.return_value = {
+        "Payload": mock_payload_stream
+    }
+
+    # boto3.client() should return our mock lambda
+    mock_boto_client.return_value = mock_lambda
 
     # Reset global client
     import bignbit.utils
     bignbit.utils.HARMONY_CLIENT = None
 
+    # Run function
     result = get_harmony_client('SIT')
 
+    # ---- Assertions ----
     assert result == mock_client_instance
+
+    mock_client.assert_called_once()
+    mock_boto_client.assert_called_once_with('lambda', region_name='us-west-2')
+    mock_lambda.invoke.assert_called_once()
+
+    # Optional: validate payload
+    _, kwargs = mock_lambda.invoke.call_args
+    sent_payload = json.loads(kwargs["Payload"].decode("utf-8"))
+
+    assert sent_payload["edl_user"] == "test_user"
+    assert sent_payload["edl_pass"] == "test_pass"
+    assert sent_payload["edl_env"] == "SIT"
