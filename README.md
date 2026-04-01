@@ -201,6 +201,17 @@ considered a failure.
 
 For more details of what each of these parameters does, see the [AWS documentation](https://docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html#error-handling-retrying-after-an-error)
 
+### Behavior for Harmony requests that complete with no data
+
+Occasionally, a harmony request will complete and report success but no data files will be generated, this can occur for a number of reasons, 
+one of which is when a variable subsetting/filtering step completely filters all data from a granule. In these cases, the 
+"Process Harmony Job Output" workflow step, defined in the code as the `process_harmony_results.py` lambda, will raise 
+a HarmonyJobNoDataError. This exception does not trigger a failure in the whole workflow, as other variables associated with the granule may succeed.
+To track Harmony jobs that return no data in CloudWatch, the following warning can be tracked:
+```
+"Harmony job {job_id} completed successfully but returned no data for variable '{variable}' and CRS '{crs}'"
+```
+
 # GIBS Integration
 
 This module implements delivery of browse images to GIBS via [Cloud Notification Message](https://github.com/podaac/cloud-notification-message-schema)(CNM)

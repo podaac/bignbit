@@ -3,13 +3,11 @@
 import json
 import logging
 import os
-from datetime import datetime, timezone
+from typing import Any
 
 import boto3
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
-
-from bignbit.image_set import ImageSet, to_cnm_product_dict
 
 CUMULUS_LOGGER = CumulusLogger('send_to_gitc')
 
@@ -52,47 +50,55 @@ class NotifyGitc(Process):
         """
 
         # Send ImageSet(s) to GITC for processing
-        collection_name = self.input.get('collection_name')
-        cmr_provider = self.input.get('cmr_provider')
-        image_set = ImageSet(**self.input['image_set'])
-        gitc_id = image_set.name
+        cnm_bucket = self.input.get('cnm_bucket', '')
+        cnm_key = self.input.get('cnm_key', '')
 
-        cnm_message = notify_gitc(image_set, cmr_provider, gitc_id, collection_name)
+        cnm_payload = read_cnm(cnm_bucket, cnm_key)
+        sqs_response = notify_gitc(cnm_payload)
 
-        return cnm_message
+        return sqs_response
 
 
-def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str):
+def read_cnm(cnm_bucket: str, cnm_key: str) -> str:
+    """
+    Downloads and reads CNM message from S3 so it can be serialized into
+    SQS message
+
+    Parameters
+    ----------
+    cnm_bucket: str
+      S3 bucket containing the CNM (usually *-internal)
+    cnm_key: str
+      Key within the bucket pointing to CNM JSON
+    """
+    s3_client = boto3.client('s3')
+    response = s3_client.get_object(Bucket=cnm_bucket, Key=cnm_key)
+    return response['Body'].read().decode('utf-8')
+
+
+def notify_gitc(cnm_payload: str) -> dict[str, Any]:
     """
     Builds and sends a CNM message to GITC
 
     Parameters
     ----------
-    image_set: ImageSet
-      The image set to send
-    cmr_provider: str
-      The provider sent in the CNM message
-    gitc_id: str
-      The unique identifier for this particular request to GITC
-    collection_name: str
-      Collection that this image set belongs to
+    cnm_payload: str
+      string containing contents of CNM JSON
 
     Returns
     -------
-    cnm_id: str
-      The identifier of this CNM
+    sqs_response: dict[str, Any]
+      Response from GIBS SQS
     """
-
+    cnm = json.loads(cnm_payload)
     queue_url = os.environ.get(GIBS_SQS_URL_ENV_NAME)
     gibs_response_topic_arn = os.environ.get(GIBS_RESPONSE_TOPIC_ARN_ENV_NAME)
-    CUMULUS_LOGGER.info(f'Sending SQS message to GITC for image {image_set.name}')
+    gibs_region = os.environ.get(GIBS_REGION_ENV_NAME)
+    CUMULUS_LOGGER.info(f"Sending SQS message to GITC for image {cnm['identifier']}")
 
-    cnm = construct_cnm(image_set, cmr_provider, gitc_id, collection_name)
-
-    cnm_json = json.dumps(cnm)
     sqs_message_params = {
         "QueueUrl": queue_url,
-        "MessageBody": cnm_json,
+        "MessageBody": cnm_payload,
         "MessageGroupId": cnm['collection'],
         "MessageAttributes": {
             'response_topic_arn': {
@@ -103,55 +109,12 @@ def notify_gitc(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection
     }
     CUMULUS_LOGGER.debug(f'CNM message for GIBS: {sqs_message_params}')
 
-    gibs_region = os.environ.get(GIBS_REGION_ENV_NAME)
-
     sqs = boto3.client('sqs', region_name=gibs_region)
-
     response = sqs.send_message(**sqs_message_params)
 
     CUMULUS_LOGGER.debug(f'SQS send_message output: {response}')
 
-    return cnm
-
-
-def construct_cnm(image_set: ImageSet, cmr_provider: str, gitc_id: str, collection_name: str):
-    """
-    Construct the CNM message for GITC
-
-    Parameters
-    ----------
-    image_set: ImageSet
-        ImageSet for one image to be sent to gibs
-    cmr_provider: str
-      The provider sent in the CNM message
-    gitc_id: str
-      The unique identifier for this particular request to GITC
-    collection_name: str
-      Collection that this image set belongs to
-
-    Returns
-    ----------
-    cnm: dict
-        CNM message
-    """
-    product = to_cnm_product_dict(image_set)
-    submission_time = datetime.now(timezone.utc).isoformat()[:-9] + 'Z'
-    CUMULUS_LOGGER.debug(image_set.image['variable'])
-    if 'output_crs' in image_set.image:
-        crs_suffix = GIBS_CRS_NAME_TO_SUFFIX.get(image_set.image['output_crs'], GIBS_CRS_NAME_TO_SUFFIX["EPSG:4326"])
-        new_collection = f"{collection_name}_{image_set.image['variable']}_{crs_suffix}".replace('/', '_')
-    else:
-        new_collection = f"{collection_name}_{image_set.image['variable']}".replace('/', '_')
-
-    return {
-        "version": "1.5.1",
-        "duplicationid": image_set.name,
-        "collection": new_collection,
-        "submissionTime": submission_time,
-        "identifier": gitc_id,
-        "product": product,
-        'provider': cmr_provider
-    }
+    return response
 
 
 def lambda_handler(event, context):
@@ -178,7 +141,7 @@ def lambda_handler(event, context):
     }
 
     logging_level = os.environ.get('LOGGING_LEVEL', 'info')
-    CUMULUS_LOGGER.logger.level = levels.get(logging_level, 'info')
+    CUMULUS_LOGGER.logger.setLevel(levels.get(logging_level, 'info'))
     CUMULUS_LOGGER.setMetadata(event, context)
 
     return NotifyGitc.cumulus_handler(event, context=context)

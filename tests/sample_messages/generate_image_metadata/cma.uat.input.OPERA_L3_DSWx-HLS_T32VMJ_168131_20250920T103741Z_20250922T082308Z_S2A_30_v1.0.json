@@ -1,0 +1,822 @@
+{
+  "cumulus_meta": {},
+  "meta": {
+    "buckets": {},
+    "cmr": {
+      "clientId": "POCLOUD",
+      "cmrEnvironment": "UAT",
+      "provider": "POCLOUD"
+    },
+    "collection": {
+      "name": "OPERA_L3_DSWX-HLS_V1"
+    },
+    "stack": "podaac-uat-cumulus",
+    "provider": {},
+    "workflow_tasks": {
+      "0": {
+        "name": "svc-bignbit-podaac-sit-svc-get_dataset_configuration",
+        "version": "$LATEST",
+        "arn": "arn:aws:lambda:us-west-2:206226843404:function:svc-bignbit-podaac-sit-svc-get_dataset_configuration"
+      },
+      "1": {
+        "name": "svc-bignbit-podaac-sit-svc-get_granule_umm_json",
+        "version": "$LATEST",
+        "arn": "arn:aws:lambda:us-west-2:206226843404:function:svc-bignbit-podaac-sit-svc-get_granule_umm_json"
+      },
+      "2": {
+        "name": "svc-bignbit-podaac-sit-svc-identify_image_file",
+        "version": "$LATEST",
+        "arn": "arn:aws:lambda:us-west-2:206226843404:function:svc-bignbit-podaac-sit-svc-identify_image_file"
+      },
+      "3": {
+        "name": "svc-bignbit-podaac-sit-svc-apply_opera_hls_treatment",
+        "version": "$LATEST",
+        "arn": "arn:aws:lambda:us-west-2:206226843404:function:svc-bignbit-podaac-sit-svc-apply_opera_hls_treatment"
+      }
+    }
+  },
+  "payload": {
+    "granules": [
+      {
+        "createdAt": 1766160852904,
+        "granuleId": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0",
+        "provider": "opera",
+        "dataType": "OPERA_L3_DSWX-HLS_V1",
+        "sync_granule_duration": 1829,
+        "cmrLink": "https://cmr.uat.earthdata.nasa.gov/search/concepts/G1276618252-POCLOUD.umm_json",
+        "cmrConceptId": "G1276618252-POCLOUD",
+        "files": [
+          {
+            "bucket": "podaac-sit-svc-private",
+            "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+            "size": 160804,
+            "checksumType": "md5",
+            "checksum": "351789c61b221f1d30469c6de091aec4",
+            "source": "OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+            "type": "data",
+            "key": "OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif"
+          }
+        ]
+      }
+    ],
+    "datasetConfigurationForBIG": {
+      "config": {
+        "sendToHarmony": false,
+        "operaHLSTreatment": true,
+        "imageFilenameRegex": ".*BROWSE.tif",
+        "imgVariables": [
+          {
+            "id": "all"
+          }
+        ],
+        "variables": [],
+        "outputCrs": [
+          "EPSG:4326"
+        ]
+      }
+    },
+    "granule_umm_json": {
+      "MetadataSpecification": {
+        "Version": "1.6.6",
+        "URL": "https://cdn.earthdata.nasa.gov/umm/granule/v1.6.6",
+        "Name": "UMM-G"
+      },
+      "GranuleUR": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0",
+      "PGEVersionClass": {
+        "PGEName": "DSWX_HLS_PGE",
+        "PGEVersion": "1.0.3"
+      },
+      "CollectionReference": {
+        "Version": "1.0",
+        "ShortName": "OPERA_L3_DSWX-HLS_V1"
+      },
+      "RelatedUrls": [
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.png",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.png",
+          "Type": "GET RELATED VISUALIZATION"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B01_WTR.tif",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B01_WTR.tif",
+          "Type": "GET DATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B02_BWTR.tif",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B02_BWTR.tif",
+          "Type": "GET DATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B03_CONF.tif",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B03_CONF.tif",
+          "Type": "GET DATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B04_DIAG.tif",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B04_DIAG.tif",
+          "Type": "GET DATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B05_WTR-1.tif",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B05_WTR-1.tif",
+          "Type": "GET DATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B06_WTR-2.tif",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B06_WTR-2.tif",
+          "Type": "GET DATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B07_LAND.tif",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B07_LAND.tif",
+          "Type": "GET DATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B08_SHAD.tif",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B08_SHAD.tif",
+          "Type": "GET DATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B09_CLOUD.tif",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B09_CLOUD.tif",
+          "Type": "GET DATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B10_DEM.tif",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B10_DEM.tif",
+          "Type": "GET DATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0.iso.xml",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0.iso.xml",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B01_WTR.tif.md5",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B01_WTR.tif.md5",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B02_BWTR.tif.md5",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B02_BWTR.tif.md5",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B03_CONF.tif.md5",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B03_CONF.tif.md5",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B04_DIAG.tif.md5",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B04_DIAG.tif.md5",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B05_WTR-1.tif.md5",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B05_WTR-1.tif.md5",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B06_WTR-2.tif.md5",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B06_WTR-2.tif.md5",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B07_LAND.tif.md5",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B07_LAND.tif.md5",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B08_SHAD.tif.md5",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B08_SHAD.tif.md5",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B09_CLOUD.tif.md5",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B09_CLOUD.tif.md5",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B10_DEM.tif.md5",
+          "Description": "Download OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B10_DEM.tif.md5",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.png",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "GET RELATED VISUALIZATION"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B01_WTR.tif",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "GET DATA VIA DIRECT ACCESS"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B02_BWTR.tif",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "GET DATA VIA DIRECT ACCESS"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B03_CONF.tif",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "GET DATA VIA DIRECT ACCESS"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B04_DIAG.tif",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "GET DATA VIA DIRECT ACCESS"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B05_WTR-1.tif",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "GET DATA VIA DIRECT ACCESS"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B06_WTR-2.tif",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "GET DATA VIA DIRECT ACCESS"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B07_LAND.tif",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "GET DATA VIA DIRECT ACCESS"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B08_SHAD.tif",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "GET DATA VIA DIRECT ACCESS"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B09_CLOUD.tif",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "GET DATA VIA DIRECT ACCESS"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-protected/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B10_DEM.tif",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "GET DATA VIA DIRECT ACCESS"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0.iso.xml",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B01_WTR.tif.md5",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B02_BWTR.tif.md5",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B03_CONF.tif.md5",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B04_DIAG.tif.md5",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B05_WTR-1.tif.md5",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B06_WTR-2.tif.md5",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B07_LAND.tif.md5",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B08_SHAD.tif.md5",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B09_CLOUD.tif.md5",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "s3://podaac-uat-cumulus-public/OPERA_L3_DSWX-HLS_V1/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B10_DEM.tif.md5",
+          "Description": "This link provides direct download access via S3 to the granule",
+          "Type": "EXTENDED METADATA"
+        },
+        {
+          "URL": "https://archive.podaac.uat.earthdata.nasa.gov/s3credentials",
+          "Description": "api endpoint to retrieve temporary credentials valid for same-region direct s3 access",
+          "Type": "VIEW RELATED INFORMATION"
+        }
+      ],
+      "InputGranules": [
+        "GSHHS_f_L1.dbf",
+        "GSHHS_f_L1.prj",
+        "GSHHS_f_L1.shp",
+        "GSHHS_f_L1.shx",
+        "HLS.S30.T32VMJ.2025263T103741.v2.0.B02.tif",
+        "HLS.S30.T32VMJ.2025263T103741.v2.0.B03.tif",
+        "HLS.S30.T32VMJ.2025263T103741.v2.0.B04.tif",
+        "HLS.S30.T32VMJ.2025263T103741.v2.0.B11.tif",
+        "HLS.S30.T32VMJ.2025263T103741.v2.0.B12.tif",
+        "HLS.S30.T32VMJ.2025263T103741.v2.0.B8A.tif",
+        "HLS.S30.T32VMJ.2025263T103741.v2.0.Fmask.tif",
+        "dem.vrt",
+        "dem_0.tif",
+        "landcover.tif",
+        "worldcover.vrt",
+        "worldcover_0.tif"
+      ],
+      "TemporalExtent": {
+        "RangeDateTime": {
+          "EndingDateTime": "2025-09-20T10:45:20.634Z",
+          "BeginningDateTime": "2025-09-20T10:45:20.634Z"
+        }
+      },
+      "ProviderDates": [
+        {
+          "Type": "Insert",
+          "Date": "2026-01-07T20:07:43.875Z"
+        },
+        {
+          "Type": "Update",
+          "Date": "2026-01-07T20:07:43.882Z"
+        }
+      ],
+      "SpatialExtent": {
+        "HorizontalSpatialDomain": {
+          "Geometry": {
+            "BoundingRectangles": [
+              {
+                "WestBoundingCoordinate": 7.236303076160075,
+                "SouthBoundingCoordinate": 56.78797497057592,
+                "EastBoundingCoordinate": 9.082406606672334,
+                "NorthBoundingCoordinate": 57.78610544076002
+              }
+            ]
+          }
+        }
+      },
+      "AdditionalAttributes": [
+        {
+          "Values": [
+            "LaSRC v3.5.1.0"
+          ],
+          "Name": "Accode"
+        },
+        {
+          "Values": [
+            "Area"
+          ],
+          "Name": "AreaOrPoint"
+        },
+        {
+          "Values": [
+            "84"
+          ],
+          "Name": "CloudCoverage"
+        },
+        {
+          "Values": [
+            "HLS.S30.T32VMJ.2025263T103741.v2.0"
+          ],
+          "Name": "HlsDataset"
+        },
+        {
+          "Values": [
+            "169.518914190358"
+          ],
+          "Name": "MeanSunAzimuthAngle"
+        },
+        {
+          "Values": [
+            "56.7666384420399"
+          ],
+          "Name": "MeanSunZenithAngle"
+        },
+        {
+          "Values": [
+            "107.981685674416"
+          ],
+          "Name": "MeanViewAzimuthAngle"
+        },
+        {
+          "Values": [
+            "7.00457262712232"
+          ],
+          "Name": "MeanViewZenithAngle"
+        },
+        {
+          "Values": [
+            "56.9413778283837"
+          ],
+          "Name": "NBAR_SolarZenith"
+        },
+        {
+          "Values": [
+            "dswx_hls"
+          ],
+          "Name": "ProductID"
+        },
+        {
+          "Values": [
+            "3"
+          ],
+          "Name": "ProductLevel"
+        },
+        {
+          "Values": [
+            "DSWx-HLS"
+          ],
+          "Name": "ProductType"
+        },
+        {
+          "Values": [
+            "1.0"
+          ],
+          "Name": "ProductVersion"
+        },
+        {
+          "Values": [
+            "OPERA"
+          ],
+          "Name": "Project"
+        },
+        {
+          "Values": [
+            "OLI"
+          ],
+          "Name": "Sensor"
+        },
+        {
+          "Values": [
+            "S2A_MSIL1C_20250920T103741_N0511_R008_T32VMJ_20250920T110104.SAFE"
+          ],
+          "Name": "SensorProductID"
+        },
+        {
+          "Values": [
+            "1.0.1"
+          ],
+          "Name": "SoftwareVersion"
+        },
+        {
+          "Values": [
+            "Sentinel-2A"
+          ],
+          "Name": "SpacecraftName"
+        },
+        {
+          "Values": [
+            "99"
+          ],
+          "Name": "SpatialCoverage"
+        },
+        {
+          "Values": [
+            "T32VMJ"
+          ],
+          "Name": "MGRS_TILE_ID"
+        }
+      ],
+      "DataGranule": {
+        "ArchiveAndDistributionInformation": [
+          {
+            "SizeUnit": "MB",
+            "Size": 0.22176074981689453,
+            "Checksum": {
+              "Value": "6f43ae3875daf7826db6b6a21b16a7d2",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 232533,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B07_LAND.tif"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.0022602081298828125,
+            "Checksum": {
+              "Value": "f79a0c987dd1b849e4ce70584fff749f",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 2370,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0.catalog.json"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 10.763175010681152,
+            "Checksum": {
+              "Value": "2b33bc39ad5ed921e87576774e49db05",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 11286007,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B10_DEM.tif"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 2.39400577545166,
+            "Checksum": {
+              "Value": "87c3ca8e0f6395b19315cb24e1aa4ed1",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 2510297,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B04_DIAG.tif"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.13703155517578125,
+            "Checksum": {
+              "Value": "2ed37141c3685af5b3f2b698d4ff1387",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 143688,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0.iso.xml"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.000030517578125,
+            "Checksum": {
+              "Value": "2938c551c482f8aa9ad76f730a1b95d0",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 32,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B06_WTR-2.tif.md5"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.14972686767578125,
+            "Checksum": {
+              "Value": "3cd9da2d802de79c0ca3e959ebb61391",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 157000,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B02_BWTR.tif"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.01868724822998047,
+            "Checksum": {
+              "Value": "eddbaf010fe166bdb32aabd2375ea54c",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 19595,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.png"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.1534404754638672,
+            "Checksum": {
+              "Value": "bbd2277ca3f0c8082eed33eb75e221fb",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 160894,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B01_WTR.tif"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.000030517578125,
+            "Checksum": {
+              "Value": "a2e1979234477a13c379abb1ed0c1b1c",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 32,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B10_DEM.tif.md5"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 1.3545112609863281,
+            "Checksum": {
+              "Value": "347d6e750f3a73eca5b8e6b06c1ae35b",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 1420308,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B05_WTR-1.tif"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.000030517578125,
+            "Checksum": {
+              "Value": "2f72c48863545e2c6031d3806d8d87bc",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 32,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B09_CLOUD.tif.md5"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.000030517578125,
+            "Checksum": {
+              "Value": "93ac3c44b396745cbda46a6f5b55359b",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 32,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B01_WTR.tif.md5"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.000030517578125,
+            "Checksum": {
+              "Value": "2b975ff954246f6423ad3808c0332838",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 32,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B08_SHAD.tif.md5"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.04250907897949219,
+            "Checksum": {
+              "Value": "b214af5621e71446b0914e326af5eb02",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 44574,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0.log"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 1.3304319381713867,
+            "Checksum": {
+              "Value": "818fafb9dde02bf26557a5976878661a",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 1395059,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B06_WTR-2.tif"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.3561429977416992,
+            "Checksum": {
+              "Value": "ab814f621d6213cdd102ea0c2f1c908c",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 373443,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B09_CLOUD.tif"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.000030517578125,
+            "Checksum": {
+              "Value": "cc052a145105dfed6531b5de2da32a22",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 32,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B03_CONF.tif.md5"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.000030517578125,
+            "Checksum": {
+              "Value": "00f46d470499d04f66668a21b78eee7f",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 32,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B04_DIAG.tif.md5"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 1.5239200592041016,
+            "Checksum": {
+              "Value": "44125c3258fba21932e540859ca25ce5",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 1597946,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B03_CONF.tif"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.000030517578125,
+            "Checksum": {
+              "Value": "7448d6fc640f93b52f234ffc830718e9",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 32,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B05_WTR-1.tif.md5"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.15335464477539062,
+            "Checksum": {
+              "Value": "351789c61b221f1d30469c6de091aec4",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 160804,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.000030517578125,
+            "Checksum": {
+              "Value": "d320308d6832caa435ea5637c0529628",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 32,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B07_LAND.tif.md5"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.12150096893310547,
+            "Checksum": {
+              "Value": "c71f0c054fa88a635f763b12f0940f6a",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 127403,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B08_SHAD.tif"
+          },
+          {
+            "SizeUnit": "MB",
+            "Size": 0.000030517578125,
+            "Checksum": {
+              "Value": "8d43c75435ab94e7b7f3f86f408e0746",
+              "Algorithm": "MD5"
+            },
+            "SizeInBytes": 32,
+            "Name": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_B02_BWTR.tif.md5"
+          }
+        ],
+        "DayNightFlag": "Unspecified",
+        "Identifiers": [
+          {
+            "Identifier": "OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0",
+            "IdentifierType": "ProducerGranuleId"
+          },
+          {
+            "Identifier": "1.0.1",
+            "IdentifierType": "Other",
+            "IdentifierName": "SASVersionId"
+          },
+          {
+            "Identifier": "1.0.3",
+            "IdentifierType": "Other",
+            "IdentifierName": "PGEVersionId"
+          }
+        ],
+        "ProductionDateTime": "2025-09-22T08:23:08.238Z"
+      },
+      "CloudCover": 84
+    },
+    "big": [
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_167131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260204/OPERA_L3_DSWx-HLS_T32VMJ_167131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "local_filepath": "/tmp/tmpm2e08zry/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/167131/OPERA_L3_DSWx-HLS_T32VMJ_167131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "19e9802c817c862c0689f9039847459eb1127ca92d9e0105761326cdea2bf5037a96dd4b5f835611f065e3389b6c57ced67472af6fb49745714a739360650251",
+        "checksumType": "SHA512"
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_167132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260204/OPERA_L3_DSWx-HLS_T32VMJ_167132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "local_filepath": "/tmp/tmpm2e08zry/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/167132/OPERA_L3_DSWx-HLS_T32VMJ_167132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "1e1b0480482a757076762e60ec16fe6ea9fb75bc4095129311ab93a49f270be29c0831a2d4133c826a2ad18352ec8d9e32cdbfbd0f4db09e722e443cc7fd7f5b",
+        "checksumType": "SHA512"
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_168131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260204/OPERA_L3_DSWx-HLS_T32VMJ_168131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "local_filepath": "/tmp/tmpm2e08zry/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/168131/OPERA_L3_DSWx-HLS_T32VMJ_168131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "a0dfa003546741323ba711453afe476405a37e8e412f28e286fbada07c2568a255b2747a32e4d236ed5d98b545335240f5ad2a5f2fbd49ef813a021ea5aeceb6",
+        "checksumType": "SHA512"
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_168132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260204/OPERA_L3_DSWx-HLS_T32VMJ_168132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "local_filepath": "/tmp/tmpm2e08zry/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/168132/OPERA_L3_DSWx-HLS_T32VMJ_168132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "7ba75e5471dc99bf608c0acf7932689d2e2bda5b035c48c6278f5a94c4d6f7941fb8d412b0890018b119f8cdc32a46ac17fb220e4872af5b6b14d30edc15e70d",
+        "checksumType": "SHA512"
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_169131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260204/OPERA_L3_DSWx-HLS_T32VMJ_169131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "local_filepath": "/tmp/tmpm2e08zry/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/169131/OPERA_L3_DSWx-HLS_T32VMJ_169131_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "ad73c48118db04ccc7e123a66a610f90cb3362329fe33bf75b951ec6255de1a105cb7995cb232f692decaacde81a1dc2ead1ab90f8281c99636c049065911bf8",
+        "checksumType": "SHA512"
+      },
+      {
+        "fileName": "OPERA_L3_DSWx-HLS_T32VMJ_169132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "bucket": "svc-bignbit-podaac-sit-svc-staging",
+        "key": "opera_hls_processing/20260204/OPERA_L3_DSWx-HLS_T32VMJ_169132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "local_filepath": "/tmp/tmpm2e08zry/OPERA_L3_DSWx-HLS_T32VMJ_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE/169132/OPERA_L3_DSWx-HLS_T32VMJ_169132_20250920T103741Z_20250922T082308Z_S2A_30_v1.0_BROWSE.tif",
+        "checksum": "4d0def12bd2746a606e64f80163f326cac2daf71305a4823c31ff691eb234b101e53fb93e1bd7fb69b27864b1f8c95b7b9e1474a193621f4c558c8b3481227c9",
+        "checksumType": "SHA512"
+      }
+    ]
+  },
+  "task_config": {
+    "bignbit_staging_bucket": "svc-bignbit-podaac-sit-svc-staging",
+    "cumulus_message": {
+      "input": "{$.payload}"
+    }
+  },
+  "exception": "None"
+}

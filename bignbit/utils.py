@@ -4,23 +4,22 @@ import json
 import os
 import pathlib
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from typing import Union
+from typing import Any
 import boto3
-import harmony.config
 import requests
 from dateutil import parser
 from harmony import Environment, Client
 
 ED_USER = ED_PASS = None
-EDL_USER_TOKEN = {}
-HARMONY_CLIENT: Client or None = None
+EDL_USER_TOKEN: dict[str, str] = {}
+HARMONY_CLIENT: Client | None = None
 
 HARMONY_SHOULD_VALIDATE_AUTH = os.environ.get('HARMONY_SHOULD_VALIDATE_AUTH', default='False').upper() == 'TRUE'
 
 
-def get_edl_creds() -> (str, str):
+def get_edl_creds() -> tuple[str, str]:
     """
     Get EDL username and password from SSM.
 
@@ -52,7 +51,7 @@ def get_edl_creds() -> (str, str):
     return ED_USER, ED_PASS
 
 
-def format_iso_expiration_date(value: Union[str, datetime]) -> str:
+def format_iso_expiration_date(value: str | datetime) -> str:
     """
     Convert a date/time string or datetime object to MM/DD/YYYY format.
 
@@ -143,7 +142,7 @@ def get_cmr_user_token(edl_user: str, edl_pass: str, cmr_env: str) -> str:
     return EDL_USER_TOKEN['access_token']
 
 
-def get_umm_json(granule_concept_id: str, cmr_environment):
+def get_umm_json(granule_concept_id: str, cmr_environment: str) -> dict[str, Any]:
     """
     Get the granuleUR for the given concept ID
 
@@ -221,6 +220,25 @@ def upload_string_as_object(bucket_name: str, key_name: str, object_content: str
     return f's3://{bucket_name}/{key_name}'
 
 
+def upload_object(
+        body_content: bytes,
+        bucket: str,
+        key: str,
+        content_type: str,
+) -> str:
+    """
+    Uploads a bytestring to S3, returns S3 URI
+    """
+    s3_client = boto3.client('s3')
+    s3_client.put_object(
+        Bucket=bucket,
+        Key=key,
+        Body=body_content,
+        ContentType=content_type,
+    )
+    return f's3://{bucket}/{key}'
+
+
 def upload_to_s3(filepath: pathlib.Path, bucket_name: str, object_key: str):
     """
     Uploads a file to S3
@@ -245,7 +263,7 @@ def upload_to_s3(filepath: pathlib.Path, bucket_name: str, object_key: str):
     return f's3://{bucket_name}/{object_key}'
 
 
-def checksum_and_upload(filepath: pathlib.Path, bucket_name: str, object_key: str) -> (str, str, str):
+def checksum_and_upload(filepath: pathlib.Path, bucket_name: str, object_key: str) -> tuple[str, str, str]:
     """
     Create a checksum for the given file then upload it to s3
 
@@ -275,7 +293,7 @@ def checksum_and_upload(filepath: pathlib.Path, bucket_name: str, object_key: st
     return checksum_type, checksum, s3_uri
 
 
-def get_harmony_client(environment_str: str) -> harmony.Client:
+def get_harmony_client(environment_str: str) -> Client:
     """
     Return a harmony client configured for the given environment.
 
@@ -366,3 +384,103 @@ class CustomDateTimeEncoder(json.JSONEncoder):
 def json_dumps_with_datetime(obj, **kwargs):
     """Dump an object to a JSON string, handling datetime objects."""
     return json.dumps(obj, cls=CustomDateTimeEncoder, **kwargs)
+
+
+def extract_granule_dates(
+        granule_umm_json: dict[str, Any],
+        static_data_day: int | None = None
+) -> tuple[str, str, str, str]:
+    """
+    Parse the begin, midpoint, end, and dataday for this granule
+
+    Parameters
+    ----------
+    granule_umm_json
+      umm json for this granule
+    Returns
+    -------
+    begin
+      range beginning date time as string formatted "%Y-%m-%dT%H:%M:%S.%fZ"
+    mid
+      date time halfway between begin and end as string formatted "%Y-%m-%dT%H:%M:%S.%fZ"
+    end
+      range ending date time as string formatted "%Y-%m-%dT%H:%M:%S.%fZ"
+    dataday
+      day this granule applies to as string formatted "%Y%j
+    """
+    time_range_dict = granule_umm_json['TemporalExtent']['RangeDateTime']
+
+    beginning_time_dt = parse_datetime(time_range_dict['BeginningDateTime'])
+    ending_time_dt = parse_datetime(time_range_dict['EndingDateTime'])
+    middle_time_dt = beginning_time_dt + (ending_time_dt - beginning_time_dt) / 2
+
+    if static_data_day is None:
+        begin = beginning_time_dt.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+        mid = middle_time_dt.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+        end = ending_time_dt.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+
+        middle_year = middle_time_dt.strftime('%Y')
+        day_of_year = middle_time_dt.strftime('%j')
+        dataday = middle_year + day_of_year
+    else:
+        # If the static_data_day override is set, parse the year from the midpoint
+        # of the granule, and set all metadata dates to the doy that was set.
+        data_year = middle_time_dt.year
+        begin = parse_doy(data_year, static_data_day)
+        mid = begin
+        end = begin
+        dataday = middle_time_dt.strftime('%Y') + f'{static_data_day:03d}'
+
+    return begin, mid, end, dataday
+
+
+def parse_datetime(datetime_str: str) -> datetime:
+    """
+    Parses a datetime string into a datetime object.
+
+    Parameters
+    ----------
+    datetime_str
+      Datetime in str format to parse
+
+    Returns
+    -------
+    datetime
+      a datetime object
+    """
+    formats = [
+        "%Y-%m-%dT%H:%M:%S.%fZ",        # 2023-01-01T12:30:45.123456Z
+        "%Y-%m-%dT%H:%M:%SZ",           # 2023-01-01T12:30:45Z
+        "%Y-%m-%dT%H:%M:%S.%f%z",       # 2023-01-01T12:30:45.123456+00:00
+        "%Y-%m-%dT%H:%M:%S%z",          # 2023-01-01T12:30:45+00:00
+    ]
+
+    for fmt in formats:
+        try:
+            return datetime.strptime(datetime_str, fmt)
+        except ValueError:
+            continue
+
+    # If none of the formats worked
+    raise ValueError(f"Unable to parse datetime string: {datetime_str}")
+
+
+def parse_doy(year: int, doy: int) -> str:
+    """
+    Parses a year and day of year into a string.
+
+    Parameters
+    ----------
+    year
+      integer year (parsed from midpoint of granule time range)
+    doy
+      static data day provided in DatasetConfiguration
+
+    Returns
+    -------
+    str
+      a static Y-m-d format date string with the time set to midnight UTC
+    """
+    jan_1 = datetime(year, 1, 1)
+    result_dt = jan_1 + timedelta(days=doy - 1)
+    return result_dt.strftime("%Y-%m-%dT00:00:00.000000Z")

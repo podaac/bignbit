@@ -5,11 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-[Unreleased]
+## [Unreleased]
 ### Added
 ### Changed
 ### Deprecated
 ### Removed
+### Fixed
+### Security
+
+## [0.7.0]
+### Added
+- [issues/108](https://github.com/podaac/bignbit/issues/108): Handle case when no data is returned from a Harmony job by throwing a warning that can be tracked in CloudWatch logs.
+### Changed
+- [issues/148](https://github.com/podaac/bignbit/issues/148): Refactored message passing system after browse image generation to handle large tiled outputs (100s of output files).
+### Deprecated
+### Removed
+- [issues/148](https://github.com/podaac/bignbit/issues/148): Removed "Generate Image Metadata", "Build Image Sets", "Process Harmony Results", and "Save CNM Message" lambdas in favor of a consolidated "Process BIG Result" lambda that generates and save CNM messages for the entire result of a browse image generation workflow.
 ### Fixed
 ### Security
 
@@ -20,7 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
-- [issues/138](https://github.com/podaac/bignbit/issues/138): Fix key error when building image sets from OPERA HLS imagery. 
+- [issues/138](https://github.com/podaac/bignbit/issues/138): Fix key error when building image sets from OPERA HLS imagery.
 ### Security
 
 ## [0.5.0]
@@ -119,12 +130,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - [issues/15](https://github.com/podaac/bignbit/issues/15): Change 'convertToPNG' choice to a generic send to harmony choice
 - [issues/16](https://github.com/podaac/bignbit/issues/16): Change apply opera treatment choice and lambda to be specific to HLS
-- [issues/23](https://github.com/podaac/bignbit/issues/23): Harmony requests now include `destinationUrl` parameter to place output 
+- [issues/23](https://github.com/podaac/bignbit/issues/23): Harmony requests now include `destinationUrl` parameter to place output
   directly in s3 bucket instead of requiring data to be copied.
 - [issues/41](https://github.com/podaac/bignbit/issues/41): Module no longer depends on deprecated hashicorp/template provider
 - [issues/42](https://github.com/podaac/bignbit/issues/42): Terraform version upgraded to v1.5.3
 - Default values for `config_dir` and `bignbit_audit_path` have changed to `big-config` and `bignbit-cnm-output` respectively
-### Deprecated 
+### Deprecated
 ### Removed
 - [issues/7](https://github.com/podaac/bignbit/issues/15): Remove the wait for GITC response
 - [issues/23](https://github.com/podaac/bignbit/issues/23): Removed `lambda_role` module variable. The lambda role is now created as part of the module, `permissions_boundary_arn` is required instead.
@@ -144,7 +155,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [0.1.1]
-### Added 
+### Added
 - [issues/2](https://github.com/podaac/bignbit/issues/2): Create github action pipeline to build artifacts
 - [issues/3](https://github.com/podaac/bignbit/issues/3): Update terraform mock deployment of cumulus module to services accounts
 - Initial port from JPL GHE to public GitHub.com

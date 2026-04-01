@@ -5,78 +5,62 @@ import jsonschema
 import pytest
 
 import bignbit.image_set
-import bignbit.send_to_gitc
+from bignbit.handle_big_result import (
+    construct_cnm
+)
 
 
 @pytest.fixture()
 def cnm_v151_schema():
-    cnm_v151_url = "https://raw.githubusercontent.com/podaac/cloud-notification-message-schema/v1.5.1/cumulus_sns_schema.json"
-    cnm_schema = json.loads(urllib.request.urlopen(cnm_v151_url).read().decode("utf-8"))
+    cnm_v151_url = 'https://raw.githubusercontent.com/podaac/cloud-notification-message-schema/v1.5.1/cumulus_sns_schema.json'
+    cnm_schema = json.loads(urllib.request.urlopen(cnm_v151_url).read().decode('utf-8'))
     return cnm_schema
 
 
 def test_get_image_sets():
     image_set_1 = bignbit.image_set.ImageSet(
-        name='test_1992001_EPSG:4326',
+        name='test_1992002_EPSG:4326!C123456789-POCLOUD',
         image={
-            'name': 'test.png',
             'fileName': 'test.png',
             'type': 'browse',
             'subtype': 'png',
-            "variable": "analysed_sst",
-            "output_crs": "EPSG:4326"
+            'variable': 'analysed_sst',
+            'output_crs': 'EPSG:4326',
+            'dataday': '1992002'
         },
         world_file={
-            'name': 'test.wld',
             'fileName': 'test.wld',
             'type': 'metadata',
             'subtype': 'world file',
-            "variable": "analysed_sst",
-            "output_crs": "EPSG:4326"
-        },
-        image_metadata={
-            'name': 'test.xml',
-            'fileName': 'test.xml',
-            'type': 'metadata',
-            'subtype': 'ImageMetadata-v1.2',
-            'dataday': '1992001',
-            "variable": "analysed_sst",
-            "output_crs": "EPSG:4326"
+            'variable': 'analysed_sst',
+            'output_crs': 'EPSG:4326',
+            'dataday': '1992002'
         })
 
     image_set_2 = bignbit.image_set.ImageSet(
-        name='test2_1992002_EPSG:4326',
+        name='test2_1992002_EPSG:4326!C123456789-POCLOUD',
         image={
-            'name': 'test2.png',
             'fileName': 'test2.png',
             'type': 'browse',
             'subtype': 'png',
-            "variable": "analysed_sst",
-            "output_crs": "EPSG:4326"
+            'variable': 'analysed_sst',
+            'output_crs': 'EPSG:4326',
+            'dataday': '1992002'
         },
         world_file={
-            'name': 'test2.wld',
             'fileName': 'test2.wld',
             'type': 'metadata',
             'subtype': 'world file',
-            "variable": "analysed_sst",
-            "output_crs": "EPSG:4326"
-        },
-        image_metadata={
-            'name': 'test2.xml',
-            'fileName': 'test2.xml',
-            'type': 'metadata',
-            'subtype': 'ImageMetadata-v1.2',
-            'dataday': '1992002',
-            "variable": "analysed_sst",
-            "output_crs": "EPSG:4326"
+            'variable': 'analysed_sst',
+            'output_crs': 'EPSG:4326',
+            'dataday': '1992002'
         })
     test_input = [
         image_set_1.image, image_set_1.image_metadata, image_set_1.world_file,
         image_set_2.image, image_set_2.image_metadata, image_set_2.world_file,
     ]
 
-    image_sets = bignbit.image_set.from_big_output(test_input)
+    image_sets = bignbit.image_set.build_image_sets(test_input, 'C123456789-POCLOUD', '1992002')
 
     assert len(image_sets) == 2
     assert image_set_1 in image_sets
@@ -94,8 +78,8 @@ def test_construct_cnm(cnm_v151_schema):
             'subtype': 'png',
             'key': 'test.png',
             'bucket': 'test',
-            "variable": "analysed_sst",
-            "output_crs": "EPSG:4326"
+            'variable': 'analysed_sst',
+            'output_crs': 'EPSG:4326'
         },
         world_file={
             'name': 'test.wld',
@@ -105,8 +89,8 @@ def test_construct_cnm(cnm_v151_schema):
             'subtype': 'world file',
             'key': 'test.png',
             'bucket': 'test',
-            "variable": "analysed_sst",
-            "output_crs": "EPSG:4326"
+            'variable': 'analysed_sst',
+            'output_crs': 'EPSG:4326'
         },
         image_metadata={
             'name': 'test.xml',
@@ -117,17 +101,19 @@ def test_construct_cnm(cnm_v151_schema):
             'dataday': '1992001',
             'key': 'test.xml',
             'bucket': 'test',
-            "variable": "analysed_sst",
-            "output_crs": "EPSG:4326"
+            'variable': 'analysed_sst',
+            'output_crs': 'EPSG:4326'
         })
 
     test_input = [
         image_set_1.image, image_set_1.image_metadata, image_set_1.world_file
     ]
 
-    image_sets = bignbit.image_set.from_big_output(test_input)
+    image_sets = bignbit.image_set.build_image_sets(test_input, 'C123456789-POCLOUD', '1992001')
+    # image metadata is created later
+    image_sets[0].image_metadata = image_set_1.image_metadata
 
-    cnm = bignbit.send_to_gitc.construct_cnm(image_sets[0], 'pytest', 'token', 'testcollection')
+    cnm = construct_cnm(image_sets[0], 'POCLOUD', 'testcollection')
     jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
 
 
@@ -141,8 +127,8 @@ def test_construct_cnm_no_wld(cnm_v151_schema):
             'subtype': 'png',
             'key': 'test.png',
             'bucket': 'test',
-            "variable": "analysed_sst",
-            "output_crs": "EPSG:4326"
+            'variable': 'analysed_sst',
+            'output_crs': 'EPSG:4326'
         },
         {
             'name': 'test.xml',
@@ -153,14 +139,16 @@ def test_construct_cnm_no_wld(cnm_v151_schema):
             'dataday': '1992001',
             'key': 'test.xml',
             'bucket': 'test',
-            "variable": "analysed_sst",
-            "output_crs": "EPSG:4326"
+            'variable': 'analysed_sst',
+            'output_crs': 'EPSG:4326'
         }
     ]
 
-    image_sets = bignbit.image_set.from_big_output(test_input)
+    image_sets = bignbit.image_set.build_image_sets(test_input, 'C123456789-POCLOUD', '1992001')
+    # image metadata is created later
+    image_sets[0].image_metadata = test_input[1]
 
-    cnm = bignbit.send_to_gitc.construct_cnm(image_sets[0], 'pytest', 'token', 'testcollection')
+    cnm = construct_cnm(image_sets[0], 'POCLOUD', 'testcollection')
     jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
 
 def test_construct_cnm_variable_with_slash(cnm_v151_schema):
@@ -173,8 +161,8 @@ def test_construct_cnm_variable_with_slash(cnm_v151_schema):
             'subtype': 'png',
             'key': 'test.png',
             'bucket': 'test',
-            "variable": "groupA/analysed_sst",
-            "output_crs": "EPSG:4326"
+            'variable': 'groupA/analysed_sst',
+            'output_crs': 'EPSG:4326'
         },
         {
             'name': 'test.xml',
@@ -185,18 +173,20 @@ def test_construct_cnm_variable_with_slash(cnm_v151_schema):
             'dataday': '1992001',
             'key': 'test.xml',
             'bucket': 'test',
-            "variable": "groupA/analysed_sst",
-            "output_crs": "EPSG:4326"
+            'variable': 'groupA/analysed_sst',
+            'output_crs': 'EPSG:4326'
         }
     ]
 
-    image_sets = bignbit.image_set.from_big_output(test_input)
+    image_sets = bignbit.image_set.build_image_sets(test_input, 'C123456789-POCLOUD', '1992001')
+    # image metadata is created later
+    image_sets[0].image_metadata = test_input[1]
 
-    cnm = bignbit.send_to_gitc.construct_cnm(image_sets[0], 'pytest', 'token', 'testcollection')
+    cnm = construct_cnm(image_sets[0], 'POCLOUD', 'testcollection')
     jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
     assert cnm['collection'] == 'testcollection_groupA_analysed_sst_LL'
 
-@pytest.mark.parametrize("output_crs", ["EPSG:4326", "EPSG:3031", "EPSG:3413"])
+@pytest.mark.parametrize('output_crs', ['EPSG:4326', 'EPSG:3031', 'EPSG:3413'])
 def test_construct_cnm_with_projection(output_crs: str, cnm_v151_schema):
     test_input = [
         {
@@ -207,8 +197,8 @@ def test_construct_cnm_with_projection(output_crs: str, cnm_v151_schema):
             'subtype': 'png',
             'key': 'test.png',
             'bucket': 'test',
-            "variable": "groupA/analysed_sst",
-            "output_crs": output_crs
+            'variable': 'groupA/analysed_sst',
+            'output_crs': output_crs
         },
         {
             'name': 'test.xml',
@@ -219,19 +209,21 @@ def test_construct_cnm_with_projection(output_crs: str, cnm_v151_schema):
             'dataday': '1992001',
             'key': 'test.xml',
             'bucket': 'test',
-            "variable": "groupA/analysed_sst",
-            "output_crs": output_crs
+            'variable': 'groupA/analysed_sst',
+            'output_crs': output_crs
         }
     ]
 
-    image_sets = bignbit.image_set.from_big_output(test_input)
+    image_sets = bignbit.image_set.build_image_sets(test_input, 'C123456789-POCLOUD', '1992001')
+    # image metadata is created later
+    image_sets[0].image_metadata = test_input[1]
 
-    cnm = bignbit.send_to_gitc.construct_cnm(image_sets[0], 'pytest', 'token', 'testcollection')
+    cnm = construct_cnm(image_sets[0], 'POCLOUD', 'testcollection')
     jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
 
-    if output_crs == "EPSG:4326":
+    if output_crs == 'EPSG:4326':
         assert cnm['collection'] == 'testcollection_groupA_analysed_sst_LL'
-    elif output_crs == "EPSG:3031":
+    elif output_crs == 'EPSG:3031':
         assert cnm['collection'] == 'testcollection_groupA_analysed_sst_S'
-    elif output_crs == "EPSG:3413":
+    elif output_crs == 'EPSG:3413':
         assert cnm['collection'] == 'testcollection_groupA_analysed_sst_N'

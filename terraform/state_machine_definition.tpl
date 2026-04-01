@@ -1,8 +1,8 @@
 {
   "Comment": "Run BIG & BIT",
-  "StartAt":"GetDatasetConfiguration",
+  "StartAt":"Get Dataset Configuration",
   "States":{
-    "GetDatasetConfiguration":{
+    "Get Dataset Configuration":{
       "Type":"Task",
       "Resource":"${GetDatasetConfigurationLambda}",
       "Parameters":{
@@ -153,7 +153,7 @@
           "Next":"Apply OPERA HLS Treatment"
         }
       ],
-      "Default":"Generate Image Metadata"
+      "Default":"Handle BIG Result"
     },
     "Apply OPERA HLS Treatment":{
       "Type":"Task",
@@ -190,7 +190,7 @@
           "MaxAttempts": 2
         }
       ],
-      "Next":"Generate Image Metadata"
+      "Next":"Handle BIG Result"
     },
     "Get Collection Concept Id":{
       "Type":"Task",
@@ -200,7 +200,6 @@
           "event.$":"$",
           "task_config":{
             "collection_shortname":"{$.meta.collection.name}",
-            "collection_version":"{$.meta.collection.version}",
             "collection_version":"{$.meta.collection.version}",
             "cmr_provider":"{$.meta.cmr.provider}",
             "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
@@ -268,12 +267,13 @@
               "States":{
                   "Submit Harmony Job":{
                     "Type":"Task",
+                    "Resource":"${SubmitHarmonyJobLambda}",
                     "Parameters":{
                       "cma":{
                         "event.$":"$",
                         "task_config":{
                           "granule":"{$.payload.granules[0]}",
-                          "cmr_provider":"{$.cmr_provider}",
+                          "cmr_provider":"{$.meta.cmr.provider}",
                           "collection":"{$.meta.collection}",
                           "collection_concept_id":"{$.payload.collection_concept_id}",
                           "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
@@ -289,18 +289,39 @@
                         }
                       }
                     },
-                    "Resource":"${SubmitHarmonyJobLambda}",
+                    "Retry": [
+                      {
+                        "ErrorEquals": [
+                          "Lambda.ServiceException",
+                          "Lambda.AWSLambdaException",
+                          "Lambda.SdkClientException",
+                          "Lambda.TooManyRequestsException"
+                        ],
+                        "IntervalSeconds": 2,
+                        "MaxAttempts": 6,
+                        "BackoffRate": 2
+                      },
+                      {
+                        "ErrorEquals": ["Lambda.Unknown"],
+                        "BackoffRate": 2,
+                        "IntervalSeconds": 2,
+                        "MaxAttempts": 2
+                      }
+                    ],
                     "Next":"Get Harmony Job Status"
                   },
                   "Get Harmony Job Status":{
                     "Type":"Task",
                     "Resource":"${GetHarmonyJobStatusLambda}",
+                    "OutputPath":"$.payload",
                     "Parameters":{
                       "cma":{
                         "event.$":"$",
                         "task_config":{
                           "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
                           "harmony_job":"{$.payload.harmony_job.job}",
+                          "variable":"{$.current_variable.id}",
+                          "current_crs":"{$.current_crs}",
                           "cumulus_message":{
                             "input":"{$.payload}"
                           }
@@ -337,47 +358,21 @@
                         "MaxAttempts": 2
                       }
                     ],
-                    "Next":"Process Harmony Job Output"
-                  },
-                  "Process Harmony Job Output":{
-                    "Type":"Task",
-                    "Resource":"${ProcessHarmonyJobOutputLambda}",
-                    "OutputPath": "$.payload",
-                    "Parameters":{
-                      "cma":{
-                        "event.$":"$",
-                        "task_config":{
-                          "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
-                          "harmony_job":"{$.payload.harmony_job.job}",
-                          "variable":"{$.current_variable.id}",
-                          "current_crs":"{$.current_crs}",
-                          "cumulus_message":{
-                            "input":"{$.payload}"
-                          }
-                        }
-                      }
-                    },
-                    "Retry":[
+                    "Catch":[
                       {
                         "ErrorEquals":[
-                          "Lambda.ServiceException",
-                          "Lambda.AWSLambdaException",
-                          "Lambda.SdkClientException",
-                          "Lambda.TooManyRequestsException"
+                          "HarmonyJobNoDataError"
                         ],
-                        "IntervalSeconds":2,
-                        "MaxAttempts":6,
-                        "BackoffRate":2
-                      },
-                      {
-                        "ErrorEquals": [
-                          "Lambda.Unknown"
-                       ],
-                        "BackoffRate": 2,
-                        "IntervalSeconds": 2,
-                        "MaxAttempts": 2
+                        "ResultPath":"$.harmonyNoDataError",
+                        "Next":"Handle No Data Result"
                       }
                     ],
+                    "End":true
+                  },
+                  "Handle No Data Result":{
+                    "Type":"Pass",
+                    "Comment":"Handles cases where Harmony job succeeded but returned no data",
+                    "Result":{},
                     "End":true
                   }
                 }
@@ -389,15 +384,20 @@
       },
       "MaxConcurrency":10,
       "ResultPath":"$.payload.big",
-      "Next":"Generate Image Metadata"
+      "Next":"Handle BIG Result"
     },
-    "Generate Image Metadata":{
+    "Handle BIG Result":{
       "Type":"Task",
-      "Resource":"${GenerateImageMetadataLambda}",
+      "Resource":"${HandleBigResultLambda}",
       "Parameters":{
         "cma":{
           "event.$":"$",
           "task_config":{
+            "bignbit_audit_bucket": "${BignbitAuditBucket}",
+            "bignbit_audit_path": "${BignbitAuditPath}",
+            "cmr_environment":"{$.meta.cmr.cmrEnvironment}",
+            "cmr_provider": "{$.meta.cmr.provider}",
+            "collection": "{$.meta.collection.name}",
             "cumulus_message":{
               "input":"{$.payload}"
             }
@@ -425,43 +425,6 @@
           "MaxAttempts": 2
         }
       ],
-      "Next":"Clean Output"
-    },
-    "Clean Output":{
-      "Type":"Pass",
-      "Next":"BuildImageSets",
-      "Parameters":{
-        "cumulus_meta.$": "$.cumulus_meta",
-        "meta": {
-          "buckets.$": "$.meta.buckets",
-          "cmr.$": "$.meta.cmr",
-          "collection.$": "$.meta.collection",
-          "provider.$": "$.meta.provider",
-          "stack.$": "$.meta.stack"
-        },
-        "payload":{
-          "granules.$":"$.payload.granules",
-          "big.$":"$.payload.big"
-        },
-        "exception.$":"$.exception"
-      },
-      "Comment":"Removes extra data from payload that is no longer necessary"
-    },
-    "BuildImageSets": {
-      "Parameters": {
-        "cma": {
-          "event.$": "$",
-          "task_config": {
-            "collection": "{$.meta.collection}",
-            "cmr_provider": "{$.meta.cmr.provider}",
-            "cumulus_message": {
-              "input": "{$.payload}"
-            }
-          }
-        }
-      },
-      "Type": "Task",
-      "Resource": "${BuildImageSetsLambda}",
       "Catch": [
         {
           "ErrorEquals": [
@@ -471,69 +434,37 @@
           "Next": "WorkflowFailed"
         }
       ],
-      "Retry": [
-        {
-          "ErrorEquals": [
-            "States.ALL"
-          ],
-          "IntervalSeconds": 2,
-          "MaxAttempts": 3
-        }
-      ],
-      "Next": "TransferImageSets"
+      "Next":"Transfer Image Sets"
     },
-    "TransferImageSets": {
+    "Transfer Image Sets": {
       "Type": "Map",
       "InputPath": "$",
       "ItemsPath": "$.payload.pobit",
       "MaxConcurrency": 20,
-      "Iterator": {
-        "StartAt": "SendToGITC",
+      "ItemProcessor": {
+        "ProcessorConfig": {
+          "Mode": "INLINE"
+        },
+        "StartAt": "Send To GITC",
         "States": {
-          "SendToGITC": {
+          "Send To GITC": {
+            "Type": "Task",
+            "Resource": "${SendToGITCLambda}",
             "Parameters": {
               "cma": {
                 "event.$": "$",
                 "task_config": {
-                  "collection": "{$.collection}",
-                  "cmr_provider": "{$.cmr_provider}",
                   "cumulus_message": {
                     "input": "{$}"
                   }
                 }
               }
             },
-            "Type": "Task",
-            "Resource": "${SendToGITCLambda}",
             "TimeoutSeconds": 86400,
             "ResultPath": "$.gibs",
             "ResultSelector": {
               "cnmContent.$": "$.payload"
             },
-            "Next": "SaveCNMMessage"
-          },
-          "SaveCNMMessage": {
-            "Type": "Task",
-            "Resource": "${SaveCNMMessageLambda}",
-            "Parameters": {
-              "cma": {
-                "event.$": "$",
-                "task_config": {
-                  "collection": "{$.collection_name}",
-                  "granule_ur": "{$.granule_ur}",
-                  "cnm": "{$.gibs.cnmContent}",
-                  "bignbit_audit_bucket": "${BignbitAuditBucket}",
-                  "bignbit_audit_path": "${BignbitAuditPath}",
-                  "cumulus_message": {
-                    "input": "{$}"
-                  }
-                }
-              }
-            },
-            "ResultSelector": {
-              "cnmObjectName.$": "$.payload"
-            },
-            "ResultPath": "$.gibs",
             "Retry": [
               {
                 "ErrorEquals": [
