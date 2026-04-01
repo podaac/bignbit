@@ -5,10 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-[Unreleased]
+## [Unreleased]
+### Added
+- [issues/119](https://github.com/podaac/bignbit/issues/119): As part of the operationalization of a large number of collections, added a script and instructions to partially automate dataset config creation.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.7.0]
 ### Added
 - [issues/108](https://github.com/podaac/bignbit/issues/108): Handle case when no data is returned from a Harmony job by throwing a warning that can be tracked in CloudWatch logs.
-- [issues/119](https://github.com/podaac/bignbit/issues/119): As part of the operationalization of a large number of collections, added a script and instructions to partially automate dataset config creation.
 ### Changed
 - [issues/148](https://github.com/podaac/bignbit/issues/148): Refactored message passing system after browse image generation to handle large tiled outputs (100s of output files).
 ### Deprecated
