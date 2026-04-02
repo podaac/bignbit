@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.7.1]
+### Added
 - [issues/119](https://github.com/podaac/bignbit/issues/119): As part of the operationalization of a large number of collections, added a script and instructions to partially automate dataset config creation.
 ### Changed
 ### Deprecated
