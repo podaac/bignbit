@@ -171,7 +171,12 @@ class CMA(Process):
             })
             CUMULUS_LOGGER.info(f'Finished writing CNM message for {image_set.name}')
 
-        return {'pobit': pobit_cnm_urls}
+        response_payload = {
+            'granules': self.input.get('granules', []),
+            'pobit': pobit_cnm_urls,
+        }
+
+        return response_payload
 
 
 def process_harmony_results(harmony_job: dict[str, str], cmr_env: str) -> list[dict[str, Any]]:

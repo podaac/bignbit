@@ -13,6 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.7.1]
+### Added
+- [issues/119](https://github.com/podaac/bignbit/issues/119): As part of the operationalization of a large number of collections, added a script and instructions to partially automate dataset config creation.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- [issues/164](https://github.com/podaac/bignbit/issues/164): Add `granules` to payload output for cumulus db status reporting
+### Security
+
 ## [0.7.0]
 ### Added
 - [issues/108](https://github.com/podaac/bignbit/issues/108): Handle case when no data is returned from a Harmony job by throwing a warning that can be tracked in CloudWatch logs.

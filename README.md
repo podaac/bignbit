@@ -11,7 +11,7 @@ In general, the high level steps are:
 5. Wait for GIBS to process the CNM messages and send a success or failure response back to an SNS topic.
 6. Record the result of GIBS processing in S3.
 
-_Visual representation of the bignbit step function state machine:_ 
+_Visual representation of the bignbit step function state machine:_
 
 <img src="stepfunctions_graph.png" width="512">
 
@@ -153,6 +153,8 @@ This module supplies the following outputs:
 
 
 # Configuring a collection
+**NEW**: A script is now available to aid with dataset configuration creation. Please see `scripts/CONFIGURATION.md` for more information.
+
 In order to configure a collection for use with bignbit the following must be done:
 
 1. Add config file to the `config_bucket`. The file should be named "_collection shortname_.cfg" and the contents should be JSON
@@ -160,7 +162,7 @@ In order to configure a collection for use with bignbit the following must be do
 
 The contents of the configuration file should be a valid json object with the following attributes:
 
-| Name               | Type         | Description                                                                                                                                                                                                                                                          | 
+| Name               | Type         | Description                                                                                                                                                                                                                                                          |
 |--------------------|--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | sendToHarmony      | boolean      | true/false if this collection should be processed using Harmony to generate browse images                                                                                                                                                                            |
 | operaHLSTreatment  | boolean      | true/false if this collection should have special OPERA_L3_DSWX-HLS processing applied to it (see [apply_opera_hls_treatment](bignbit/apply_opera_hls_treatment.py))                                                                                                 |
@@ -179,11 +181,11 @@ A few example configurations can be found in the [podaac/bignbit-config](https:/
 
 ## Harmony requests
 
-> [!IMPORTANT]  
+> [!IMPORTANT]
 > bignbit uses the [user owned bucket](https://harmony.earthdata.nasa.gov/docs#user-owned-buckets-for-harmony-output) parameter
 > when making Harmony requests. If an existing bucket is configured for the `bignbit_staging_bucket` parameter, it must
 > have a bucket policy that allows Harmony write permission and GIBS read permission. If `bignbit_staging_bucket` is left blank, bignbit will
-> create a new S3 bucket (named `svc-${var.app_name}-${var.prefix}-staging`) and apply the correct permissions automatically. 
+> create a new S3 bucket (named `svc-${var.app_name}-${var.prefix}-staging`) and apply the correct permissions automatically.
 > This bucket will also automatically expire objects older than 30 days.
 
 bignbit uses the harmony-py library to construct the Harmony requests for generating images. Most of the parameters
@@ -195,17 +197,17 @@ See `bignbit.submit_harmony_job.generate_harmony_request` for details on how the
 ### Harmony status check policy
 
 The frequency of checking the Harmony job status is controlled by the `harmony_job_status_*` parameters in the module inputs.
-The default policy will check the Harmony job status every 20 seconds for a maximum of 15 attempts, essentially giving a 
-maximum wait time of 5 minutes for the Harmony job to complete. If the job does not complete within this time, it will be 
+The default policy will check the Harmony job status every 20 seconds for a maximum of 15 attempts, essentially giving a
+maximum wait time of 5 minutes for the Harmony job to complete. If the job does not complete within this time, it will be
 considered a failure.
 
 For more details of what each of these parameters does, see the [AWS documentation](https://docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html#error-handling-retrying-after-an-error)
 
 ### Behavior for Harmony requests that complete with no data
 
-Occasionally, a harmony request will complete and report success but no data files will be generated, this can occur for a number of reasons, 
-one of which is when a variable subsetting/filtering step completely filters all data from a granule. In these cases, the 
-"Process Harmony Job Output" workflow step, defined in the code as the `process_harmony_results.py` lambda, will raise 
+Occasionally, a harmony request will complete and report success but no data files will be generated, this can occur for a number of reasons,
+one of which is when a variable subsetting/filtering step completely filters all data from a granule. In these cases, the
+"Process Harmony Job Output" workflow step, defined in the code as the `process_harmony_results.py` lambda, will raise
 a HarmonyJobNoDataError. This exception does not trigger a failure in the whole workflow, as other variables associated with the granule may succeed.
 To track Harmony jobs that return no data in CloudWatch, the following warning can be tracked:
 ```
@@ -304,12 +306,12 @@ An example CNM-S message produced by this module:
 5. Install python package and dependencies `poetry install`
 6. Verify tests pass `poetry run pytest tests/`
 
-> [!IMPORTANT] 
+> [!IMPORTANT]
 > If developing on a `darwin_arm64` based mac, running terraform locally may result
-> in an error message during `terraform init`: "Provider registry.terraform.io/hashicorp/null v2.1.2 
+> in an error message during `terraform init`: "Provider registry.terraform.io/hashicorp/null v2.1.2
 > does not have a package available for your current platform, darwin_arm64."
 > One workaround for this is to use https://github.com/kreuzwerker/m1-terraform-provider-helper
 > to compile a local arm-based version of the hashicorp/null provider.
-> 
+>
 > This is only necessary as long as cumulus core requires `~>2.1` version of hashicorp/null because
 > v3.x of the provider does have support for `darwin_arm64` platforms
