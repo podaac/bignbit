@@ -468,13 +468,17 @@ def test_parse_doy_leap_day():
 # Tests for get_harmony_client()
 # ---------------------------------------------------------------------------
 
+@patch('boto3.client')
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
-def test_get_harmony_client_uat(mock_get_edl_creds, mock_client):
+def test_get_harmony_client_uat(mock_get_edl_creds, mock_client, mock_boto):
     """Test getting Harmony client for UAT environment."""
     mock_get_edl_creds.return_value = ('test_user', 'test_pass')
     mock_client_instance = MagicMock()
     mock_client.return_value = mock_client_instance
+
+    mock_client = MagicMock()
+    mock_boto.return_value = mock_client
 
     # Reset global client
     import bignbit.utils
@@ -486,13 +490,17 @@ def test_get_harmony_client_uat(mock_get_edl_creds, mock_client):
     mock_client.assert_called_once()
 
 
+@patch('boto3.client')
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
-def test_get_harmony_client_prod(mock_get_edl_creds, mock_client):
+def test_get_harmony_client_prod(mock_get_edl_creds, mock_client, mock_boto):
     """Test getting Harmony client for PROD environment."""
     mock_get_edl_creds.return_value = ('test_user', 'test_pass')
     mock_client_instance = MagicMock()
     mock_client.return_value = mock_client_instance
+
+    mock_client = MagicMock()
+    mock_boto.return_value = mock_client
 
     # Reset global client
     import bignbit.utils
@@ -503,13 +511,17 @@ def test_get_harmony_client_prod(mock_get_edl_creds, mock_client):
     assert result == mock_client_instance
 
 
+@patch('boto3.client')
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
-def test_get_harmony_client_sit_defaults_to_uat(mock_get_edl_creds, mock_client):
+def test_get_harmony_client_sit_defaults_to_uat(mock_get_edl_creds, mock_client, mock_boto):
     """Test that SIT environment defaults to UAT."""
     mock_get_edl_creds.return_value = ('test_user', 'test_pass')
     mock_client_instance = MagicMock()
     mock_client.return_value = mock_client_instance
+
+    mock_client = MagicMock()
+    mock_boto.return_value = mock_client
 
     # Reset global client
     import bignbit.utils
