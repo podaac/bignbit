@@ -328,7 +328,11 @@ def get_harmony_client(environment_str: str) -> Client:
     if not HARMONY_CLIENT:
         # Create a boto3 Lambda client for token retrieval
         session = boto3.session.Session()
-        region = session.region_name
+        region = (
+            os.environ.get("AWS_REGION") or
+            os.environ.get("AWS_DEFAULT_REGION") or
+            "us-west-2"
+        )
 
         lambda_client = boto3.client('lambda', region_name=region)
 
