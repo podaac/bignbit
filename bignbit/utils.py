@@ -331,6 +331,7 @@ def get_harmony_client(environment_str: str) -> Client:
         region = (
             os.environ.get("AWS_REGION") or
             os.environ.get("AWS_DEFAULT_REGION") or
+            session.region_name or
             "us-west-2"
         )
 
