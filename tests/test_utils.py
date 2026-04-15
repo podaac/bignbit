@@ -477,8 +477,14 @@ def test_get_harmony_client_uat(mock_get_edl_creds, mock_client, mock_boto):
     mock_client_instance = MagicMock()
     mock_client.return_value = mock_client_instance
 
-    mock_client = MagicMock()
-    mock_boto.return_value = mock_client
+    mock_client.get_parameter.return_value = {
+        "Parameter": {
+            "Value": json.dumps({
+                "username": "test_user",
+                "password": "test_pass"
+            })
+        }
+    }
 
     # Reset global client
     import bignbit.utils
@@ -499,8 +505,14 @@ def test_get_harmony_client_prod(mock_get_edl_creds, mock_client, mock_boto):
     mock_client_instance = MagicMock()
     mock_client.return_value = mock_client_instance
 
-    mock_client = MagicMock()
-    mock_boto.return_value = mock_client
+    mock_client.get_parameter.return_value = {
+        "Parameter": {
+            "Value": json.dumps({
+                "username": "test_user",
+                "password": "test_pass"
+            })
+        }
+    }
 
     # Reset global client
     import bignbit.utils
@@ -520,8 +532,14 @@ def test_get_harmony_client_sit_defaults_to_uat(mock_get_edl_creds, mock_client,
     mock_client_instance = MagicMock()
     mock_client.return_value = mock_client_instance
 
-    mock_client = MagicMock()
-    mock_boto.return_value = mock_client
+    mock_client.get_parameter.return_value = {
+        "Parameter": {
+            "Value": json.dumps({
+                "username": "test_user",
+                "password": "test_pass"
+            })
+        }
+    }
 
     # Reset global client
     import bignbit.utils
