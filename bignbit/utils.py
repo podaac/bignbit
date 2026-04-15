@@ -4,8 +4,8 @@ import json
 import os
 import pathlib
 import re
+import base64
 from datetime import datetime, timedelta
-
 from typing import Any
 import boto3
 import requests
@@ -325,9 +325,39 @@ def get_harmony_client(environment_str: str) -> Client:
         HARMONY_CLIENT = None
 
     if not HARMONY_CLIENT:
+        # Create a boto3 Lambda client for token retrieval
+        lambda_client = boto3.client('lambda')
+
+        # Retrieve EDL credentials (username/password)
+        edl_user, edl_pass = get_edl_creds()
+
+        # Prepare payload to request an access token from the Lambda "token-dispenser"
+        payload = {
+            "action": "edl",
+            "edl_user": edl_user,
+            "edl_pass": edl_pass,
+            "edl_env": environment_str,
+            "minimum_alive_secs": 300  # keep token valid for at least 5 minutes
+        }
+        encoded_payload = base64.b64encode(
+            json.dumps(payload).encode("utf-8")
+        ).decode("utf-8")
+
+        # Invoke the Lambda synchronously and get the token
+        response = lambda_client.invoke(
+            FunctionName='sndbx-launchpad_token_dispenser',
+            InvocationType='RequestResponse',  # wait for response
+            Payload=encoded_payload
+        )
+
+        # Read the payload from Lambda response and parse JSON
+        response_payload = response['Payload'].read()
+        token = json.loads(response_payload)['access-token']
+
+        # Instantiate Harmony client with retrieved token
         HARMONY_CLIENT = Client(
             env=harmony_environ,
-            auth=get_edl_creds(),
+            token=token,
             should_validate_auth=HARMONY_SHOULD_VALIDATE_AUTH
         )
 
