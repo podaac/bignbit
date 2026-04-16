@@ -5,6 +5,7 @@ import xml.etree.ElementTree as ET
 import boto3
 import pytest
 from moto import mock_s3
+from unittest.mock import patch, MagicMock
 
 import bignbit.utils
 from bignbit.handle_big_result import (
@@ -19,8 +20,16 @@ from bignbit.image_set import ImageSet
 
 @pytest.mark.vcr
 @mock_s3
-def test_process_harmony_results():
+@patch("boto3.client")
+def test_process_harmony_results(mock_boto):
     """Test pulling results of a harmony job from s3."""
+    mock_lambda = MagicMock()
+    mock_boto.return_value = mock_lambda
+
+    mock_lambda.invoke.return_value = {
+        "Payload": MagicMock(read=lambda: b'{"token": "fake-token"}')
+    }
+    
     bignbit.utils.ED_USER = 'test'
     bignbit.utils.ED_PASS = 'test'
     job_id = '3d276f84-56e2-4f0a-acb2-35b9fcaaa317'
@@ -63,8 +72,16 @@ def test_process_harmony_results():
         assert file['variable'] == 'flx'
 
 @pytest.mark.vcr
-def test_process_harmony_results_no_data():
+@patch("boto3.client")
+def test_process_harmony_results_no_data(mock_boto):
     """Test case where a harmony job returned no data and was passed empty."""
+    mock_lambda = MagicMock()
+    mock_boto.return_value = mock_lambda
+
+    mock_lambda.invoke.return_value = {
+        "Payload": MagicMock(read=lambda: b'{"token": "fake-token"}')
+    }
+
     bignbit.utils.ED_USER = 'test'
     bignbit.utils.ED_PASS = 'test'
 
