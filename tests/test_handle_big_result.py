@@ -72,7 +72,7 @@ def test_process_harmony_results(mock_boto):
         assert file['variable'] == 'flx'
 
 @pytest.mark.vcr
-@patch("boto3.client")
+@patch('bignbit.utils.boto3.client')
 def test_process_harmony_results_no_data(mock_boto):
     """Test case where a harmony job returned no data and was passed empty."""
     mock_lambda = MagicMock()

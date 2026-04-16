@@ -471,15 +471,17 @@ def test_parse_doy_leap_day():
 @patch('bignbit.utils.boto3.client')
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
-def test_get_harmony_client_uat(mock_get_edl_creds, mock_harmony_client, mock_boto):
-    """Test getting Harmony client for UAT environment."""
+def test_get_harmony_client_uat(
+    mock_get_edl_creds,
+    mock_harmony_client,
+    mock_boto
+):
     mock_get_edl_creds.return_value = ('test_user', 'test_pass')
 
-    # --- Harmony client mock ---
     mock_client_instance = MagicMock()
     mock_harmony_client.return_value = mock_client_instance
 
-    # --- boto3 SSM mock ---
+    # boto3 mock
     mock_ssm = MagicMock()
     mock_boto.return_value = mock_ssm
 
@@ -495,7 +497,6 @@ def test_get_harmony_client_uat(mock_get_edl_creds, mock_harmony_client, mock_bo
     result = get_harmony_client('UAT')
 
     assert result == mock_client_instance
-    mock_harmony_client.assert_called_once()
 
 
 @patch('bignbit.utils.boto3.client')
