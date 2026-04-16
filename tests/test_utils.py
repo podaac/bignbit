@@ -16,7 +16,8 @@ from bignbit.utils import (
     extract_granule_dates,
     parse_datetime,
     parse_doy,
-    get_harmony_client
+    get_harmony_client,
+    Environment
 )
 
 
@@ -468,121 +469,65 @@ def test_parse_doy_leap_day():
 # Tests for get_harmony_client()
 # ---------------------------------------------------------------------------
 
+@pytest.mark.parametrize(
+    "input_env, expected_env",
+    [
+        ("UAT", Environment.UAT),
+        ("PROD", Environment.PROD),
+        ("SIT", Environment.UAT),  # defaults to UAT
+    ]
+)
 @patch('bignbit.utils.boto3.client')
+@patch('bignbit.utils.boto3.session.Session')
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
-def test_get_harmony_client_uat(mock_get_edl_creds, mock_harmony_client, mock_boto):
-    """Test getting Harmony client for PROD environment."""
+def test_get_harmony_client_environments(
+    mock_get_edl_creds,
+    mock_harmony_client,
+    mock_session,
+    mock_boto,
+    input_env,
+    expected_env
+):
+    import bignbit.utils
+
     # --- creds ---
     mock_get_edl_creds.return_value = ('test_user', 'test_pass')
+
+    # --- session / region ---
+    mock_session.return_value.region_name = "us-west-2"
 
     # --- harmony client ---
     mock_client_instance = MagicMock()
     mock_harmony_client.return_value = mock_client_instance
 
-    # --- boto3 SSM mock chain ---
-    mock_ssm = MagicMock()
-    mock_boto.return_value = mock_ssm
+    # --- lambda client ---
+    mock_lambda = MagicMock()
+    mock_boto.return_value = mock_lambda
 
-    mock_value = '{"username": "test_user", "password": "test_pass"}'
+    # 👇 double-encoded JSON (required by function)
+    inner = json.dumps({"access-token": "test-token"})
+    outer = json.dumps(inner).encode("utf-8")
 
-    # This represents param.get("Parameter")
-    mock_parameter = MagicMock()
-    mock_parameter.get.return_value = mock_value  # .get("Value")
+    mock_payload = MagicMock()
+    mock_payload.read.return_value = outer
 
-    # This represents response.get("Parameter")
-    mock_response = MagicMock()
-    mock_response.get.return_value = mock_parameter
+    mock_lambda.invoke.return_value = {
+        "Payload": mock_payload
+    }
 
-    mock_ssm.get_parameter.return_value = mock_response
-
-    # --- reset singleton ---
-    import bignbit.utils
+    # reset singleton
     bignbit.utils.HARMONY_CLIENT = None
 
     # --- execute ---
-    result = bignbit.utils.get_harmony_client('UAT')
+    result = bignbit.utils.get_harmony_client(input_env)
 
-    # --- assert ---
+    # --- assertions ---
     assert result == mock_client_instance
-    mock_harmony_client.assert_called_once()
 
-
-@patch('bignbit.utils.boto3.client')
-@patch('bignbit.utils.Client')
-@patch('bignbit.utils.get_edl_creds')
-def test_get_harmony_client_prod(mock_get_edl_creds, mock_harmony_client, mock_boto):
-    """Test getting Harmony client for PROD environment."""
-    # --- creds ---
-    mock_get_edl_creds.return_value = ('test_user', 'test_pass')
-
-    # --- harmony client ---
-    mock_client_instance = MagicMock()
-    mock_harmony_client.return_value = mock_client_instance
-
-    # --- boto3 SSM mock chain ---
-    mock_ssm = MagicMock()
-    mock_boto.return_value = mock_ssm
-
-    mock_value = '{"username": "test_user", "password": "test_pass"}'
-
-    # This represents param.get("Parameter")
-    mock_parameter = MagicMock()
-    mock_parameter.get.return_value = mock_value  # .get("Value")
-
-    # This represents response.get("Parameter")
-    mock_response = MagicMock()
-    mock_response.get.return_value = mock_parameter
-
-    mock_ssm.get_parameter.return_value = mock_response
-
-    # --- reset singleton ---
-    import bignbit.utils
-    bignbit.utils.HARMONY_CLIENT = None
-
-    # --- execute ---
-    result = bignbit.utils.get_harmony_client('PROD')
-
-    # --- assert ---
-    assert result == mock_client_instance
-    mock_harmony_client.assert_called_once()
-
-
-@patch('bignbit.utils.boto3.client')
-@patch('bignbit.utils.Client')
-@patch('bignbit.utils.get_edl_creds')
-def test_get_harmony_client_sit_defaults_to_uat(mock_get_edl_creds, mock_harmony_client, mock_boto):
-    """Test that SIT environment defaults to UAT."""
-    # --- creds ---
-    mock_get_edl_creds.return_value = ('test_user', 'test_pass')
-
-    # --- harmony client ---
-    mock_client_instance = MagicMock()
-    mock_harmony_client.return_value = mock_client_instance
-
-    # --- boto3 SSM mock chain ---
-    mock_ssm = MagicMock()
-    mock_boto.return_value = mock_ssm
-
-    mock_value = '{"username": "test_user", "password": "test_pass"}'
-
-    # This represents param.get("Parameter")
-    mock_parameter = MagicMock()
-    mock_parameter.get.return_value = mock_value  # .get("Value")
-
-    # This represents response.get("Parameter")
-    mock_response = MagicMock()
-    mock_response.get.return_value = mock_parameter
-
-    mock_ssm.get_parameter.return_value = mock_response
-
-    # --- reset singleton ---
-    import bignbit.utils
-    bignbit.utils.HARMONY_CLIENT = None
-
-    # --- execute ---
-    result = bignbit.utils.get_harmony_client('SIT')
-
-    # --- assert ---
-    assert result == mock_client_instance
-    mock_harmony_client.assert_called_once()
+    # verify correct environment passed to Client
+    mock_harmony_client.assert_called_with(
+        env=expected_env,
+        token="test-token",
+        should_validate_auth=bignbit.utils.HARMONY_SHOULD_VALIDATE_AUTH
+    )
