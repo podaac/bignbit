@@ -17,7 +17,7 @@ def test_process_results_no_data(mock_boto):
 
     mock_lambda.invoke.return_value = {
         "Payload": MagicMock(
-            read=lambda: b'{"status": "SUCCESS", "results": []}'
+            read=lambda: b'"{\\"status\\": \\"SUCCESS\\", \\"results\\": []}"'
         )
     }
     
