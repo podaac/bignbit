@@ -9,6 +9,7 @@ from bignbit.get_harmony_job_status import check_harmony_job, HarmonyJobNoDataEr
 
 @pytest.mark.vcr
 @mock_s3
+@patch('bignbit.utils.boto3.client')
 def test_process_results_no_data(mock_boto):
     """Test that HarmonyJobNoDataError is raised when Harmony returns no data"""
     mock_lambda = MagicMock()
