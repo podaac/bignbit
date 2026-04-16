@@ -9,8 +9,9 @@ from bignbit.get_harmony_job_status import check_harmony_job, HarmonyJobNoDataEr
 
 @pytest.mark.vcr
 @mock_s3
+@patch('bignbit.utils.get_edl_creds')
 @patch('bignbit.utils.boto3.client')
-def test_process_results_no_data(mock_boto):
+def test_process_results_no_data(mock_boto, mock_get_creds):
     """Test that HarmonyJobNoDataError is raised when Harmony returns no data"""
     mock_lambda = MagicMock()
     mock_boto.return_value = mock_lambda
@@ -21,6 +22,10 @@ def test_process_results_no_data(mock_boto):
         )
     }
     
+    mock_get_creds.return_value = {
+        "access-token": "test-token"
+    }
+
     bignbit.utils.ED_USER = 'test'
     bignbit.utils.ED_PASS = 'test'
 
