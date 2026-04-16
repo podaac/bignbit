@@ -13,9 +13,6 @@ from bignbit.get_harmony_job_status import check_harmony_job, HarmonyJobNoDataEr
 def test_process_results_no_data(mock_boto, mock_get_edl_creds):
     """Test HarmonyJobNoDataError is raised when no results are returned"""
 
-    import bignbit.utils
-    from bignbit.utils import check_harmony_job, HarmonyJobNoDataError
-
     # ---- creds MUST be tuple (fixes unpacking error) ----
     mock_get_edl_creds.return_value = ('test_user', 'test_pass')
 
