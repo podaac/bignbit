@@ -555,3 +555,4 @@ def test_get_harmony_client_sit_defaults_to_uat(mock_get_edl_creds, mock_harmony
     result = get_harmony_client('SIT')
 
     assert result == mock_client_instance
+    mock_harmony_client.assert_called_once()
