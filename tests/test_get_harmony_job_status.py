@@ -1,6 +1,7 @@
 """Unit tests for get_harmony_job_status module"""
 import pytest
 from moto import mock_s3
+import json
 from unittest.mock import patch, MagicMock
 
 import bignbit.utils
