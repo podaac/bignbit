@@ -1,6 +1,7 @@
 """Unit tests for get_harmony_job_status module"""
 import pytest
 from moto import mock_s3
+from unittest.mock import patch, MagicMock
 
 import bignbit.utils
 from bignbit.get_harmony_job_status import check_harmony_job, HarmonyJobNoDataError
@@ -8,8 +9,17 @@ from bignbit.get_harmony_job_status import check_harmony_job, HarmonyJobNoDataEr
 
 @pytest.mark.vcr
 @mock_s3
-def test_process_results_no_data():
+def test_process_results_no_data(mock_boto):
     """Test that HarmonyJobNoDataError is raised when Harmony returns no data"""
+    mock_lambda = MagicMock()
+    mock_boto.return_value = mock_lambda
+
+    mock_lambda.invoke.return_value = {
+        "Payload": MagicMock(
+            read=lambda: b'{"status": "SUCCESS", "results": []}'
+        )
+    }
+    
     bignbit.utils.ED_USER = 'test'
     bignbit.utils.ED_PASS = 'test'
 

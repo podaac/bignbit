@@ -468,7 +468,7 @@ def test_parse_doy_leap_day():
 # Tests for get_harmony_client()
 # ---------------------------------------------------------------------------
 
-@patch('boto3.client')
+@patch('bignbit.utils.boto3.client')
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
 def test_get_harmony_client_uat(mock_get_edl_creds, mock_harmony_client, mock_boto):
@@ -485,10 +485,7 @@ def test_get_harmony_client_uat(mock_get_edl_creds, mock_harmony_client, mock_bo
 
     mock_ssm.get_parameter.return_value = {
         "Parameter": {
-            "Value": json.dumps({
-                "username": "test_user",
-                "password": "test_pass"
-            })
+            "Value": '{"username": "test_user", "password": "test_pass"}'
         }
     }
 
@@ -501,7 +498,7 @@ def test_get_harmony_client_uat(mock_get_edl_creds, mock_harmony_client, mock_bo
     mock_harmony_client.assert_called_once()
 
 
-@patch('boto3.client')
+@patch('bignbit.utils.boto3.client')
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
 def test_get_harmony_client_prod(mock_get_edl_creds, mock_harmony_client, mock_boto):
@@ -518,10 +515,7 @@ def test_get_harmony_client_prod(mock_get_edl_creds, mock_harmony_client, mock_b
 
     mock_ssm.get_parameter.return_value = {
         "Parameter": {
-            "Value": json.dumps({
-                "username": "test_user",
-                "password": "test_pass"
-            })
+            "Value": '{"username": "test_user", "password": "test_pass"}'
         }
     }
 
@@ -534,7 +528,7 @@ def test_get_harmony_client_prod(mock_get_edl_creds, mock_harmony_client, mock_b
     mock_harmony_client.assert_called_once()
 
 
-@patch('boto3.client')
+@patch('bignbit.utils.boto3.client')
 @patch('bignbit.utils.Client')
 @patch('bignbit.utils.get_edl_creds')
 def test_get_harmony_client_sit_defaults_to_uat(mock_get_edl_creds, mock_harmony_client, mock_boto):
@@ -551,10 +545,7 @@ def test_get_harmony_client_sit_defaults_to_uat(mock_get_edl_creds, mock_harmony
 
     mock_ssm.get_parameter.return_value = {
         "Parameter": {
-            "Value": json.dumps({
-                "username": "test_user",
-                "password": "test_pass"
-            })
+            "Value": '{"username": "test_user", "password": "test_pass"}'
         }
     }
 

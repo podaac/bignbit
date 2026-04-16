@@ -20,7 +20,7 @@ from bignbit.image_set import ImageSet
 
 @pytest.mark.vcr
 @mock_s3
-@patch("boto3.client")
+@patch('bignbit.utils.boto3.client')
 def test_process_harmony_results(mock_boto):
     """Test pulling results of a harmony job from s3."""
     mock_lambda = MagicMock()
