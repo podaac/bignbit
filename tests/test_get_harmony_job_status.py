@@ -23,7 +23,7 @@ def test_process_results_no_data(mock_boto, mock_get_edl_creds):
 
     # ---- payload must behave like AWS (realistic read()) ----
     payload_data = {
-        "access-token": "fake-token"
+        "access-token": "test-token"
     }
 
     mock_payload = MagicMock()
