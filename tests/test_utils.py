@@ -1,3 +1,4 @@
+import os
 import json
 import pathlib
 import tempfile
@@ -464,6 +465,9 @@ def test_parse_doy_leap_day():
     result = parse_doy(2024, 60)
     assert result == "2024-02-29T00:00:00.000000Z"
 
+@pytest.fixture(autouse=True)
+def aws_region():
+    os.environ["AWS_DEFAULT_REGION"] = "us-west-2"
 
 # ---------------------------------------------------------------------------
 # Tests for get_harmony_client()
