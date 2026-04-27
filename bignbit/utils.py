@@ -360,8 +360,8 @@ def get_harmony_client(environment_str: str) -> Client:
         )
 
         # Read the payload from Lambda response and parse JSON
-        response_payload = json.loads(response["Payload"].read())
-        token = json.loads(response_payload)['access-token']
+        # response_payload = json.loads(response["Payload"].read())
+        token = json.loads(response["Payload"].read())['access-token']
 
         # Instantiate Harmony client with retrieved token
         HARMONY_CLIENT = Client(
