@@ -510,15 +510,27 @@ def test_get_harmony_client_environments(
     mock_boto.return_value = mock_lambda
 
     # 👇 double-encoded JSON (required by function)
-    inner = json.dumps({"access-token": "test-token"})
-    outer = json.dumps(inner).encode("utf-8")
+    # inner = json.dumps({"access-token": "test-token"})
+    # outer = json.dumps(inner).encode("utf-8")
+
+    # mock_payload = MagicMock()
+    # mock_payload.read.return_value = outer
+
+    # mock_lambda.invoke.return_value = {
+    #     "Payload": mock_payload
+    # }
+
+    # ---- payload must behave like AWS (realistic read()) ----
+    payload_data = {
+        "access-token": "test-token"
+    }
 
     mock_payload = MagicMock()
-    mock_payload.read.return_value = outer
+    mock_payload.read.return_value = json.dumps(payload_data).encode("utf-8")
 
     mock_lambda.invoke.return_value = {
         "Payload": mock_payload
-    }
+    }    
 
     # reset singleton
     bignbit.utils.HARMONY_CLIENT = None
