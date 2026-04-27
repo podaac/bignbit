@@ -79,9 +79,7 @@ def test_process_harmony_results_no_data(mock_boto):
     mock_boto.return_value = mock_lambda
 
     mock_lambda.invoke.return_value = {
-        "Payload": MagicMock(
-            read=lambda: b'{"status": "SUCCESS", "results": []}'
-        )
+        "Payload": MagicMock(read=lambda: b'{"access-token": "fake-token"}')
     }
 
     bignbit.utils.ED_USER = 'test'
