@@ -400,6 +400,15 @@ Examples:
         )
     )
     parser.add_argument(
+        '--reprojection',
+        action='store_true',
+        help=(
+            'Set to true to force reprojection for all granules. This will send the `outputCrs` '
+            'parameter in Harmony API calls unconditionally. Warning: if the Harmony service used '
+            'to generate browse images does not support reprojection, jobs will fail.'
+        )
+    )
+    parser.add_argument(
         '--s3Destination',
         type=str,
         nargs=2,
