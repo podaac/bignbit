@@ -1,0 +1,267 @@
+interactions:
+- request:
+    body: <CreateBucketConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><LocationConstraint>us-west-2</LocationConstraint></CreateBucketConfiguration>
+    headers:
+      Content-Length:
+      - '153'
+      User-Agent:
+      - !!binary |
+        Qm90bzMvMS4yNi4xNjUgUHl0aG9uLzMuMTAuMTMgRGFyd2luLzI0LjYuMCBCb3RvY29yZS8xLjI5
+        LjE2NQ==
+      X-Amz-Content-SHA256:
+      - !!binary |
+        YTRhM2QyNjMxNzliZmNiYWY4ODc1NWIxNGVhOWRiMzA0OGU0MTc5YzAzYmJjOTRjY2YwZjEzYzhj
+        MmQzZGY2YQ==
+      X-Amz-Date:
+      - !!binary |
+        MjAyNjA0MjhUMTIxNzI0Wg==
+      amz-sdk-invocation-id:
+      - !!binary |
+        MjlhZTA0ODctMGE3NC00YzViLWJmNDctNzc1ZDQ4NTA2NDVj
+      amz-sdk-request:
+      - !!binary |
+        YXR0ZW1wdD0x
+    method: PUT
+    uri: https://harmony-uat-staging.s3.us-west-2.amazonaws.com/
+  response:
+    body:
+      string: '<?xml version="1.0" encoding="UTF-8"?>
+
+        <Error><Code>BucketAlreadyExists</Code><Message>The requested bucket name
+        is not available. The bucket namespace is shared by all users of the system.
+        Please select a different name and try again.</Message><BucketName>harmony-uat-staging</BucketName><RequestId>3KDANE7WF976V34N</RequestId><HostId>SjY5MpO95JO7GJNLWoMrvbLjgpvS0/fKYzAYt2d4IlZlHDxSzPVp+Pg2yHdinX9fMG/fxeBRhs8=</HostId></Error>'
+    headers:
+      Content-Type:
+      - application/xml
+      Date:
+      - Tue, 28 Apr 2026 12:17:24 GMT
+      Server:
+      - AmazonS3
+      Transfer-Encoding:
+      - chunked
+      x-amz-bucket-region:
+      - us-west-2
+      x-amz-id-2:
+      - SjY5MpO95JO7GJNLWoMrvbLjgpvS0/fKYzAYt2d4IlZlHDxSzPVp+Pg2yHdinX9fMG/fxeBRhs8=
+      x-amz-request-id:
+      - 3KDANE7WF976V34N
+    status:
+      code: 409
+      message: Conflict
+- request:
+    body: <CreateBucketConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><LocationConstraint>us-west-2</LocationConstraint></CreateBucketConfiguration>
+    headers:
+      Content-Length:
+      - '153'
+      User-Agent:
+      - !!binary |
+        Qm90bzMvMS4yNi4xNjUgUHl0aG9uLzMuMTAuMTMgRGFyd2luLzI0LjYuMCBCb3RvY29yZS8xLjI5
+        LjE2NQ==
+      X-Amz-Content-SHA256:
+      - !!binary |
+        YTRhM2QyNjMxNzliZmNiYWY4ODc1NWIxNGVhOWRiMzA0OGU0MTc5YzAzYmJjOTRjY2YwZjEzYzhj
+        MmQzZGY2YQ==
+      X-Amz-Date:
+      - !!binary |
+        MjAyNjA0MjhUMTM1NDA5Wg==
+      amz-sdk-invocation-id:
+      - !!binary |
+        NGM2YTI3OGUtYWI2ZS00ZDY2LWE2MWMtOGQ0ODY5ZDUyODkx
+      amz-sdk-request:
+      - !!binary |
+        YXR0ZW1wdD0x
+    method: PUT
+    uri: https://harmony-uat-staging.s3.us-west-2.amazonaws.com/
+  response:
+    body:
+      string: '<?xml version="1.0" encoding="UTF-8"?>
+
+        <Error><Code>BucketAlreadyExists</Code><Message>The requested bucket name
+        is not available. The bucket namespace is shared by all users of the system.
+        Please select a different name and try again.</Message><BucketName>harmony-uat-staging</BucketName><RequestId>XZ4WJ0RP7BAVS2S2</RequestId><HostId>R/NYuETRTfQoJN9u01s056AkIFtbPMBuwRZ6B001HZxo3Cy2n+h2KrN21yxcQvTKjLPfkg3jg3qbz/JsH4v3GA==</HostId></Error>'
+    headers:
+      Content-Type:
+      - application/xml
+      Date:
+      - Tue, 28 Apr 2026 13:54:09 GMT
+      Server:
+      - AmazonS3
+      Transfer-Encoding:
+      - chunked
+      x-amz-bucket-region:
+      - us-west-2
+      x-amz-id-2:
+      - R/NYuETRTfQoJN9u01s056AkIFtbPMBuwRZ6B001HZxo3Cy2n+h2KrN21yxcQvTKjLPfkg3jg3qbz/JsH4v3GA==
+      x-amz-request-id:
+      - XZ4WJ0RP7BAVS2S2
+    status:
+      code: 409
+      message: Conflict
+- request:
+    body: !!python/object/new:_io.BytesIO
+      state: !!python/tuple
+      - !!binary |
+        ZmFrZSBpbWFnZSBkYXRhIGZvciB0ZXN0aW5n
+      - 0
+      - null
+    headers:
+      Content-Length:
+      - '27'
+      Content-MD5:
+      - !!binary |
+        dTlXQ0gvREpaZ1RqQnVYbXBVOUE0UT09
+      Expect:
+      - !!binary |
+        MTAwLWNvbnRpbnVl
+      User-Agent:
+      - !!binary |
+        Qm90bzMvMS4yNi4xNjUgUHl0aG9uLzMuMTAuMTMgRGFyd2luLzI0LjYuMCBCb3RvY29yZS8xLjI5
+        LjE2NQ==
+      X-Amz-Content-SHA256:
+      - !!binary |
+        VU5TSUdORUQtUEFZTE9BRA==
+      X-Amz-Date:
+      - !!binary |
+        MjAyNjA0MjhUMTM1NDEwWg==
+      amz-sdk-invocation-id:
+      - !!binary |
+        ZDM3MzZjMGItNmMyZi00YjM2LWIyNGEtMWMzNGZmZjA4MTc0
+      amz-sdk-request:
+      - !!binary |
+        YXR0ZW1wdD0x
+    method: PUT
+    uri: https://harmony-uat-staging.s3.us-west-2.amazonaws.com/public/3d276f84-56e2-4f0a-acb2-35b9fcaaa317/9202859/PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.png
+  response:
+    body:
+      string: '<?xml version="1.0" encoding="UTF-8"?>
+
+        <Error><Code>AccessDenied</Code><Message>User: arn:aws:iam::536711851782:user/NGAPShApplicationDeveloper-bcwong1-580
+        is not authorized to perform: s3:PutObject on resource: "arn:aws:s3:::harmony-uat-staging/public/3d276f84-56e2-4f0a-acb2-35b9fcaaa317/9202859/PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.png"
+        because no resource-based policy allows the s3:PutObject action</Message><RequestId>EQNCR3A24D1J8J7B</RequestId><HostId>fLXDRiPEiJDpPvoYwRr2ODSjX6WKk8+3FR0PmA0fyr053y4YnthlfNV7DZSxjiwU8J4RPm1yssvW8bdfn4NTXw==</HostId></Error>'
+    headers:
+      Connection:
+      - close
+      Content-Type:
+      - application/xml
+      Date:
+      - Tue, 28 Apr 2026 13:54:09 GMT
+      Server:
+      - AmazonS3
+      Transfer-Encoding:
+      - chunked
+      x-amz-id-2:
+      - fLXDRiPEiJDpPvoYwRr2ODSjX6WKk8+3FR0PmA0fyr053y4YnthlfNV7DZSxjiwU8J4RPm1yssvW8bdfn4NTXw==
+      x-amz-request-id:
+      - EQNCR3A24D1J8J7B
+    status:
+      code: 403
+      message: Forbidden
+- request:
+    body: <CreateBucketConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/"><LocationConstraint>us-west-2</LocationConstraint></CreateBucketConfiguration>
+    headers:
+      Content-Length:
+      - '153'
+      User-Agent:
+      - !!binary |
+        Qm90bzMvMS4yNi4xNjUgUHl0aG9uLzMuMTAuMTMgRGFyd2luLzI0LjYuMCBCb3RvY29yZS8xLjI5
+        LjE2NQ==
+      X-Amz-Content-SHA256:
+      - !!binary |
+        YTRhM2QyNjMxNzliZmNiYWY4ODc1NWIxNGVhOWRiMzA0OGU0MTc5YzAzYmJjOTRjY2YwZjEzYzhj
+        MmQzZGY2YQ==
+      X-Amz-Date:
+      - !!binary |
+        MjAyNjA0MjhUMTM1NjQ1Wg==
+      amz-sdk-invocation-id:
+      - !!binary |
+        N2Q1ZWIzZjEtZWEwNi00N2U1LWEzYTItN2Q3N2JhZjM5NmNj
+      amz-sdk-request:
+      - !!binary |
+        YXR0ZW1wdD0x
+    method: PUT
+    uri: https://harmony-uat-staging.s3.us-west-2.amazonaws.com/
+  response:
+    body:
+      string: '<?xml version="1.0" encoding="UTF-8"?>
+
+        <Error><Code>BucketAlreadyExists</Code><Message>The requested bucket name
+        is not available. The bucket namespace is shared by all users of the system.
+        Please select a different name and try again.</Message><BucketName>harmony-uat-staging</BucketName><RequestId>GX93N1KJ872KXDC7</RequestId><HostId>LKQ8fp13yzWAVRjOAcanxIYz73LuMyti0FSQMzgf3hguKCc/2WPppBxM4OYDWN/pLrBQehzPPSk=</HostId></Error>'
+    headers:
+      Content-Type:
+      - application/xml
+      Date:
+      - Tue, 28 Apr 2026 13:56:46 GMT
+      Server:
+      - AmazonS3
+      Transfer-Encoding:
+      - chunked
+      x-amz-bucket-region:
+      - us-west-2
+      x-amz-id-2:
+      - LKQ8fp13yzWAVRjOAcanxIYz73LuMyti0FSQMzgf3hguKCc/2WPppBxM4OYDWN/pLrBQehzPPSk=
+      x-amz-request-id:
+      - GX93N1KJ872KXDC7
+    status:
+      code: 409
+      message: Conflict
+- request:
+    body: !!python/object/new:_io.BytesIO
+      state: !!python/tuple
+      - !!binary |
+        ZmFrZSBpbWFnZSBkYXRhIGZvciB0ZXN0aW5n
+      - 0
+      - null
+    headers:
+      Content-Length:
+      - '27'
+      Content-MD5:
+      - !!binary |
+        dTlXQ0gvREpaZ1RqQnVYbXBVOUE0UT09
+      Expect:
+      - !!binary |
+        MTAwLWNvbnRpbnVl
+      User-Agent:
+      - !!binary |
+        Qm90bzMvMS4yNi4xNjUgUHl0aG9uLzMuMTAuMTMgRGFyd2luLzI0LjYuMCBCb3RvY29yZS8xLjI5
+        LjE2NQ==
+      X-Amz-Content-SHA256:
+      - !!binary |
+        VU5TSUdORUQtUEFZTE9BRA==
+      X-Amz-Date:
+      - !!binary |
+        MjAyNjA0MjhUMTM1NjQ2Wg==
+      amz-sdk-invocation-id:
+      - !!binary |
+        M2Y4YWQzNGQtYmQzZS00M2ViLWFiYjAtNTlhYjMxZWQxNjgx
+      amz-sdk-request:
+      - !!binary |
+        YXR0ZW1wdD0x
+    method: PUT
+    uri: https://harmony-uat-staging.s3.us-west-2.amazonaws.com/public/3d276f84-56e2-4f0a-acb2-35b9fcaaa317/9202859/PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.png
+  response:
+    body:
+      string: '<?xml version="1.0" encoding="UTF-8"?>
+
+        <Error><Code>AccessDenied</Code><Message>User: arn:aws:iam::536711851782:user/NGAPShApplicationDeveloper-bcwong1-580
+        is not authorized to perform: s3:PutObject on resource: "arn:aws:s3:::harmony-uat-staging/public/3d276f84-56e2-4f0a-acb2-35b9fcaaa317/9202859/PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.png"
+        because no resource-based policy allows the s3:PutObject action</Message><RequestId>GX9C5QGV8VCN50B3</RequestId><HostId>iq7RXLPY4W/n09vtZ7afhBtw97J5kjFmBJ97/hA2Z7K62SScb5c9vjlFAleCZkvsGoFcKUDxOGI=</HostId></Error>'
+    headers:
+      Connection:
+      - close
+      Content-Type:
+      - application/xml
+      Date:
+      - Tue, 28 Apr 2026 13:56:46 GMT
+      Server:
+      - AmazonS3
+      Transfer-Encoding:
+      - chunked
+      x-amz-id-2:
+      - iq7RXLPY4W/n09vtZ7afhBtw97J5kjFmBJ97/hA2Z7K62SScb5c9vjlFAleCZkvsGoFcKUDxOGI=
+      x-amz-request-id:
+      - GX9C5QGV8VCN50B3
+    status:
+      code: 403
+      message: Forbidden
+version: 1

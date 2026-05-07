@@ -1,27 +1,35 @@
 """Unit tests for get_harmony_job_status module"""
-import pytest
-from moto import mock_s3
+
 import json
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
+import pytest
 
 import bignbit.utils
-from bignbit.get_harmony_job_status import check_harmony_job, HarmonyJobNoDataError
+from bignbit.get_harmony_job_status import (
+    check_harmony_job,
+    HarmonyJobNoDataError
+)
 
 
 @pytest.mark.vcr
+@patch('bignbit.utils.get_harmony_client')
 @patch('bignbit.utils.get_edl_creds')
 @patch('bignbit.utils.boto3.client')
-def test_process_results_no_data(mock_boto, mock_get_edl_creds):
+def test_process_results_no_data(
+    mock_boto,
+    mock_get_edl_creds,
+    mock_get_harmony_client
+):
     """Test HarmonyJobNoDataError is raised when no results are returned"""
 
-    # ---- creds MUST be tuple (fixes unpacking error) ----
+    # ---- creds ----
     mock_get_edl_creds.return_value = ('test_user', 'test_pass')
 
-    # ---- lambda client mock ----
+    # ---- lambda client ----
     mock_lambda = MagicMock()
     mock_boto.return_value = mock_lambda
 
-    # ---- payload must behave like AWS (realistic read()) ----
     payload_data = {
         "access-token": "test-token"
     }
@@ -33,7 +41,21 @@ def test_process_results_no_data(mock_boto, mock_get_edl_creds):
         "Payload": mock_payload
     }
 
-    # optional globals if your function depends on them
+    # ---- harmony client ----
+    mock_harmony_client = MagicMock()
+
+    # simulate empty Harmony results
+    mock_harmony_client.result_urls.return_value = []
+
+    # serializable status response
+    mock_harmony_client.status.return_value = {
+        "status": "successful",
+        "message": "No data found"
+    }
+
+    mock_get_harmony_client.return_value = mock_harmony_client
+
+    # optional globals
     bignbit.utils.ED_USER = "test"
     bignbit.utils.ED_PASS = "test"
 
@@ -51,3 +73,10 @@ def test_process_results_no_data(mock_boto, mock_get_edl_creds):
     assert "no data" in msg
     assert "test_variable" in msg
     assert "epsg:4326" in msg
+
+    # ---- verify mocks ----
+    mock_get_harmony_client.assert_called_once_with('uat')
+
+    mock_harmony_client.result_urls.assert_called_once()
+
+    mock_harmony_client.status.assert_called()

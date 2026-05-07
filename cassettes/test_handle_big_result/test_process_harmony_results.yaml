@@ -1,0 +1,57 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.5
+    method: GET
+    uri: https://harmony.uat.earthdata.nasa.gov/jobs/3d276f84-56e2-4f0a-acb2-35b9fcaaa317?linktype=https
+  response:
+    body:
+      string: '{"code":"harmony.UnauthorizedError","description":"Error: You are not
+        authorized to access the requested resource"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '115'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Wed, 29 Apr 2026 15:50:03 GMT
+      ETag:
+      - W/"73-nItWkl68x6IlPn6tx7bg/IcouGY"
+      Server:
+      - CloudFront
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Via:
+      - 1.1 22922394e3534f85930c1603d51f2156.cloudfront.net (CloudFront)
+      X-Amz-Cf-Id:
+      - 8h3Stmve4aRgESrEJpwVOaf5co7Gx6FbA5eRgrpChi2FoepoNyHhPg==
+      X-Amz-Cf-Pop:
+      - SFO53-P10
+      X-Cache:
+      - Error from cloudfront
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Powered-By:
+      - Express
+      X-Request-Id:
+      - 8h3Stmve4aRgESrEJpwVOaf5co7Gx6FbA5eRgrpChi2FoepoNyHhPg==
+      X-XSS-Protection:
+      - 1; mode=block
+    status:
+      code: 401
+      message: Unauthorized
+version: 1
