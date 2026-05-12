@@ -111,7 +111,7 @@ def generate_harmony_request(collection_concept_id, granule_concept_id, variable
     # equirectangular projection through the reproject service.
     # Avoids unnecessary processing and errors for some collections
     # that do not support reprojection.
-    if output_crs.upper() != 'EPSG:4326':
+    if output_crs.upper() != 'EPSG:4326' or big_config['config'].get('reprojection', False):
         kwargs['crs'] = output_crs
         # Use the scaleExtent either from datasetConfig or use the
         # default values from GIBS
@@ -152,7 +152,7 @@ def lambda_handler(event, context):
     }
 
     logging_level = os.environ.get('LOGGING_LEVEL', 'info')
-    CUMULUS_LOGGER.logger.level = levels.get(logging_level, 'info')
+    CUMULUS_LOGGER.logger.setLevel(levels.get(logging_level, 'info'))
     CUMULUS_LOGGER.setMetadata(event, context)
 
     return CMA.cumulus_handler(event, context=context)
