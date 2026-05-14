@@ -244,8 +244,8 @@ resource "aws_lambda_function" "handle_big_result" {
   }
   function_name = local.handle_big_result_function_name
   role          = aws_iam_role.bignbit_lambda_role.arn
-  timeout       = 180
-  memory_size   = 512
+  timeout       = 300
+  memory_size   = 1024
 
   environment {
     variables = {

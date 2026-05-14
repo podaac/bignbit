@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.7.2]
 ### Added
 ### Changed
+- increased timeout for "Handle BIG Result" lambda
 ### Deprecated
 ### Removed
 ### Fixed
