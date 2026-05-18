@@ -9,6 +9,8 @@ import boto3
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 
+from bignbit import utils
+
 CUMULUS_LOGGER = CumulusLogger('get_dataset_configuration')
 
 
@@ -69,7 +71,8 @@ def get_collection_config(config_bucket_name: str, config_key_name: str) -> dict
     s3_client = boto3.client('s3')
 
     try:
-        object_result = s3_client.get_object(Bucket=config_bucket_name, Key=config_key_name)
+        object_result = s3_client.get_object(Bucket=config_bucket_name, Key=config_key_name,
+                                             ExpectedBucketOwner=utils.get_aws_account_id())
     except s3_client.exceptions.NoSuchKey as ex:
         raise MissingDatasetConfiguration(
             f"Dataset configuration not found s3://{config_bucket_name}/{config_key_name}") from ex

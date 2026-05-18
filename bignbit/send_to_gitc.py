@@ -9,6 +9,8 @@ import boto3
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 
+from bignbit import utils
+
 CUMULUS_LOGGER = CumulusLogger('send_to_gitc')
 
 GIBS_REGION_ENV_NAME = "GIBS_REGION"
@@ -72,7 +74,8 @@ def read_cnm(cnm_bucket: str, cnm_key: str) -> str:
       Key within the bucket pointing to CNM JSON
     """
     s3_client = boto3.client('s3')
-    response = s3_client.get_object(Bucket=cnm_bucket, Key=cnm_key)
+    response = s3_client.get_object(Bucket=cnm_bucket, Key=cnm_key,
+                                    ExpectedBucketOwner=utils.get_aws_account_id())
     return response['Body'].read().decode('utf-8')
 
 

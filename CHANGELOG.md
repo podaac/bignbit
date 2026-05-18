@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Fixed
 ### Security
+- [issues/151](https://github.com/podaac/bignbit/issues/151): Added ExpectedBucketOwner parameter when making S3 requests.
 
 ## [0.7.2]
 ### Added
