@@ -18,9 +18,11 @@ from bignbit.handle_big_result import (
 from bignbit.image_set import ImageSet
 
 @pytest.mark.vcr
+@mock_sts
 @mock_s3
 def test_process_harmony_results():
     """Test pulling results of a harmony job from s3."""
+    bignbit.utils.AWS_ACCOUNT_ID = None
     bignbit.utils.ED_USER = 'test'
     bignbit.utils.ED_PASS = 'test'
     job_id = '3d276f84-56e2-4f0a-acb2-35b9fcaaa317'

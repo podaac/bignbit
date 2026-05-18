@@ -216,7 +216,8 @@ def process_harmony_results(harmony_job: dict[str, str], cmr_env: str) -> list[d
     for url in result_urls:
         bucket, key = urlparse(url).netloc, urlparse(url).path.lstrip('/')
 
-        response = s3_client.get_object(Bucket=bucket, Key=key)
+        response = s3_client.get_object(Bucket=bucket, Key=key,
+                                        ExpectedBucketOwner=utils.get_aws_account_id())
         md5_hash = hashlib.new('md5')
         for chunk in response['Body'].iter_chunks(chunk_size=100 * 1024 * 1024):  # 100 MB chunk size
             md5_hash.update(chunk)
