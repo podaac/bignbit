@@ -7,10 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- [issues/150](https://github.com/podaac/bignbit/issues/150): Added support for mixed NRT & Standard collections with configurable regex.
 ### Changed
+- Removed MD5 checksum hash computation to optimize performance of `handle_big_result` lambda.
 ### Deprecated
 ### Removed
 ### Fixed
+- [issues/83](https://github.com/podaac/bignbit/issues/83): Use "_" instead of ":" in CNM filenames for Mac and Linux compatibility
 ### Security
 - [issues/151](https://github.com/podaac/bignbit/issues/151): Added ExpectedBucketOwner parameter when making S3 requests.
 

@@ -42,12 +42,14 @@ def test_process_harmony_results():
     wld_data = b'fake world file for testing'
     aux_key = f'public/{job_id}/9202859/PREFIRE_SAT2_2B-FLX_S07_R00_20210721013413_03040.nc.G00.png.aux.xml'
     aux_data = b'fake png aux xml metadata for testing'
+    expected_checksums = {}
     for key, data in [(image_key, image_data), (wld_key, wld_data), (aux_key, aux_data)]:
         s3_client.put_object(
             Bucket=bucket_name,
             Key=key,
             Body=data
         )
+        expected_checksums[key.split('/')[-1]] = hashlib.md5(data).hexdigest()
 
     harmony_job = {
         'job': job_id,
@@ -63,6 +65,9 @@ def test_process_harmony_results():
     for file in file_dicts:
         assert file['output_crs'] == 'EPSG:3413'
         assert file['variable'] == 'flx'
+        # Checksum should come from the S3 ETag (MD5 of the object for single-part uploads)
+        assert file['checksumType'] == 'md5'
+        assert file['checksum'] == expected_checksums[file['fileName']]
 
 @pytest.mark.vcr
 def test_process_harmony_results_no_data():
@@ -278,14 +283,16 @@ def test_write_cnm_message():
     cmr_provider = 'TESTPROV'
     collection_name = 'TEST_COLLECTION'
     granule_id = 'test_granule_id'
+    isNrt = False
     bignbit_audit_path = 'bignbit-cnm-output'
 
-    # Write CNM message
+    # Write CNM message (Standard)
     cnm_key = write_cnm_message(
         image_set,
         cmr_provider,
         collection_name,
         granule_id,
+        isNrt,
         bucket_name,
         bignbit_audit_path
     )
@@ -295,6 +302,8 @@ def test_write_cnm_message():
     assert collection_name in cnm_key
     assert granule_id in cnm_key
     assert cnm_key.endswith('.cnm.json')
+    # Colons in the submission timestamp should be replaced with underscores
+    assert ':' not in cnm_key
 
     # Verify the file was uploaded to S3
     response = s3_client.get_object(Bucket=bucket_name, Key=cnm_key)
@@ -334,7 +343,7 @@ def test_construct_cnm_with_crs():
     cmr_provider = 'TESTPROV'
     collection_name = 'TEST_COLLECTION'
 
-    cnm = construct_cnm(image_set, cmr_provider, collection_name)
+    cnm = construct_cnm(image_set, cmr_provider, collection_name, False)
 
     # Verify CNM structure
     assert cnm['version'] == '1.5.1'
@@ -343,7 +352,7 @@ def test_construct_cnm_with_crs():
     assert cnm['provider'] == cmr_provider
     assert cnm['submissionTime'] is not None
 
-    # Verify collection name includes CRS suffix (N for EPSG:3413)
+    # Verify collection name includes CRS suffix (N for EPSG:3413) and no NRT string
     assert cnm['collection'] == 'TEST_COLLECTION_temperature_N'
 
     # Verify product structure
@@ -374,9 +383,9 @@ def test_construct_cnm_without_crs():
     cmr_provider = 'TESTPROV'
     collection_name = 'OPERA_L3_DSWX-HLS'
 
-    cnm = construct_cnm(image_set, cmr_provider, collection_name)
+    cnm = construct_cnm(image_set, cmr_provider, collection_name, False)
 
-    # Verify collection name doesn't have CRS suffix when output_crs is not present
+    # Verify collection name doesn't have CRS suffix when output_crs is not present, and no NRT string
     assert cnm['collection'] == 'OPERA_L3_DSWX-HLS_water_index'
 
 
@@ -412,7 +421,153 @@ def test_construct_cnm_crs_suffixes():
             }
         )
 
-        cnm = construct_cnm(image_set, 'PROV', 'COLLECTION')
+        cnm = construct_cnm(image_set, 'PROV', 'COLLECTION', False)
         assert cnm['collection'] == f'COLLECTION_var_{expected_suffix}'
+
+
+def test_construct_cnm_nrt_with_crs():
+    """Test that isNrt=True inserts _NRT before the CRS suffix in the collection name"""
+    image_set = ImageSet(
+        name='test_image_2021202_EPSG:3413!G1234567890-TESTPROV',
+        image={
+            'fileName': 'test_image.png',
+            'bucket': 'test-bucket',
+            'key': 'path/to/test_image.png',
+            'variable': 'temperature',
+            'output_crs': 'EPSG:3413'
+        },
+        world_file={
+            'fileName': 'test_image.pgw',
+            'bucket': 'test-bucket',
+            'key': 'path/to/test_image.pgw'
+        },
+        image_metadata={
+            'fileName': 'test_image.xml',
+            'bucket': 'test-bucket',
+            'key': 'path/to/test_image.xml',
+            'type': 'metadata',
+            'subtype': 'ImageMetadata-v1.2'
+        }
+    )
+
+    cnm = construct_cnm(image_set, 'TESTPROV', 'TEST_COLLECTION', True)
+
+    # _NRT should appear between the variable and the CRS suffix
+    assert cnm['collection'] == 'TEST_COLLECTION_temperature_NRT_N'
+
+
+def test_construct_cnm_nrt_without_crs():
+    """Test that isNrt=True appends _NRT to the collection name when no CRS is present"""
+    image_set = ImageSet(
+        name='test_image_2021202!G1234567890-TESTPROV',
+        image={
+            'fileName': 'test_image.tif',
+            'bucket': 'test-bucket',
+            'key': 'path/to/test_image.tif',
+            'variable': 'water_index'
+        },
+        image_metadata={
+            'fileName': 'test_image.xml',
+            'bucket': 'test-bucket',
+            'key': 'path/to/test_image.xml',
+            'type': 'metadata',
+            'subtype': 'ImageMetadata-v1.2'
+        }
+    )
+
+    cnm = construct_cnm(image_set, 'TESTPROV', 'OPERA_L3_DSWX-HLS', True)
+
+    # _NRT should be appended after the variable when no output_crs is present
+    assert cnm['collection'] == 'OPERA_L3_DSWX-HLS_water_index_NRT'
+
+
+def test_construct_cnm_crs_suffixes_nrt():
+    """Test that all CRS values produce correct suffixes when isNrt=True"""
+    test_cases = [
+        ('EPSG:4326', 'LL'),
+        ('EPSG:3413', 'N'),
+        ('EPSG:3031', 'S'),
+    ]
+
+    for crs, expected_suffix in test_cases:
+        image_set = ImageSet(
+            name=f'test_{crs}',
+            image={
+                'fileName': 'test.png',
+                'bucket': 'bucket',
+                'key': 'key',
+                'variable': 'var',
+                'output_crs': crs
+            },
+            world_file={
+                'fileName': 'test.pgw',
+                'bucket': 'bucket',
+                'key': 'key'
+            },
+            image_metadata={
+                'fileName': 'test.xml',
+                'bucket': 'bucket',
+                'key': 'key',
+                'type': 'metadata',
+                'subtype': 'ImageMetadata-v1.2'
+            }
+        )
+
+        cnm = construct_cnm(image_set, 'PROV', 'COLLECTION', True)
+        assert cnm['collection'] == f'COLLECTION_var_NRT_{expected_suffix}'
+
+
+@mock_sts
+@mock_s3
+def test_write_cnm_message_nrt():
+    """Test that write_cnm_message with isNrt=True produces a collection name containing _NRT"""
+    bignbit.utils.AWS_ACCOUNT_ID = None
+    s3_client = boto3.client('s3', region_name='us-west-2')
+    bucket_name = 'test-audit-bucket'
+    s3_client.create_bucket(
+        Bucket=bucket_name,
+        CreateBucketConfiguration={'LocationConstraint': 'us-west-2'}
+    )
+
+    image_set = ImageSet(
+        name='test_image_2021202_EPSG:4326!G1234567890-TESTPROV',
+        image={
+            'fileName': 'test_image.png',
+            'bucket': 'test-bucket',
+            'key': 'path/to/test_image.png',
+            'variable': 'temperature',
+            'output_crs': 'EPSG:4326'
+        },
+        world_file={
+            'fileName': 'test_image.pgw',
+            'bucket': 'test-bucket',
+            'key': 'path/to/test_image.pgw'
+        },
+        image_metadata={
+            'fileName': 'test_image.xml',
+            'bucket': 'test-bucket',
+            'key': 'path/to/test_image.xml',
+            'type': 'metadata',
+            'subtype': 'ImageMetadata-v1.2'
+        }
+    )
+
+    cnm_key = write_cnm_message(
+        image_set,
+        'TESTPROV',
+        'TEST_COLLECTION',
+        'test_granule_id',
+        True,
+        bucket_name,
+        'bignbit-cnm-output'
+    )
+
+    # Verify the key has no colons and was uploaded to S3
+    assert ':' not in cnm_key
+    response = s3_client.get_object(Bucket=bucket_name, Key=cnm_key)
+    cnm_message = json.loads(response['Body'].read())
+
+    # Verify _NRT appears in the collection name
+    assert '_NRT_' in cnm_message['collection'] or cnm_message['collection'].endswith('_NRT')
 
 
