@@ -4,7 +4,7 @@ import json
 import xml.etree.ElementTree as ET
 import boto3
 import pytest
-from moto import mock_s3
+from moto import mock_s3, mock_sts
 
 import bignbit.utils
 from bignbit.handle_big_result import (
@@ -73,9 +73,11 @@ def test_process_harmony_results_no_data():
     file_dicts = process_harmony_results(harmony_job, cmr_environment)
     assert file_dicts == []
 
+@mock_sts
 @mock_s3
 def test_generate_metadata():
     """Test generating image metadata xml end-to-end for a single image set."""
+    bignbit.utils.AWS_ACCOUNT_ID = None
     # image metadata xml will be uploaded within the function, so the bucket needs to be mocked
     s3_client = boto3.client('s3', region_name='us-west-2')
     bucket_name = 'svc-bignbit-podaac-sit-svc-staging'
@@ -234,9 +236,11 @@ def test_get_mdxml_cnm_file_meta():
     assert result['size'] == len(image_metadata_xml)
 
 
+@mock_sts
 @mock_s3
 def test_write_cnm_message():
     """Test writing CNM message to S3"""
+    bignbit.utils.AWS_ACCOUNT_ID = None
     # Create mock S3 bucket
     s3_client = boto3.client('s3', region_name='us-west-2')
     bucket_name = 'test-audit-bucket'

@@ -15,8 +15,25 @@ from harmony import Environment, Client
 ED_USER = ED_PASS = None
 EDL_USER_TOKEN: dict[str, str] = {}
 HARMONY_CLIENT: Client | None = None
+AWS_ACCOUNT_ID: str | None = None
 
 HARMONY_SHOULD_VALIDATE_AUTH = os.environ.get('HARMONY_SHOULD_VALIDATE_AUTH', default='False').upper() == 'TRUE'
+
+
+def get_aws_account_id() -> str:
+    """
+    Get and cache the current AWS account ID via STS.
+
+    Returns
+    -------
+    str
+        The AWS account ID for the current caller identity
+    """
+    global AWS_ACCOUNT_ID  # pylint: disable=W0603
+    if not AWS_ACCOUNT_ID:
+        sts_client = boto3.client('sts')
+        AWS_ACCOUNT_ID = sts_client.get_caller_identity()['Account']
+    return AWS_ACCOUNT_ID
 
 
 def get_edl_creds() -> tuple[str, str]:
@@ -215,7 +232,8 @@ def upload_string_as_object(bucket_name: str, key_name: str, object_content: str
     s3_client.put_object(
         Body=object_content.encode(),
         Bucket=bucket_name,
-        Key=key_name
+        Key=key_name,
+        ExpectedBucketOwner=get_aws_account_id()
     )
     return f's3://{bucket_name}/{key_name}'
 
@@ -235,6 +253,7 @@ def upload_object(
         Key=key,
         Body=body_content,
         ContentType=content_type,
+        ExpectedBucketOwner=get_aws_account_id()
     )
     return f's3://{bucket}/{key}'
 
@@ -258,7 +277,8 @@ def upload_to_s3(filepath: pathlib.Path, bucket_name: str, object_key: str):
       s3 uri of new object
     """
     s3_client = boto3.client('s3')
-    s3_client.upload_file(str(filepath), bucket_name, object_key)
+    s3_client.upload_file(str(filepath), bucket_name, object_key,
+                          ExtraArgs={'ExpectedBucketOwner': get_aws_account_id()})
 
     return f's3://{bucket_name}/{object_key}'
 
