@@ -4,7 +4,7 @@ import json
 import xml.etree.ElementTree as ET
 import boto3
 import pytest
-from moto import mock_s3
+from moto import mock_s3, mock_sts
 from unittest.mock import patch, MagicMock
 
 import bignbit.utils
@@ -19,10 +19,12 @@ from bignbit.handle_big_result import (
 from bignbit.image_set import ImageSet
 
 @pytest.mark.vcr
+@mock_sts
 @mock_s3
 @patch('bignbit.utils.boto3.client')
 def test_process_harmony_results(mock_boto):
     """Test pulling results of a harmony job from s3."""
+
     mock_lambda = MagicMock()
     mock_boto.return_value = mock_lambda
 
@@ -30,6 +32,7 @@ def test_process_harmony_results(mock_boto):
         "Payload": MagicMock(read=lambda: b'{"access-token": "test-token"}')
     }
     
+    bignbit.utils.AWS_ACCOUNT_ID = None
     bignbit.utils.ED_USER = 'test'
     bignbit.utils.ED_PASS = 'test'
     job_id = '3d276f84-56e2-4f0a-acb2-35b9fcaaa317'
@@ -90,9 +93,11 @@ def test_process_harmony_results_no_data(mock_boto):
     file_dicts = process_harmony_results(harmony_job, cmr_environment)
     assert file_dicts == []
 
+@mock_sts
 @mock_s3
 def test_generate_metadata():
     """Test generating image metadata xml end-to-end for a single image set."""
+    bignbit.utils.AWS_ACCOUNT_ID = None
     # image metadata xml will be uploaded within the function, so the bucket needs to be mocked
     s3_client = boto3.client('s3', region_name='us-west-2')
     bucket_name = 'svc-bignbit-podaac-sit-svc-staging'
@@ -251,9 +256,11 @@ def test_get_mdxml_cnm_file_meta():
     assert result['size'] == len(image_metadata_xml)
 
 
+@mock_sts
 @mock_s3
 def test_write_cnm_message():
     """Test writing CNM message to S3"""
+    bignbit.utils.AWS_ACCOUNT_ID = None
     # Create mock S3 bucket
     s3_client = boto3.client('s3', region_name='us-west-2')
     bucket_name = 'test-audit-bucket'

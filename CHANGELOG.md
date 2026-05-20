@@ -12,6 +12,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 ### Fixed
 ### Security
+- [issues/151](https://github.com/podaac/bignbit/issues/151): Added ExpectedBucketOwner parameter when making S3 requests.
+
+## [0.7.2]
+### Added
+### Changed
+- increased timeout for "Handle BIG Result" lambda
+### Deprecated
+### Removed
+### Fixed
+- [issues/168](https://github.com/podaac/bignbit/issues/164): Added `reprojection` keyword to allow overriding default behavior for EPSG:4326
+### Security
 
 ## [0.7.1]
 ### Added
