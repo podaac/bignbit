@@ -2,16 +2,19 @@
 import hashlib
 import json
 import xml.etree.ElementTree as ET
+from unittest.mock import MagicMock, patch
 import boto3
 import pytest
 from moto import mock_s3, mock_sts
 
 import bignbit.utils
 from bignbit.handle_big_result import (
+    _resolve_static_data_day,
     construct_cnm,
     create_metadata_xml,
     generate_metadata,
     get_mdxml_cnm_file_meta,
+    IncompleteImageSetError,
     process_harmony_results,
     write_cnm_message
 )
@@ -571,3 +574,102 @@ def test_write_cnm_message_nrt():
     assert '_NRT_' in cnm_message['collection'] or cnm_message['collection'].endswith('_NRT')
 
 
+# --------------------------------------------------------------------------------------
+# Tests for _resolve_static_data_day
+# --------------------------------------------------------------------------------------
+
+def test_resolve_static_data_day_no_strategy():
+    """Returns None when dataDayStrategy is absent."""
+    assert _resolve_static_data_day({}) is None
+
+
+def test_resolve_static_data_day_different_strategy():
+    """Returns None when dataDayStrategy is set to something other than 'single_day_of_year'."""
+    config = {'dataDayStrategy': 'some_other_strategy', 'singleDayNumber': 100}
+    assert _resolve_static_data_day(config) is None
+
+
+def test_resolve_static_data_day_valid():
+    """Returns the configured day number when it is within the valid range."""
+    config = {'dataDayStrategy': 'single_day_of_year', 'singleDayNumber': 100}
+    assert _resolve_static_data_day(config) == 100
+
+
+def test_resolve_static_data_day_boundary_values():
+    """Returns 1 and 366 as valid boundary day numbers."""
+    assert _resolve_static_data_day({'dataDayStrategy': 'single_day_of_year', 'singleDayNumber': 1}) == 1
+    assert _resolve_static_data_day({'dataDayStrategy': 'single_day_of_year', 'singleDayNumber': 366}) == 366
+
+
+def test_resolve_static_data_day_too_low():
+    """Returns 1 (fallback) when configured day is below the valid range."""
+    config = {'dataDayStrategy': 'single_day_of_year', 'singleDayNumber': 0}
+    assert _resolve_static_data_day(config) == 1
+
+
+def test_resolve_static_data_day_too_high():
+    """Returns 1 (fallback) when configured day exceeds 366."""
+    config = {'dataDayStrategy': 'single_day_of_year', 'singleDayNumber': 367}
+    assert _resolve_static_data_day(config) == 1
+
+
+def test_resolve_static_data_day_default_number():
+    """Returns 1 (default singleDayNumber) when the key is absent but strategy is set."""
+    config = {'dataDayStrategy': 'single_day_of_year'}
+    assert _resolve_static_data_day(config) == 1
+
+
+# --------------------------------------------------------------------------------------
+# Additional tests for generate_metadata and process_harmony_results
+# --------------------------------------------------------------------------------------
+
+def test_generate_metadata_raises_when_image_missing():
+    """IncompleteImageSetError is raised when the image_set has no image."""
+    image_set = ImageSet(name='empty_set', image={})
+    with pytest.raises(IncompleteImageSetError):
+        generate_metadata(image_set, 'begin', 'mid', 'end', 'day', False, None)
+
+
+@mock_sts
+@mock_s3
+@patch('bignbit.utils.get_harmony_client')
+def test_process_harmony_results_empty_result_urls(mock_get_harmony_client):
+    """Returns an empty list when a valid Harmony job produces no result files."""
+    bignbit.utils.AWS_ACCOUNT_ID = None
+
+    mock_harmony_client = MagicMock()
+    mock_harmony_client.result_urls.return_value = iter([])
+    mock_get_harmony_client.return_value = mock_harmony_client
+
+    harmony_job = {'job': 'valid-job-id', 'variable': 'temperature', 'output_crs': 'EPSG:4326'}
+    result = process_harmony_results(harmony_job, 'UAT')
+    assert result == []
+
+
+@mock_sts
+@mock_s3
+@patch('bignbit.utils.get_harmony_client')
+def test_process_harmony_results_all_variable_omitted(mock_get_harmony_client):
+    """When variable is 'all', the 'variable' key is omitted from each file dict."""
+    bignbit.utils.AWS_ACCOUNT_ID = None
+
+    s3_client = boto3.client('s3', region_name='us-west-2')
+    bucket_name = 'test-harmony-bucket'
+    s3_client.create_bucket(
+        Bucket=bucket_name,
+        CreateBucketConfiguration={'LocationConstraint': 'us-west-2'}
+    )
+    image_key = 'path/to/result_image.png'
+    s3_client.put_object(Bucket=bucket_name, Key=image_key, Body=b'fake image data')
+
+    mock_harmony_client = MagicMock()
+    mock_harmony_client.result_urls.return_value = iter([f's3://{bucket_name}/{image_key}'])
+    mock_get_harmony_client.return_value = mock_harmony_client
+
+    harmony_job = {'job': 'valid-job-id', 'variable': 'all', 'output_crs': 'EPSG:4326'}
+    result = process_harmony_results(harmony_job, 'UAT')
+
+    assert len(result) == 1
+    assert 'variable' not in result[0]
+    assert result[0]['output_crs'] == 'EPSG:4326'
+    assert result[0]['fileName'] == 'result_image.png'
