@@ -303,7 +303,7 @@ Examples:
     parser.add_argument(
         'shortName',
         type=str,
-        help='Short name of the collection, '
+        help='Short name of the collection'
     )
     parser.add_argument(
         '--collectionId',
@@ -336,6 +336,14 @@ Examples:
         help=(
             'Regular expression used to identify which file in a granule should be used as '
             'the image file. Uses first if multiple files match'
+        )
+    )
+    parser.add_argument(
+        '--nrtFilenameRegex',
+        type=str,
+        help=(
+            'Regular expression used to identify whether a granule should be treated as NRT or '
+            'standard. All files are assumed standard if not specified.'
         )
     )
     parser.add_argument(
