@@ -1,10 +1,12 @@
 """Unit tests for handle_big_result module"""
 import hashlib
+import io
 import json
 import xml.etree.ElementTree as ET
 from unittest.mock import MagicMock, patch
 import boto3
 import pytest
+from botocore.response import StreamingBody
 from moto import mock_s3, mock_sts
 
 import bignbit.utils
@@ -673,3 +675,35 @@ def test_process_harmony_results_all_variable_omitted(mock_get_harmony_client):
     assert 'variable' not in result[0]
     assert result[0]['output_crs'] == 'EPSG:4326'
     assert result[0]['fileName'] == 'result_image.png'
+
+
+@patch('bignbit.utils.get_harmony_client')
+@patch('bignbit.handle_big_result.boto3')
+def test_process_harmony_results_multipart_etag_fallback(mock_boto3, mock_get_harmony_client):
+    """When ETag has a multipart suffix, falls back to streaming the object to compute MD5."""
+    bignbit.utils.AWS_ACCOUNT_ID = '123456789012'
+
+    image_data = b'fake image data for multipart test'
+    expected_checksum = hashlib.md5(image_data).hexdigest()
+
+    bucket_name = 'test-harmony-bucket'
+    image_key = 'path/to/result_image.png'
+
+    mock_s3_instance = MagicMock()
+    mock_s3_instance.head_object.return_value = {'ETag': '"abcdef1234567890abcdef1234567890-5"'}
+    mock_s3_instance.get_object.return_value = {
+        'Body': StreamingBody(io.BytesIO(image_data), len(image_data))
+    }
+    mock_boto3.client.return_value = mock_s3_instance
+
+    mock_harmony_client = MagicMock()
+    mock_harmony_client.result_urls.return_value = iter([f's3://{bucket_name}/{image_key}'])
+    mock_get_harmony_client.return_value = mock_harmony_client
+
+    harmony_job = {'job': 'valid-job-id', 'variable': 'temperature', 'output_crs': 'EPSG:4326'}
+    result = process_harmony_results(harmony_job, 'UAT')
+
+    assert len(result) == 1
+    assert result[0]['checksumType'] == 'md5'
+    assert result[0]['checksum'] == expected_checksum
+    mock_s3_instance.get_object.assert_called_once()

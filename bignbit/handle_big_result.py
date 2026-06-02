@@ -93,8 +93,7 @@ class CMA(Process):
         nrt_filename_regex = dataset_config.get('nrtFilenameRegex')
         is_nrt = False
         if nrt_filename_regex:
-            nrt_match = re.match(nrt_filename_regex, granule_id)
-            if nrt_match:
+            if re.search(nrt_filename_regex, granule_id):
                 is_nrt = True
 
         try:
@@ -242,15 +241,27 @@ def process_harmony_results(harmony_job: dict[str, str], cmr_env: str) -> list[d
 
         response = s3_client.head_object(Bucket=bucket, Key=key,
                                          ExpectedBucketOwner=utils.get_aws_account_id())
-        # For single-part uploads, the S3 ETag is the MD5 hex digest of the object
         etag = response['ETag'].strip('"')
+
+        # For single-part uploads, the S3 ETag is the MD5 hex digest of the object.
+        # For multipart uploads, the ETag has a '-<partcount>' suffix and is not an MD5.
+        if re.fullmatch(r'[0-9a-fA-F]{32}', etag):
+            checksum = etag
+        else:
+            CUMULUS_LOGGER.warning(
+                'ETag {} for s3://{}/{} is not a valid MD5 digest; '
+                'falling back to streaming MD5 computation', etag, bucket, key
+            )
+            get_response = s3_client.get_object(Bucket=bucket, Key=key,
+                                                ExpectedBucketOwner=utils.get_aws_account_id())
+            checksum = hashlib.md5(get_response['Body'].read()).hexdigest()
 
         filename = key.split('/')[-1]
         file_dict = {
             'fileName': filename,
             'bucket': bucket,
             'key': key,
-            'checksum': etag,
+            'checksum': checksum,
             'checksumType': 'md5'
         }
         # Weird quirk where if we are working with a collection that doesn't define variables, the Harmony request
