@@ -21,8 +21,7 @@ locals {
 
 
 resource aws_ecr_repository "lambda-image-repo" {
-  name         = local.ecr_image_name
-  force_delete = true
+  name = local.ecr_image_name
 }
 
 
