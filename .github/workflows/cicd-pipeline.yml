@@ -309,6 +309,13 @@ jobs:
           terraform init -backend=false -upgrade
           terraform validate -no-color
 
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
       - name: Deploy to venue
         id: terraform-deploy
         working-directory: examples/cumulus-tf
