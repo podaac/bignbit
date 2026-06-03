@@ -5,8 +5,9 @@ locals {
 }
 
 resource "aws_s3_bucket" "bignbit_staging_bucket" {
-  count  = local.create_bucket ? 1 : 0
-  bucket = "${local.aws_resources_name}-staging"
+  count         = local.create_bucket ? 1 : 0
+  bucket        = "${local.aws_resources_name}-staging"
+  force_destroy = true
 
   lifecycle {
     ignore_changes = [
