@@ -22,6 +22,7 @@ locals {
   account_id = data.aws_caller_identity.current.account_id
 
   aws_resources_name = terraform.workspace == "default" ? "${var.prefix}-${var.app_name}" : "${var.prefix}-${var.app_name}-${terraform.workspace}"
+  sns_topic_name = terraform.workspace == "default" ? "${var.app_name}-${var.prefix}" : "${var.app_name}-${var.prefix}-${terraform.workspace}"
 
   default_tags = length(var.default_tags) == 0 ? {
     team : "TVA",

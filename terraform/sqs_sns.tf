@@ -21,7 +21,7 @@ resource "aws_sns_topic_policy" "default" {
 }
 
 resource "aws_sns_topic" "gibs_response_topic" {
-  name   = "svc-${local.aws_resources_name}-gibs-response-topic"
+  name   = "svc-${local.sns_topic_name}-gibs-response-topic"
   lifecycle {
     # GIBS publishes to this topic, so we want to avoid destroying it unless coordinating the change with GIBS
     prevent_destroy = true
