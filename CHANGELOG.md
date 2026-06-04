@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.8.0]
+### Added
 - [issues/150](https://github.com/podaac/bignbit/issues/150): Added support for mixed NRT & Standard collections with configurable regex.
 ### Changed
 - [issues/173](https://github.com/podaac/bignbit/issues/173): Changed resource names (e.g. ECR repo name) to include deployment level prefixes. This allows for deploying multiple copies of bignbit to a single AWS account/venue.
