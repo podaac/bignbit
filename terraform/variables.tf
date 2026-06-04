@@ -112,6 +112,18 @@ variable "lambda_container_image_uri" {
   default = ""
 }
 
+variable "force_delete_ecr" {
+  type        = bool
+  description = "Force delete the ECR repository and all its images on destroy. Set to true when migrating resource names to avoid manual cleanup."
+  default     = false
+}
+
+variable "force_destroy_staging_bucket" {
+  type        = bool
+  description = "Force destroy the staging S3 bucket and all its contents on destroy. Set to true when migrating resource names to avoid manual cleanup."
+  default     = false
+}
+
 variable "harmony_job_status_interval_seconds" {
     type = number
     description = "Interval in seconds for checking Harmony job status"

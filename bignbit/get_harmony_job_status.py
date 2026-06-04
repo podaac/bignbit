@@ -2,6 +2,7 @@
 import logging
 import os
 
+import requests
 from cumulus_logger import CumulusLogger
 from cumulus_process import Process
 from harmony import LinkType
@@ -10,6 +11,13 @@ from bignbit import utils
 from bignbit.utils import json_dumps_with_datetime
 
 CUMULUS_LOGGER = CumulusLogger('get_harmony_job_status')
+
+
+class HarmonyTransientError(Exception):
+    """Exception raised when the Harmony API returns a transient 5xx error"""
+
+    def __init__(self, message):
+        super().__init__(message)
 
 
 class HarmonyJobIncompleteError(Exception):
@@ -98,12 +106,26 @@ def check_harmony_job(
     """
 
     harmony_client = utils.get_harmony_client(cmr_env)
-    job_status = harmony_client.status(harmony_job_id)
+    try:
+        job_status = harmony_client.status(harmony_job_id)
+    except requests.exceptions.HTTPError as exc:
+        if exc.response is not None and exc.response.status_code >= 500:
+            raise HarmonyTransientError(
+                f'Harmony API returned a transient error checking status of job {harmony_job_id}: {exc}'
+            ) from exc
+        raise
 
     # For a successful job, return the status; for all other states, raise an exception.
     if job_status.get('status') == 'successful':
         # Check that the harmony job returned data to confirm that the job was successful
-        result_urls = list(harmony_client.result_urls(harmony_job_id, link_type=LinkType.s3))
+        try:
+            result_urls = list(harmony_client.result_urls(harmony_job_id, link_type=LinkType.s3))
+        except requests.exceptions.HTTPError as exc:
+            if exc.response is not None and exc.response.status_code >= 500:
+                raise HarmonyTransientError(
+                    f'Harmony API returned a transient error fetching result URLs for job {harmony_job_id}: {exc}'
+                ) from exc
+            raise
         if not result_urls:
             error_msg = (
                 f'Harmony job {harmony_job_id} completed successfully but returned no data for {variable} and {crs}'

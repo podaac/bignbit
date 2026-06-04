@@ -340,6 +340,14 @@
                       },
                       {
                         "ErrorEquals":[
+                          "HarmonyTransientError"
+                        ],
+                        "IntervalSeconds":2,
+                        "MaxAttempts":6,
+                        "BackoffRate":2
+                      },
+                      {
+                        "ErrorEquals":[
                           "Lambda.ServiceException",
                           "Lambda.AWSLambdaException",
                           "Lambda.SdkClientException",
