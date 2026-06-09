@@ -10,6 +10,7 @@ import os
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
+import re
 from typing import Any
 from urllib.parse import urlparse
 
@@ -73,20 +74,7 @@ class CMA(Process):
         # Throw KeyError if the state input doesn't contain the dataset config
         dataset_config = self.input['datasetConfigurationForBIG']['config']
 
-        data_day_strat = dataset_config.get('dataDayStrategy')
-        if data_day_strat is not None and data_day_strat == 'single_day_of_year':
-            static_data_day = dataset_config.get('singleDayNumber', 1)
-            # Throw TypeError on bad configuration
-            static_data_day = int(static_data_day)
-        else:
-            static_data_day = None
-
-        if static_data_day is not None and (static_data_day < 1 or static_data_day > 366):
-            CUMULUS_LOGGER.warning(
-                f'Specified data day override {static_data_day} is not logical '
-                'as a day of year. Defaulting to doy 001.'
-            )
-            static_data_day = 1
+        static_data_day = _resolve_static_data_day(dataset_config)
 
         subdaily = dataset_config.get('subdaily', False)
         try:
@@ -101,6 +89,12 @@ class CMA(Process):
         bignbit_audit_bucket = self.config.get('bignbit_audit_bucket')
         bignbit_audit_path = self.config.get('bignbit_audit_path')
         granule_id = self.input['granules'][0]['granuleId']
+
+        nrt_filename_regex = dataset_config.get('nrtFilenameRegex')
+        is_nrt = False
+        if nrt_filename_regex:
+            if re.search(nrt_filename_regex, granule_id):
+                is_nrt = True
 
         try:
             partial_id = utils.extract_mgrs_grid_code(granule_umm_json)
@@ -160,6 +154,7 @@ class CMA(Process):
                 cmr_provider,
                 collection_name,
                 granule_id,
+                is_nrt,
                 bignbit_audit_bucket,
                 bignbit_audit_path
             )
@@ -177,6 +172,34 @@ class CMA(Process):
         }
 
         return response_payload
+
+
+def _resolve_static_data_day(dataset_config: dict) -> int | None:
+    """
+    Determine the static data day override from dataset config, if configured.
+
+    Parameters
+    ----------
+    dataset_config : dict
+      Dataset configuration dictionary
+
+    Returns
+    -------
+    int | None
+      The static day-of-year override (1–366), or None if not configured.
+      Falls back to 1 if the configured value is outside the valid range.
+    """
+    if dataset_config.get('dataDayStrategy') != 'single_day_of_year':
+        return None
+    # Throw TypeError on bad configuration
+    static_data_day = int(dataset_config.get('singleDayNumber', 1))
+    if static_data_day < 1 or static_data_day > 366:
+        CUMULUS_LOGGER.warning(
+            f'Specified data day override {static_data_day} is not logical '
+            'as a day of year. Defaulting to doy 001.'
+        )
+        return 1
+    return static_data_day
 
 
 def process_harmony_results(harmony_job: dict[str, str], cmr_env: str) -> list[dict[str, Any]]:
@@ -216,17 +239,29 @@ def process_harmony_results(harmony_job: dict[str, str], cmr_env: str) -> list[d
     for url in result_urls:
         bucket, key = urlparse(url).netloc, urlparse(url).path.lstrip('/')
 
-        response = s3_client.get_object(Bucket=bucket, Key=key)
-        md5_hash = hashlib.new('md5')
-        for chunk in response['Body'].iter_chunks(chunk_size=100 * 1024 * 1024):  # 100 MB chunk size
-            md5_hash.update(chunk)
+        response = s3_client.head_object(Bucket=bucket, Key=key,
+                                         ExpectedBucketOwner=utils.get_aws_account_id())
+        etag = response['ETag'].strip('"')
+
+        # For single-part uploads, the S3 ETag is the MD5 hex digest of the object.
+        # For multipart uploads, the ETag has a '-<partcount>' suffix and is not an MD5.
+        if re.fullmatch(r'[0-9a-fA-F]{32}', etag):
+            checksum = etag
+        else:
+            CUMULUS_LOGGER.warning(
+                'ETag {} for s3://{}/{} is not a valid MD5 digest; '
+                'falling back to streaming MD5 computation', etag, bucket, key
+            )
+            get_response = s3_client.get_object(Bucket=bucket, Key=key,
+                                                ExpectedBucketOwner=utils.get_aws_account_id())
+            checksum = hashlib.md5(get_response['Body'].read()).hexdigest()
 
         filename = key.split('/')[-1]
         file_dict = {
             'fileName': filename,
             'bucket': bucket,
             'key': key,
-            'checksum': md5_hash.hexdigest(),
+            'checksum': checksum,
             'checksumType': 'md5'
         }
         # Weird quirk where if we are working with a collection that doesn't define variables, the Harmony request
@@ -391,6 +426,7 @@ def write_cnm_message(
         cmr_provider: str,
         collection_name: str,
         granule_id: str,
+        is_nrt: bool,
         bignbit_audit_bucket: str,
         bignbit_audit_path: str,
 ) -> str:
@@ -407,6 +443,8 @@ def write_cnm_message(
       Collection that this image set belongs to
     granule_id: str
       Granule id (used to determine CNM filename)
+    is_nrt: bool
+      True if the filename of the image_set is considered NRT
     bignbit_audit_bucket: str
       staging bucket where CNM is uploaded (default is *-internal)
     bignbit_audit_path: str
@@ -417,11 +455,11 @@ def write_cnm_message(
     s3_key: str
       s3 key pointing to the uploaded CNM message
     """
-    cnm_message = construct_cnm(image_set, cmr_provider, collection_name)
+    cnm_message = construct_cnm(image_set, cmr_provider, collection_name, is_nrt)
     cnm_bytes = json.dumps(cnm_message).encode()
     submission_time = cnm_message.get('submissionTime')
     collection_fullname = cnm_message.get('collection')
-    cnm_key = f'{bignbit_audit_path}/{collection_fullname}/{granule_id}.{submission_time}.cnm.json'
+    cnm_key = f'{bignbit_audit_path}/{collection_fullname}/{granule_id}.{submission_time}.cnm.json'.replace(':', '_')
     utils.upload_object(
         cnm_bytes,
         bignbit_audit_bucket,
@@ -434,7 +472,8 @@ def write_cnm_message(
 def construct_cnm(
         image_set: ImageSet,
         cmr_provider: str,
-        collection_name: str
+        collection_name: str,
+        is_nrt: bool,
 ) -> dict[str, Any]:
     """
     Construct the CNM message for GITC
@@ -442,11 +481,13 @@ def construct_cnm(
     Parameters
     ----------
     image_set: ImageSet
-        ImageSet for one image to be sent to gibs
+      ImageSet for one image to be sent to gibs
     cmr_provider: str
       The provider sent in the CNM message
     collection_name: str
       Collection that this image set belongs to
+    is_nrt: bool
+      True if the filename of the image_set is considered NRT
 
     Returns
     ----------
@@ -456,11 +497,12 @@ def construct_cnm(
     product = to_cnm_product_dict(image_set)
     submission_time = datetime.now(timezone.utc).isoformat()[:-9] + 'Z'
     CUMULUS_LOGGER.debug(image_set.image['variable'])
+    nrt_string = '_NRT' if is_nrt else ''
     if 'output_crs' in image_set.image:
         crs_suffix = GIBS_CRS_NAME_TO_SUFFIX.get(image_set.image.get('output_crs', 'EPSG:4326'), 'LL')
-        new_collection = f"{collection_name}_{image_set.image['variable']}_{crs_suffix}".replace('/', '_')
+        new_collection = f"{collection_name}_{image_set.image['variable']}{nrt_string}_{crs_suffix}".replace('/', '_')
     else:
-        new_collection = f"{collection_name}_{image_set.image['variable']}".replace('/', '_')
+        new_collection = f"{collection_name}_{image_set.image['variable']}{nrt_string}".replace('/', '_')
 
     return {
         'version': '1.5.1',

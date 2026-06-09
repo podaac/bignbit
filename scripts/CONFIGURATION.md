@@ -21,39 +21,51 @@ To configure a collection for bignbit, you need to have the following informatio
   shortName             Short name of the collection
 
   --collectionId COLLECTIONID
-                        CMR collection id, use if the collection name is ambiguous.
-                        WARNING: since collection ids are venue-specific, the output config will need to be re-generated when deploying to a separate venue.
-
+                        CMR collection id, use if the collection name is ambiguous. WARNING: since
+                        collection ids are venue-specific, the output config will need to be re-
+                        generated when deploying to a separate venue.
+  --no-sendToHarmony    Specifies that the collection should not be processed by Harmony API.
+                        Default is `sendToHarmony = True`.
+  --operaHLSTreatment   Specifies whether the collection should receive the "OPERA HLS Treatment".
+                        Default is `operaHLSTreatment = False`
   --imageFilenameRegex IMAGEFILENAMEREGEX
-                        Regular expression used to identify which file in a granule should be used as the image file.
-                        Uses first if multiple files match
-
+                        Regular expression used to identify which file in a granule should be used
+                        as the image file. Uses first if multiple files match
+  --nrtFilenameRegex NRTFILENAMEREGEX
+                        Regular expression used to identify whether a granule should be treated as
+                        NRT or standard. All files are assumed standard if not specified.
   --imgVariables VAR_NAME [VAR_NAME ...]
-                        List of variable names (not UMM-Var concept ids) to use for generating browse image(s).
-                        If none are provided, the default of "all" is used
-
+                        List of variable names (not UMM-Var concept ids) to use for generating
+                        browse image(s). If none are provided, the default of "all" is used
   --dimensions HEIGHT WIDTH
-                        Optional override to specify the height and width that each browse image should have when processed by Harmony.
-
+                        Optional override to specify the height and width that each browse image
+                        should have when processed by Harmony.
   --scaleExtentPolar MINX MINY MAXX MAXY
                         Controls the geographic extent of polar-projected browse image outputs.
-                        This keyword is ignored if `outputCrs` does not contain EPSG:3413 or EPSG:3031
-                        (polar stereographic projections used by GIBS)
-
+                        This keyword is ignored if `outputCrs` does not contain EPSG:3413 or
+                        EPSG:3031 (polar stereographic projections used by GIBS)
   --singleDayNumber JJJ
-                        All granules in this dataset will use the day of year specified in this keyword. ex: "001" for January 1st
-
-  --subdaily            Set to true if granules contain subdaily data. This will send `DataDateTime` metadata to GIBS as described in the GIBS ICD
-
-  --outputCrs list of CRS strings from these options: EPSG:4326,EPSG:3413,EPSG:3031,EPSG:3857
-                        List of output projections or coordinate reference systems for which to produce browse images. Applies to all variables in granule. GIBS-compatible values are EPSG:4326, EPSG:3413, or EPSG:3031
+                        All granules in this dataset will use the day of year specified in this
+                        keyword. ex: "001" for January 1st
+  --subdaily            Set to true if granules contain subdaily data. This will send
+                        `DataDateTime` metadata to GIBS as described in the GIBS ICD
+  --outputCrs {EPSG:4326,EPSG:3413,EPSG:3031,EPSG:3857} [{EPSG:4326,EPSG:3413,EPSG:3031,EPSG:3857} ...]
+                        List of output projections or coordinate reference systems for which to
+                        produce browse images. Applies to all variables in granule. GIBS-
+                        compatible values are EPSG:4326, EPSG:3413, or EPSG:3031
+  --reprojection        Set to true to force reprojection for all granules. This will send the
+                        `outputCrs` parameter in Harmony API calls unconditionally. Warning: if
+                        the Harmony service used to generate browse images does not support
+                        reprojection, jobs will fail.
 ```
 
 Additionally, you can provide the `--s3Destination` keyword if you wish to upload the dataset config directly to s3. You must have valid access credentials to your bucket in the environment you run the script if you wish to use this option.
 
 ```
   --s3Destination BUCKET KEY
-                        Specify an S3 URI (bucket key, ex: --s3Destination podaac-bignbit-sit-svc-internal big-config) to upload the config. Do not specify the filename, it is auto-generated.
+                        Specify an S3 URI (bucket key, ex: --s3Destination podaac-bignbit-sit-svc-
+                        internal big-config) to upload the config. Do not specify the filename, it
+                        is auto-generated.
 ```
 
 ## Setup

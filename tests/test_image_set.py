@@ -113,7 +113,7 @@ def test_construct_cnm(cnm_v151_schema):
     # image metadata is created later
     image_sets[0].image_metadata = image_set_1.image_metadata
 
-    cnm = construct_cnm(image_sets[0], 'POCLOUD', 'testcollection')
+    cnm = construct_cnm(image_sets[0], 'POCLOUD', 'testcollection', False)
     jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
 
 
@@ -148,7 +148,7 @@ def test_construct_cnm_no_wld(cnm_v151_schema):
     # image metadata is created later
     image_sets[0].image_metadata = test_input[1]
 
-    cnm = construct_cnm(image_sets[0], 'POCLOUD', 'testcollection')
+    cnm = construct_cnm(image_sets[0], 'POCLOUD', 'testcollection', False)
     jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
 
 def test_construct_cnm_variable_with_slash(cnm_v151_schema):
@@ -182,7 +182,7 @@ def test_construct_cnm_variable_with_slash(cnm_v151_schema):
     # image metadata is created later
     image_sets[0].image_metadata = test_input[1]
 
-    cnm = construct_cnm(image_sets[0], 'POCLOUD', 'testcollection')
+    cnm = construct_cnm(image_sets[0], 'POCLOUD', 'testcollection', False)
     jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
     assert cnm['collection'] == 'testcollection_groupA_analysed_sst_LL'
 
@@ -218,7 +218,7 @@ def test_construct_cnm_with_projection(output_crs: str, cnm_v151_schema):
     # image metadata is created later
     image_sets[0].image_metadata = test_input[1]
 
-    cnm = construct_cnm(image_sets[0], 'POCLOUD', 'testcollection')
+    cnm = construct_cnm(image_sets[0], 'POCLOUD', 'testcollection', False)
     jsonschema.validate(cnm, cnm_v151_schema, format_checker=jsonschema.FormatChecker())
 
     if output_crs == 'EPSG:4326':

@@ -5,9 +5,10 @@ import os
 
 import boto3
 import pytest
-from moto import mock_s3, mock_sqs
+from moto import mock_s3, mock_sqs, mock_sts
 
 import bignbit.send_to_gitc
+import bignbit.utils
 
 
 @pytest.fixture
@@ -27,9 +28,11 @@ def sample_cnm_string(sample_cnm_message):
     return json.dumps(sample_cnm_message)
 
 
+@mock_sts
 @mock_s3
 def test_read_cnm(sample_cnm_string):
     """Test that read_cnm correctly reads and decodes S3 object"""
+    bignbit.utils.AWS_ACCOUNT_ID = None
     # Setup
     bucket_name = 'test-bucket'
     cnm_key = 'test-cnm-message.json'
@@ -118,10 +121,12 @@ def test_notify_gitc(sample_cnm_string):
         del os.environ['GIBS_REGION']
 
 
+@mock_sts
 @mock_s3
 @mock_sqs
 def test_notify_gitc_process_integration(sample_cnm_message, sample_cnm_string):
     """Test the full NotifyGitc.process() flow"""
+    bignbit.utils.AWS_ACCOUNT_ID = None
     # Setup S3
     bucket_name = 'test-internal-bucket'
     cnm_key = 'bignbit-cnm-output/tempo_no2_l3/test-granule.cnm.json'
@@ -183,9 +188,11 @@ def test_notify_gitc_process_integration(sample_cnm_message, sample_cnm_string):
         del os.environ['GIBS_REGION']
 
 
+@mock_sts
 @mock_s3
 def test_read_cnm_nonexistent_object():
     """Test that read_cnm raises error for nonexistent S3 object"""
+    bignbit.utils.AWS_ACCOUNT_ID = None
     # Setup
     bucket_name = 'test-bucket'
     s3_client = boto3.client('s3', region_name='us-east-1')

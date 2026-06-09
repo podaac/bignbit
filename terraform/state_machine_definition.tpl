@@ -331,7 +331,8 @@
                     "Retry":[
                       {
                         "ErrorEquals":[
-                          "HarmonyJobIncompleteError"
+                          "HarmonyJobIncompleteError",
+                          "HarmonyTransientError"
                         ],
                         "IntervalSeconds":${HarmonyJobStatusIntervalSeconds},
                         "MaxAttempts":${HarmonyJobStatusMaxAttempts},

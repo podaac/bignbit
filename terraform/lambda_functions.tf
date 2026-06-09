@@ -3,7 +3,7 @@ data "aws_ecr_authorization_token" "token" {}
 locals {
   lambda_container_image_uri_split = split("/", var.lambda_container_image_uri)
   ecr_image_name_and_tag = split(":", element(local.lambda_container_image_uri_split, length(local.lambda_container_image_uri_split) - 1))
-  ecr_image_name = "${local.environment}-${element(local.ecr_image_name_and_tag, 0)}"
+  ecr_image_name = "${local.aws_resources_name}-${element(local.ecr_image_name_and_tag, 0)}"
   ecr_image_tag = element(local.ecr_image_name_and_tag, 1)
 
   # Truncate all function names to max 64 characters for AWS Lambda
@@ -21,7 +21,8 @@ locals {
 
 
 resource aws_ecr_repository "lambda-image-repo" {
-  name = local.ecr_image_name
+  name         = local.ecr_image_name
+  force_delete = var.force_delete_ecr
 }
 
 
