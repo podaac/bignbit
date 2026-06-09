@@ -331,20 +331,13 @@
                     "Retry":[
                       {
                         "ErrorEquals":[
-                          "HarmonyJobIncompleteError"
+                          "HarmonyJobIncompleteError",
+                          "HarmonyTransientError"
                         ],
                         "IntervalSeconds":${HarmonyJobStatusIntervalSeconds},
                         "MaxAttempts":${HarmonyJobStatusMaxAttempts},
                         "BackoffRate":${HarmonyJobStatusBackoffRate},
                         "MaxDelaySeconds":${HarmonyJobStatusMaxDelaySeconds}
-                      },
-                      {
-                        "ErrorEquals":[
-                          "HarmonyTransientError"
-                        ],
-                        "IntervalSeconds":2,
-                        "MaxAttempts":6,
-                        "BackoffRate":2
                       },
                       {
                         "ErrorEquals":[

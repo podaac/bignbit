@@ -108,6 +108,10 @@ def check_harmony_job(
     harmony_client = utils.get_harmony_client(cmr_env)
     try:
         job_status = harmony_client.status(harmony_job_id)
+    except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as exc:
+        raise HarmonyTransientError(
+            f'Harmony API returned a transient error checking status of job {harmony_job_id}: {exc}'
+        ) from exc
     except requests.exceptions.HTTPError as exc:
         if exc.response is not None and exc.response.status_code >= 500:
             raise HarmonyTransientError(
@@ -120,6 +124,10 @@ def check_harmony_job(
         # Check that the harmony job returned data to confirm that the job was successful
         try:
             result_urls = list(harmony_client.result_urls(harmony_job_id, link_type=LinkType.s3))
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as exc:
+            raise HarmonyTransientError(
+                f'Harmony API returned a transient error fetching result URLs for job {harmony_job_id}: {exc}'
+            ) from exc
         except requests.exceptions.HTTPError as exc:
             if exc.response is not None and exc.response.status_code >= 500:
                 raise HarmonyTransientError(
