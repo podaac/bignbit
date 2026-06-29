@@ -2,7 +2,7 @@
 ARG FUNCTION_DIR="/home/dockeruser/app"
 ARG GDAL_VERSION="3.13.1"
 
-FROM osgeo/gdal:ubuntu-small-${GDAL_VERSION} AS build-image
+FROM ghcr.io/osgeo/gdal:ubuntu-small-${GDAL_VERSION} AS build-image
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
