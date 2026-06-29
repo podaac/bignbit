@@ -34,7 +34,7 @@ RUN mkdir -p "${FUNCTION_DIR}" && \
     pip install --target ${FUNCTION_DIR} awslambdaric
 
 
-FROM osgeo/gdal:ubuntu-small-${GDAL_VERSION}
+FROM ghcr.io/osgeo/gdal:ubuntu-small-${GDAL_VERSION}
 ARG FUNCTION_DIR
 RUN adduser --quiet --disabled-password --shell /bin/sh --home /home/dockeruser --gecos "" --uid 993 dockeruser
 USER dockeruser
