@@ -61,15 +61,12 @@ jobs:
         uses: abatilo/actions-poetry@v3
         with:
           poetry-version: ${{ env.POETRY_VERSION }}
-      - name: Setup a local virtual environment
+      - name: Configure Poetry to install into the active environment
+        # GDAL (libgdal.so) is provided by the conda/micromamba environment, so we must
+        # NOT create a separate Poetry venv. Installing into the active micromamba env keeps
+        # the osgeo python bindings and libgdal.so co-located on the same loader path.
         run: |
-          poetry config virtualenvs.create true --local
-          poetry config virtualenvs.in-project true --local
-      - uses: actions/cache@v6
-        name: Define a cache for the virtual environment based on the dependencies lock file
-        with:
-          path: ./.venv
-          key: venv-${{ hashFiles('poetry.lock') }}
+          poetry config virtualenvs.create false --local
       - name: Get pre-build version
         id: get-version
         run: |
@@ -138,6 +135,7 @@ jobs:
         uses: mamba-org/setup-micromamba@v3
         with:
           environment-file: conda-environment.yaml
+          cache-environment: true
       - name: Install package
         run: poetry install
       - name: Lint
@@ -170,7 +168,7 @@ jobs:
             -Dsonar.tests=tests/
             -Dsonar.projectName=${{ github.repository }}
             -Dsonar.projectVersion=${{ env.software_version }}
-            -Dsonar.python.version=3.8,3.9,3.10
+            -Dsonar.python.version=3.12
       - name: Build Python Artifact
         id: poetry-build
         run: |
