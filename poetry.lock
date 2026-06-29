@@ -1361,9 +1361,10 @@ files = [
 name = "gdal"
 version = "3.13.1"
 description = "GDAL: Geospatial Data Abstraction Library"
-optional = false
+optional = true
 python-versions = ">=3.8.0"
 groups = ["main"]
+markers = "extra == \"gdal\""
 files = [
     {file = "gdal-3.13.1.tar.gz", hash = "sha256:94bb64d729ce73ceb75a314a15cba92696cdd854d99b6bf6b88a7b551227db74"},
 ]
@@ -3032,7 +3033,10 @@ idna = ">=2.0"
 multidict = ">=4.0"
 propcache = ">=0.2.1"
 
+[extras]
+gdal = ["gdal"]
+
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "71b629b6885c7307ebf54759a74506f67d728c6e3b5360ec50c835b7c59d353d"
+content-hash = "5283730cc2b3b543244ea1110ef88a34620c5d1c94dfbed2da4b55a6a3344797"

@@ -27,7 +27,7 @@ COPY ./bignbit ./bignbit
 COPY --chown=dockeruser poetry.lock pyproject.toml README.md ./
 RUN /home/dockeruser/.local/bin/poetry lock
 RUN mkdir -p "${FUNCTION_DIR}" && \
-    /home/dockeruser/.local/bin/poetry install --only main --sync && \
+    /home/dockeruser/.local/bin/poetry install --only main --extras gdal --sync && \
     cp -r $(/home/dockeruser/.local/bin/poetry env list --full-path | awk '{print $1}')/lib/python*/site-packages/* ${FUNCTION_DIR} && \
     cp -r ./bignbit ${FUNCTION_DIR} && \
     touch ${FUNCTION_DIR}/bignbit/__init__.py && \
