@@ -17,7 +17,7 @@ RUN apt-get update && \
   unzip \
   libcurl4-openssl-dev
 
-RUN adduser --quiet --disabled-password --shell /bin/sh --home /home/dockeruser --gecos "" --uid 993 dockeruser
+RUN useradd --create-home --home-dir /home/dockeruser --shell /bin/sh --uid 993 --user-group --comment "" dockeruser
 USER dockeruser
 RUN curl -sSL https://install.python-poetry.org | python3 -
 
@@ -36,7 +36,7 @@ RUN mkdir -p "${FUNCTION_DIR}" && \
 
 FROM ghcr.io/osgeo/gdal:ubuntu-small-${GDAL_VERSION}
 ARG FUNCTION_DIR
-RUN adduser --quiet --disabled-password --shell /bin/sh --home /home/dockeruser --gecos "" --uid 993 dockeruser
+RUN useradd --create-home --home-dir /home/dockeruser --shell /bin/sh --uid 993 --user-group --comment "" dockeruser
 USER dockeruser
 ENV HOME=/home/dockeruser
 WORKDIR ${FUNCTION_DIR}
