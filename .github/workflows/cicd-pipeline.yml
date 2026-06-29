@@ -27,8 +27,8 @@ on:
           - SIT
           - UAT
 env:
-  POETRY_VERSION: "1.8.2"
-  PYTHON_VERSION: "3.10"
+  POETRY_VERSION: "2.1.3"
+  PYTHON_VERSION: "3.12"
   TERRAFORM_VERSION: "1.14.0"
   REGISTRY: ghcr.io
 jobs:
@@ -44,17 +44,17 @@ jobs:
       pyproject_name: ${{ steps.poetry-build.outputs.pyproject_name }}
       tf_module_artifact_name: ${{ steps.poetry-build.outputs.tf_module_artifact_name }}
     steps:
-      - uses: getsentry/action-github-app-token@v3
+      - uses: getsentry/action-github-app-token@v4.0.0
         name: CICD Token
         id: cicd-app
         with:
           app_id: ${{ secrets.CICD_APP_ID }}
           private_key: ${{ secrets.CICD_APP_PRIVATE_KEY }}
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: ${{ github.repository }}
           token: ${{ steps.cicd-app.outputs.token }}
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install Poetry
@@ -65,7 +65,7 @@ jobs:
         run: |
           poetry config virtualenvs.create true --local
           poetry config virtualenvs.in-project true --local
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         name: Define a cache for the virtual environment based on the dependencies lock file
         with:
           path: ./.venv
@@ -135,7 +135,7 @@ jobs:
         run: |
           echo "software_version=$(poetry version | awk '{print $2}')" >> $GITHUB_ENV
       - name: Install micromamba
-        uses: mamba-org/setup-micromamba@v2
+        uses: mamba-org/setup-micromamba@v3
         with:
           environment-file: conda-environment.yaml
       - name: Install package
@@ -147,7 +147,7 @@ jobs:
       - name: Test and coverage
         run: |
           poetry run pytest --junitxml=build/reports/pytest.xml --cov=bignbit --cov-report=xml:build/reports/coverage.xml tests/
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
@@ -157,7 +157,7 @@ jobs:
           terraform init -backend=false -upgrade
           terraform validate -no-color
       - name: SonarCloud Scan
-        uses: sonarsource/sonarqube-scan-action@v6
+        uses: sonarsource/sonarqube-scan-action@v8.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -179,7 +179,7 @@ jobs:
           echo "the_version=$(poetry version | awk '{print $2}')" >> $GITHUB_OUTPUT
           echo "pyproject_name=$(poetry version | awk '{print $1}')" >> $GITHUB_OUTPUT
           echo "tf_module_artifact_name=$(poetry version | awk '{print $1}')-${{ env.software_version }}-cumulus-tf" >> $GITHUB_OUTPUT
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.poetry-build.outputs.pyproject_name }}-dist
           path: dist/*
@@ -189,7 +189,7 @@ jobs:
           cp terraform/* build/${{ steps.poetry-build.outputs.tf_module_artifact_name }}/
           cd build
           zip ${{ steps.poetry-build.outputs.tf_module_artifact_name }}.zip ${{ steps.poetry-build.outputs.tf_module_artifact_name }}/* -r -j
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ steps.poetry-build.outputs.tf_module_artifact_name }}
           path: build/${{ steps.poetry-build.outputs.tf_module_artifact_name }}.zip
@@ -238,26 +238,26 @@ jobs:
       THE_VERSION: ${{ needs.build.outputs.version }}
       PYPROJECT_NAME: ${{ needs.build.outputs.pyproject_name }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: ${{ github.repository }}
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
       - name: Log in to the Container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ github.repository }}/${{env.PYPROJECT_NAME}}
           tags: |
             type=pep440,pattern={{version}},value=${{ env.THE_VERSION }}
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: docker/Dockerfile
@@ -286,16 +286,16 @@ jobs:
       startsWith(github.ref, 'refs/heads/release') ||
       github.event_name == 'workflow_dispatch'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           repository: ${{ github.repository }}
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6.1.0
         with:
           aws-region: us-west-2
           role-session-name: GitHubActions
@@ -310,7 +310,7 @@ jobs:
           terraform validate -no-color
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}

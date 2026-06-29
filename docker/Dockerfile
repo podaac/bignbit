@@ -1,6 +1,6 @@
 # Define global args
 ARG FUNCTION_DIR="/home/dockeruser/app"
-ARG GDAL_VERSION="3.6.3"
+ARG GDAL_VERSION="3.13.1"
 
 FROM osgeo/gdal:ubuntu-small-${GDAL_VERSION} AS build-image
 

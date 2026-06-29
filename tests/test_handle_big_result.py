@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 import boto3
 import pytest
 from botocore.response import StreamingBody
-from moto import mock_s3, mock_sts
+from moto import mock_aws
 
 import bignbit.utils
 from bignbit.handle_big_result import (
@@ -23,8 +23,7 @@ from bignbit.handle_big_result import (
 from bignbit.image_set import ImageSet
 
 @pytest.mark.vcr
-@mock_sts
-@mock_s3
+@mock_aws
 def test_process_harmony_results():
     """Test pulling results of a harmony job from s3."""
     bignbit.utils.AWS_ACCOUNT_ID = None
@@ -85,8 +84,7 @@ def test_process_harmony_results_no_data():
     file_dicts = process_harmony_results(harmony_job, cmr_environment)
     assert file_dicts == []
 
-@mock_sts
-@mock_s3
+@mock_aws
 def test_generate_metadata():
     """Test generating image metadata xml end-to-end for a single image set."""
     bignbit.utils.AWS_ACCOUNT_ID = None
@@ -248,8 +246,7 @@ def test_get_mdxml_cnm_file_meta():
     assert result['size'] == len(image_metadata_xml)
 
 
-@mock_sts
-@mock_s3
+@mock_aws
 def test_write_cnm_message():
     """Test writing CNM message to S3"""
     bignbit.utils.AWS_ACCOUNT_ID = None
@@ -522,8 +519,7 @@ def test_construct_cnm_crs_suffixes_nrt():
         assert cnm['collection'] == f'COLLECTION_var_NRT_{expected_suffix}'
 
 
-@mock_sts
-@mock_s3
+@mock_aws
 def test_write_cnm_message_nrt():
     """Test that write_cnm_message with isNrt=True produces a collection name containing _NRT"""
     bignbit.utils.AWS_ACCOUNT_ID = None
@@ -632,8 +628,7 @@ def test_generate_metadata_raises_when_image_missing():
         generate_metadata(image_set, 'begin', 'mid', 'end', 'day', False, None)
 
 
-@mock_sts
-@mock_s3
+@mock_aws
 @patch('bignbit.utils.get_harmony_client')
 def test_process_harmony_results_empty_result_urls(mock_get_harmony_client):
     """Returns an empty list when a valid Harmony job produces no result files."""
@@ -648,8 +643,7 @@ def test_process_harmony_results_empty_result_urls(mock_get_harmony_client):
     assert result == []
 
 
-@mock_sts
-@mock_s3
+@mock_aws
 @patch('bignbit.utils.get_harmony_client')
 def test_process_harmony_results_all_variable_omitted(mock_get_harmony_client):
     """When variable is 'all', the 'variable' key is omitted from each file dict."""

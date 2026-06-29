@@ -177,6 +177,7 @@ def the_opera_hls_treatment(source_image_filepath: pathlib.Path, working_dirpath
     List[pathlib.Path]
         Absolute paths to each transformed output tif file
     """
+    gdal.UseExceptions()
     try:
         # Need to strip off the leading 'T' from the actual grid code in order to look it up in the json data
         # this is done using a slice on the string mgrs_grid_code[1:]
@@ -292,7 +293,7 @@ def lambda_handler(event, context):
     }
 
     logging_level = os.environ.get('LOGGING_LEVEL', 'info')
-    CUMULUS_LOGGER.logger.level = levels.get(logging_level, 'info')
+    CUMULUS_LOGGER.logger.setLevel(levels.get(logging_level, 'info'))
     CUMULUS_LOGGER.setMetadata(event, context)
 
     return CMA.cumulus_handler(event, context=context)
