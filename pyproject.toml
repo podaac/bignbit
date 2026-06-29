@@ -15,9 +15,11 @@ cumulus-process = "^1.7.0"
 python-graphql-client = "^0.4.3"
 requests = "^2.34.2"
 # GDAL is optional so that conda/micromamba can own it during local dev and CI (where it
-# provides libgdal.so alongside the python bindings). The Docker build activates the "gdal"
-# extra to install the PyPI bindings against the osgeo/gdal base image's system GDAL.
-gdal = {version = "3.13.1", optional = true}
+# provides libgdal.so alongside the python bindings; see conda-environment.yaml). Only the
+# Docker build activates the "gdal" extra, building the PyPI bindings against the osgeo/gdal
+# base image's libgdal -- so this version must match docker/Dockerfile's GDAL_VERSION, not
+# necessarily the (newer) GDAL pinned for dev/CI in conda-environment.yaml.
+gdal = {version = "3.12.4", optional = true}
 importlib-resources = "^7.1.0"
 
 [tool.poetry.extras]

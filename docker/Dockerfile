@@ -1,16 +1,28 @@
 # Define global args
 ARG FUNCTION_DIR="/home/dockeruser/app"
-ARG GDAL_VERSION="3.13.1"
+# GDAL 3.13.x base images moved to Ubuntu 26.04 / Python 3.14. Pin to 3.12.4, the newest
+# osgeo/gdal release whose base (Ubuntu 24.04 LTS) still ships Python 3.12, to keep the
+# Lambda runtime on the same Python version used in dev/CI. The PyPI gdal binding version
+# installed via the "gdal" extra in pyproject.toml must match this base image's libgdal.
+ARG GDAL_VERSION="3.12.4"
 
 FROM ghcr.io/osgeo/gdal:ubuntu-small-${GDAL_VERSION} AS build-image
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
 
-# Install aws-lambda-cpp build dependencies
+# Install aws-lambda-cpp build dependencies.
+# The newer minimal Ubuntu base behind osgeo/gdal:ubuntu-small no longer ships curl,
+# pip/venv, or the Python dev headers, so install them explicitly:
+#   curl         -> fetch the Poetry installer
+#   python3-venv -> provides ensurepip so the Poetry installer can build its venv
+#   python3-dev  -> Python.h, required to compile the GDAL bindings from the PyPI sdist
 RUN apt-get update && \
   apt-get install -y \
+  curl \
   python3-pip \
+  python3-dev \
+  python3-venv \
   g++ \
   make \
   cmake \

@@ -6,4 +6,4 @@ channels:
   - nodefaults
 dependencies:
   - python=3.12
-  - gdal=3.13.1
+  - gdal=3.12.4
