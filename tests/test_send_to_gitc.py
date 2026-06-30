@@ -5,7 +5,7 @@ import os
 
 import boto3
 import pytest
-from moto import mock_s3, mock_sqs, mock_sts
+from moto import mock_aws
 
 import bignbit.send_to_gitc
 import bignbit.utils
@@ -28,8 +28,7 @@ def sample_cnm_string(sample_cnm_message):
     return json.dumps(sample_cnm_message)
 
 
-@mock_sts
-@mock_s3
+@mock_aws
 def test_read_cnm(sample_cnm_string):
     """Test that read_cnm correctly reads and decodes S3 object"""
     bignbit.utils.AWS_ACCOUNT_ID = None
@@ -59,7 +58,7 @@ def test_read_cnm(sample_cnm_string):
     assert 'collection' in parsed
 
 
-@mock_sqs
+@mock_aws
 def test_notify_gitc(sample_cnm_string):
     """Test that notify_gitc correctly sends CNM to SQS"""
     # Setup
@@ -121,9 +120,7 @@ def test_notify_gitc(sample_cnm_string):
         del os.environ['GIBS_REGION']
 
 
-@mock_sts
-@mock_s3
-@mock_sqs
+@mock_aws
 def test_notify_gitc_process_integration(sample_cnm_message, sample_cnm_string):
     """Test the full NotifyGitc.process() flow"""
     bignbit.utils.AWS_ACCOUNT_ID = None
@@ -188,8 +185,7 @@ def test_notify_gitc_process_integration(sample_cnm_message, sample_cnm_string):
         del os.environ['GIBS_REGION']
 
 
-@mock_sts
-@mock_s3
+@mock_aws
 def test_read_cnm_nonexistent_object():
     """Test that read_cnm raises error for nonexistent S3 object"""
     bignbit.utils.AWS_ACCOUNT_ID = None
@@ -213,7 +209,7 @@ def test_notify_gitc_parses_collection_from_cnm(sample_cnm_string):
            'TEMPO_NO2_L3_V03_20250422T114702Z_S003_filtered_product_vertical_column_stratosphere_reformatted_2025112_EPSG:4326!G1273455903-LARC_CLOUD'
 
 
-@mock_sqs
+@mock_aws
 def test_notify_gitc_with_different_collection(sample_cnm_string):
     """Test notify_gitc with a different collection to ensure MessageGroupId is set correctly"""
     # Setup
