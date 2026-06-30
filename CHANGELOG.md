@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 ### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.8.1]
+### Added
+### Changed
 - [issue/190](https://github.com/podaac/bignbit/issues/190): Updated to Python 3.12 and upgraded dependency versions
 ### Deprecated
 - [issue/94](https://github.com/podaac/bignbit/issues/94): Deprecated old GDAL 3.6.3 base image, upgraded to GDAL 3.12.4
