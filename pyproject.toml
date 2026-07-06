@@ -1,30 +1,38 @@
 [tool.poetry]
 name = "bignbit"
-version = "0.8.0"
+version = "0.8.1rc1"
 description = "Browse image generation and transfer"
 authors = ["PO.DAAC <podaac@jpl.nasa.gov>"]
 license = "Apache 2.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
-boto3 = "^1.18"
-cumulus-message-adapter-python = "^2.1.0"
-harmony-py = "^1.3.3"
-cumulus-process = "^1.3.0"
+python = "^3.12"
+boto3 = "^1.40"
+cumulus-message-adapter-python = "^2.4.0"
+harmony-py = "^1.4.0"
+cumulus-process = "^1.7.0"
 python-graphql-client = "^0.4.3"
-requests = "^2.28.2"
-gdal = "3.6.3"
-importlib-resources = "^5.12.0"
+requests = "^2.34.2"
+# GDAL is optional so that conda/micromamba can own it during local dev and CI (where it
+# provides libgdal.so alongside the python bindings; see conda-environment.yaml). Only the
+# Docker build activates the "gdal" extra, building the PyPI bindings against the osgeo/gdal
+# base image's libgdal -- so this version must match docker/Dockerfile's GDAL_VERSION, not
+# necessarily the (newer) GDAL pinned for dev/CI in conda-environment.yaml.
+gdal = {version = "3.12.4", optional = true}
+importlib-resources = "^7.1.0"
+
+[tool.poetry.extras]
+gdal = ["gdal"]
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.4.0"
-moto = "^4.1.2"
-pylint = "^2.15.8"
-flake8 = "^6.0.0"
-pytest-cov = "^4.1.0"
-boto3-stubs = "^1.40.6"
-vcrpy = "^7.0.0"
+pytest = "^9.1.1"
+moto = "^5.2.2"
+pylint = "^4.0.6"
+flake8 = "^7.3.0"
+pytest-cov = "^7.1.0"
+boto3-stubs = "^1.40"
+vcrpy = "^8.2.1"
 pytest-recording = "^0.13.4"
 
 [build-system]
