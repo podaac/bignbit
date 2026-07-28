@@ -9,3 +9,7 @@ gibs_account_id="mocked"
 
 force_delete_ecr             = false
 force_destroy_staging_bucket = false
+
+harmony_job_status_max_attempts = 60
+harmony_job_status_backoff_rate = 1.1
+harmony_job_status_max_delay_seconds = 120
