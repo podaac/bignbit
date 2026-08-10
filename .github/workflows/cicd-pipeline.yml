@@ -307,6 +307,15 @@ jobs:
             --file=docker/Dockerfile \
             --severity-threshold=high \
             --sarif-file-output=snyk.sarif
+      - name: Normalize Snyk SARIF for GitHub Code Scanning
+        # Snyk emits some rules (e.g. license findings) with a null
+        # "security-severity", which GitHub Code Scanning rejects during processing
+        # ("invalid security severity value, is not a number: null"). Coerce any
+        # null/"undefined" value to "0" so the SARIF is accepted.
+        if: ${{ always() && hashFiles('snyk.sarif') != '' }}
+        run: |
+          jq '(.runs[]?.tool.driver.rules[]?.properties."security-severity") |= (if (. == null or . == "undefined") then "0" else . end)' \
+            snyk.sarif > snyk.sarif.tmp && mv snyk.sarif.tmp snyk.sarif
       - name: Upload Snyk result to GitHub Code Scanning
         # Always attempt to upload, even if the Snyk scan found vulnerabilities and
         # exited non-zero. Guarded on the SARIF file existing so that a scan which

@@ -48,6 +48,12 @@ RUN mkdir -p "${FUNCTION_DIR}" && \
 
 FROM ghcr.io/osgeo/gdal:ubuntu-small-${GDAL_VERSION}
 ARG FUNCTION_DIR
+# Patch known-vulnerable OS packages inherited from the base image. libssl3t64/openssl
+# shipped in this base image are affected by CVE-2026-45447 (fixed in 3.0.13-0ubuntu3.11);
+# upgrade to the latest Ubuntu security release. Must run as root, before switching users.
+RUN apt-get update && \
+    apt-get install -y --only-upgrade openssl libssl3t64 && \
+    rm -rf /var/lib/apt/lists/*
 RUN useradd --create-home --home-dir /home/dockeruser --shell /bin/sh --uid 993 --user-group --comment "" dockeruser
 USER dockeruser
 ENV HOME=/home/dockeruser
