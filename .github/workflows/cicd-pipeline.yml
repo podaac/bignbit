@@ -249,6 +249,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
+      security-events: write
     needs: build
     outputs:
       container_image_uri: ${{ steps.set-outputs.outputs.container_image_uri }}
@@ -293,9 +294,15 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: ${{ steps.meta.outputs.tags[0] }}
+          image: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
           args: >
             --severity-threshold=high
+      - name: Upload Snyk result to GitHub Code Scanning
+        # Always upload, even if the Snyk scan found vulnerabilities and failed
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk.sarif
 
       - name: Set output
         id: set-outputs
