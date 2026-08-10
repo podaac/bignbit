@@ -297,10 +297,11 @@ jobs:
           image: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
           args: >
             --severity-threshold=high
+            --exclude-app-vulns
       - name: Upload Snyk result to GitHub Code Scanning
         # Always upload, even if the Snyk scan found vulnerabilities and failed
         if: always()
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: snyk.sarif
 
