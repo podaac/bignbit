@@ -286,30 +286,27 @@ jobs:
           provenance: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      - name: Remove Python manifests before Snyk container scan
-        # snyk/actions/docker runs the Snyk CLI inside the snyk/snyk:docker image
-        # with the repo mounted as the working directory. If a pyproject.toml is
-        # present there, Snyk tries to resolve it as a Poetry project and shells
-        # out to `python`, which does not exist in that image ("spawn python ENOENT").
-        # The image is already built and pushed at this point, so these files are
-        # no longer needed in the workspace. Removing them makes Snyk scan only the
-        # container image. (Python dependencies are already scanned by the Snyk
-        # steps in the build job.)
-        run: rm -f pyproject.toml poetry.lock
+      - name: Set up Snyk CLI
+        uses: snyk/actions/setup@master
       - name: Run Snyk on Docker Image
-        # Snyk can be used to break the build when it detects vulnerabilities.
-        # In this case we want to upload the issues to GitHub Code Scanning.
-        # --file=docker/Dockerfile is required for the action to emit snyk.sarif
-        # (and enables base-image upgrade recommendations).
+        # Use the modern `snyk container test` subcommand directly instead of the
+        # snyk/actions/docker action. That action runs legacy `snyk test --docker`,
+        # which (a) executes inside a container with no `python`, tripping over the
+        # repo's pyproject.toml, and (b) mishandles `--file`, treating the Dockerfile
+        # as an open-source manifest ("Could not detect package manager").
+        # `snyk container test` targets only the image, reads the Dockerfile via
+        # --file for base-image upgrade advice, and reliably writes SARIF for upload
+        # to GitHub Code Scanning. continue-on-error keeps a vulnerable image (or a
+        # scan error) from failing the build.
         continue-on-error: true
-        uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          image: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
-          args: >
-            --severity-threshold=high
-            --file=docker/Dockerfile
+          IMAGE_URI: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
+        run: |
+          snyk container test "$IMAGE_URI" \
+            --file=docker/Dockerfile \
+            --severity-threshold=high \
+            --sarif-file-output=snyk.sarif
       - name: Upload Snyk result to GitHub Code Scanning
         # Always attempt to upload, even if the Snyk scan found vulnerabilities and
         # exited non-zero. Guarded on the SARIF file existing so that a scan which
