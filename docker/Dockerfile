@@ -48,11 +48,14 @@ RUN mkdir -p "${FUNCTION_DIR}" && \
 
 FROM ghcr.io/osgeo/gdal:ubuntu-small-${GDAL_VERSION}
 ARG FUNCTION_DIR
-# Patch known-vulnerable OS packages inherited from the base image. libssl3t64/openssl
-# shipped in this base image are affected by CVE-2026-45447 (fixed in 3.0.13-0ubuntu3.11);
-# upgrade to the latest Ubuntu security release. Must run as root, before switching users.
+# Patch known-vulnerable OS packages inherited from the base image. ECR/Inspector and Snyk
+# repeatedly flag CRITICAL CVEs in OS packages that GDAL pulls in transitively (openssl/libssl,
+# curl/libcurl, gnutls, glibc, ...). Rather than enumerate each package, upgrade every installed
+# package to the latest Ubuntu security release for this base's Ubuntu series so newly disclosed
+# CVEs are picked up on rebuild. Must run as root, before switching users.
 RUN apt-get update && \
-    apt-get install -y --only-upgrade openssl libssl3t64 && \
+    apt-get upgrade -y && \
+    apt-get dist-upgrade -y && \
     rm -rf /var/lib/apt/lists/*
 RUN useradd --create-home --home-dir /home/dockeruser --shell /bin/sh --uid 993 --user-group --comment "" dockeruser
 USER dockeruser
