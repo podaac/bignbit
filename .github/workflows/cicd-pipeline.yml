@@ -169,6 +169,26 @@ jobs:
             -Dsonar.projectName=${{ github.repository }}
             -Dsonar.projectVersion=${{ env.software_version }}
             -Dsonar.python.version=3.12
+      - name: Run Snyk as a blocking step
+        uses: snyk/actions/python-3.12@master
+        env:
+            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: test
+          args: >
+              --org=${{ secrets.SNYK_ORG_ID }}
+              --project-name=${{ github.repository }}
+              --severity-threshold=high
+              --fail-on=all
+      - name: Run Snyk on Python
+        uses: snyk/actions/python-3.12@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          command: monitor
+          args: >
+            --org=${{ secrets.SNYK_ORG_ID }}
+            --project-name=${{ github.repository }}
       - name: Build Python Artifact
         id: poetry-build
         run: |
@@ -265,6 +285,18 @@ jobs:
           provenance: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - name: Run Snyk on Docker Image
+        # Snyk can be used to break the build when it detects vulnerabilities.
+        # In this case we want to upload the issues to GitHub Code Scanning
+        continue-on-error: true
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: ${{ steps.meta.outputs.tags[0] }}
+          args: >
+            --severity-threshold=high
+
       - name: Set output
         id: set-outputs
         run: |

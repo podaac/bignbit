@@ -334,6 +334,28 @@ class TestGenerateHarmonyRequest:
         assert result.variables[0] == variable
         assert result.labels == ['bignbit']
 
+    def test_generate_harmony_request_comma_separated_variables(self):
+        """Test that a comma-separated variable list is properly converted"""
+        collection_concept_id = 'C9999999999-POCLOUD'
+        granule_concept_id = 'G9999999999-POCLOUD'
+        variable = 'u,v'
+        output_crs = 'EPSG:3857'
+        output_width = 512
+        output_height = 512
+        big_config = {'config': {'width': 512, 'height': 512}}
+        destination_bucket_url = 's3://bucket/path'
+
+        result = generate_harmony_request(
+            collection_concept_id, granule_concept_id, variable, output_width, output_height,
+            output_crs, big_config, destination_bucket_url
+        )
+
+        assert isinstance(result.variables, list)
+        assert len(result.variables) == 2
+        assert result.variables[0] == 'u'
+        assert result.variables[1] == 'v'
+        assert result.labels == ['bignbit']
+
 
 class TestSubmitHarmonyJobIntegration:
     """Integration-style tests for submit_harmony_job module"""
