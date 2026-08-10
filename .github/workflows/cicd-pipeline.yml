@@ -286,9 +286,21 @@ jobs:
           provenance: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+      - name: Remove Python manifests before Snyk container scan
+        # snyk/actions/docker runs the Snyk CLI inside the snyk/snyk:docker image
+        # with the repo mounted as the working directory. If a pyproject.toml is
+        # present there, Snyk tries to resolve it as a Poetry project and shells
+        # out to `python`, which does not exist in that image ("spawn python ENOENT").
+        # The image is already built and pushed at this point, so these files are
+        # no longer needed in the workspace. Removing them makes Snyk scan only the
+        # container image. (Python dependencies are already scanned by the Snyk
+        # steps in the build job.)
+        run: rm -f pyproject.toml poetry.lock
       - name: Run Snyk on Docker Image
         # Snyk can be used to break the build when it detects vulnerabilities.
-        # In this case we want to upload the issues to GitHub Code Scanning
+        # In this case we want to upload the issues to GitHub Code Scanning.
+        # --file=docker/Dockerfile is required for the action to emit snyk.sarif
+        # (and enables base-image upgrade recommendations).
         continue-on-error: true
         uses: snyk/actions/docker@master
         env:
@@ -297,10 +309,12 @@ jobs:
           image: ${{ fromJSON(steps.meta.outputs.json).tags[0] }}
           args: >
             --severity-threshold=high
-            --exclude-app-vulns
+            --file=docker/Dockerfile
       - name: Upload Snyk result to GitHub Code Scanning
-        # Always upload, even if the Snyk scan found vulnerabilities and failed
-        if: always()
+        # Always attempt to upload, even if the Snyk scan found vulnerabilities and
+        # exited non-zero. Guarded on the SARIF file existing so that a scan which
+        # fails to produce output does not fail the whole job.
+        if: ${{ always() && hashFiles('snyk.sarif') != '' }}
         uses: github/codeql-action/upload-sarif@v4
         with:
           sarif_file: snyk.sarif
