@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Security
 - [issue/194](https://github.com/podaac/bignbit/issues/194): Address critical and high security vulnerabilities found by snyk scan of python module and docker image.
 - [issue/194](https://github.com/podaac/bignbit/issues/194): Upgrade all inherited OS packages in the Docker image to the latest Ubuntu security releases to clear critical CVEs (curl/libcurl, gnutls, glibc, ...) reported by ECR/Inspector image scanning.
+- [issue/194](https://github.com/podaac/bignbit/issues/194): Move the AWS Lambda Runtime Interface Emulator (a prebuilt Go binary flagged for go/stdlib CVEs) into a dedicated `local` Docker build target so the production image pushed to ECR contains no Go binary. Build local test images with `docker build --target local`.
 
 ## [0.8.1]
 ### Added
