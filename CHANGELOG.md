@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.8.2]
+### Added
 - [issue/194](https://github.com/podaac/bignbit/issues/194): Add snyk security scanning after the python and docker build steps of the cicd-pipeline github action workflow.
 ### Changed
 ### Deprecated
