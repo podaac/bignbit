@@ -46,18 +46,41 @@ RUN mkdir -p "${FUNCTION_DIR}" && \
     pip install --target ${FUNCTION_DIR} awslambdaric
 
 
-FROM ghcr.io/osgeo/gdal:ubuntu-small-${GDAL_VERSION}
+FROM ghcr.io/osgeo/gdal:ubuntu-small-${GDAL_VERSION} AS runtime
 ARG FUNCTION_DIR
+# Patch known-vulnerable OS packages inherited from the base image. ECR/Inspector and Snyk
+# repeatedly flag CRITICAL CVEs in OS packages that GDAL pulls in transitively (openssl/libssl,
+# curl/libcurl, gnutls, glibc, ...). Rather than enumerate each package, upgrade every installed
+# package to the latest Ubuntu security release for this base's Ubuntu series so newly disclosed
+# CVEs are picked up on rebuild. Must run as root, before switching users.
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get dist-upgrade -y && \
+    rm -rf /var/lib/apt/lists/*
 RUN useradd --create-home --home-dir /home/dockeruser --shell /bin/sh --uid 993 --user-group --comment "" dockeruser
 USER dockeruser
 ENV HOME=/home/dockeruser
 WORKDIR ${FUNCTION_DIR}
 
 COPY --chown=dockeruser --from=build-image ${FUNCTION_DIR} ${FUNCTION_DIR}
-# (Optional) Add Lambda Runtime Interface Emulator and use a script in the ENTRYPOINT for simpler local runs
-ADD --chown=dockeruser https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /home/dockeruser/.local/bin/aws-lambda-rie
 COPY --chown=dockeruser docker/docker-entrypoint.sh /home/dockeruser/.local/bin/
-RUN chmod 755 /home/dockeruser/.local/bin/aws-lambda-rie /home/dockeruser/.local/bin/docker-entrypoint.sh && \
+RUN chmod 755 /home/dockeruser/.local/bin/docker-entrypoint.sh && \
     touch bignbit/__init__.py
 ENTRYPOINT [ "/home/dockeruser/.local/bin/docker-entrypoint.sh" ]
 CMD [ "bignbit.apply_opera_hls_treatment.lambda_handler" ]
+
+# Local-testing image: layers the AWS Lambda Runtime Interface Emulator on top so the
+# container can be exercised outside AWS (docker-entrypoint.sh invokes it only when
+# AWS_LAMBDA_RUNTIME_API is unset, i.e. never under the real Lambda runtime). The RIE is a
+# prebuilt Go binary whose embedded go/stdlib is what ECR/Inspector flags for go/stdlib CVEs,
+# so it is deliberately kept OUT of the production image below. Build local runs explicitly:
+#   docker build --target local -f docker/Dockerfile -t bignbit:local .
+FROM runtime AS local
+ARG FUNCTION_DIR
+ADD --chown=dockeruser https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /home/dockeruser/.local/bin/aws-lambda-rie
+RUN chmod 755 /home/dockeruser/.local/bin/aws-lambda-rie
+
+# Production image (default target, pushed to ECR by CI): identical to `runtime`, with no RIE
+# and therefore no Go binary to trigger go/stdlib findings. Kept last so a bare `docker build`
+# and the CI build (which also pins --target production) both produce the clean image.
+FROM runtime AS production
