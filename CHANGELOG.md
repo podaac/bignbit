@@ -13,6 +13,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 ### Security
 
+## [0.8.2]
+### Added
+- [issue/194](https://github.com/podaac/bignbit/issues/194): Add snyk security scanning after the python and docker build steps of the cicd-pipeline github action workflow.
+### Changed
+### Deprecated
+### Removed
+### Fixed
+- Fixed minor bug where variable lists (e.g. 'u,v') are properly passed to harmony in submit_harmony_job lambda
+### Security
+- [issue/194](https://github.com/podaac/bignbit/issues/194): Address critical and high security vulnerabilities found by snyk scan of python module and docker image.
+- [issue/194](https://github.com/podaac/bignbit/issues/194): Upgrade all inherited OS packages in the Docker image to the latest Ubuntu security releases to clear critical CVEs (curl/libcurl, gnutls, glibc, ...) reported by ECR/Inspector image scanning.
+- [issue/194](https://github.com/podaac/bignbit/issues/194): Move the AWS Lambda Runtime Interface Emulator (a prebuilt Go binary flagged for go/stdlib CVEs) into a dedicated `local` Docker build target so the production image pushed to ECR contains no Go binary. Build local test images with `docker build --target local`.
+
 ## [0.8.1]
 ### Added
 ### Changed

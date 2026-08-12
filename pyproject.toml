@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "bignbit"
-version = "0.8.1"
+version = "0.8.2rc1"
 description = "Browse image generation and transfer"
 authors = ["PO.DAAC <podaac@jpl.nasa.gov>"]
 license = "Apache 2.0"
@@ -8,11 +8,13 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+aiohttp = "^3.14"
 boto3 = "^1.40"
-cumulus-message-adapter-python = "^2.4.0"
-harmony-py = "^1.4.0"
+cumulus-message-adapter = "^2.0"
+harmony-py = "^1.5.0"
 cumulus-process = "^1.7.0"
 python-graphql-client = "^0.4.3"
+urllib3 = "^2.7"
 requests = "^2.34.2"
 # GDAL is optional so that conda/micromamba can own it during local dev and CI (where it
 # provides libgdal.so alongside the python bindings; see conda-environment.yaml). Only the

@@ -98,11 +98,15 @@ def determine_output_dimensions(big_config, output_crs):
 
 def generate_harmony_request(collection_concept_id, granule_concept_id, variable, output_width, output_height, output_crs, big_config, destination_bucket_url):
     """Generate the harmony request to be made and return request object"""
+    if ',' in variable:
+        variable_list = variable.split(',')
+    else:
+        variable_list = [variable]
 
     kwargs = {
         'collection': Collection(id=collection_concept_id),
         'granule_id': [granule_concept_id],
-        'variables': [variable],
+        'variables': variable_list,
         'format': big_config['config'].get('format', 'image/png'),
         'destination_url': destination_bucket_url,
         'labels': ['bignbit']
