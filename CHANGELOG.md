@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 ### Removed
 ### Fixed
+- [issue/205](https://github.com/podaac/bignbit/issues/194): Add `granules` keyword to payload output even when there is no output for proper cumulus status reporting
 ### Security
 
 ## [0.8.2]
