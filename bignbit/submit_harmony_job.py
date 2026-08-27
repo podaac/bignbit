@@ -128,6 +128,9 @@ def generate_harmony_request(collection_concept_id, granule_concept_id, variable
         kwargs['height'] = output_height
         kwargs['width'] = output_width
 
+    if 'interpolation' in big_config['config']:
+        kwargs['interpolation'] = big_config['config']['interpolation']
+
     request = Request(**kwargs)
     return request
 
