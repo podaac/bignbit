@@ -240,6 +240,7 @@ class TestGenerateHarmonyRequest:
 
         assert result.format == 'image/png'  # default
         assert result.crs is None  # default
+        assert result.interpolation is None  # default
         assert result.width == 1024
         assert result.height == 512
         assert result.labels == ['bignbit']
@@ -272,6 +273,33 @@ class TestGenerateHarmonyRequest:
         assert result.height == 512
         assert result.labels == ['bignbit']
 
+
+    def test_generate_harmony_request_with_interpolation(self):
+        """Test harmony request generation passes through the interpolation config"""
+        collection_concept_id = 'C1111111111-TEST'
+        granule_concept_id = 'G1111111111-TEST'
+        variable = 'wind_speed'
+        output_crs = 'EPSG:4326'
+        output_width = 1024
+        output_height = 512
+        big_config = {
+            'config': {
+                'width': 1024,
+                'height': 512,
+                'interpolation': 'near'
+            }
+        }
+        destination_bucket_url = 's3://test-bucket/results/wind/20230301'
+
+        result = generate_harmony_request(
+            collection_concept_id, granule_concept_id, variable, output_width, output_height,
+            output_crs, big_config, destination_bucket_url
+        )
+
+        assert result.interpolation == 'near'
+        assert result.width == 1024
+        assert result.height == 512
+        assert result.labels == ['bignbit']
 
     def test_generate_harmony_request_collection_object(self):
         """Test that harmony request creates proper Collection object"""
