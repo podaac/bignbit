@@ -53,7 +53,8 @@ ARG FUNCTION_DIR
 # curl/libcurl, gnutls, glibc, ...). Rather than enumerate each package, upgrade every installed
 # package to the latest Ubuntu security release for this base's Ubuntu series so newly disclosed
 # CVEs are picked up on rebuild. Must run as root, before switching users.
-RUN apt-get update && \
+RUN mkdir -p "${FUNCTION_DIR}" && \
+    apt-get update && \
     apt-get upgrade -y && \
     apt-get dist-upgrade -y && \
     rm -rf /var/lib/apt/lists/*
