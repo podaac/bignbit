@@ -128,6 +128,10 @@ def generate_harmony_request(collection_concept_id, granule_concept_id, variable
         kwargs['height'] = output_height
         kwargs['width'] = output_width
 
+    if 'harmonyKeywords' in big_config['config'] and isinstance(big_config['config']['harmonyKeywords'], dict):
+        # Allow harmonyKeywords to intentionally override other keywords previously set
+        kwargs.update(big_config['config']['harmonyKeywords'])
+
     request = Request(**kwargs)
     return request
 

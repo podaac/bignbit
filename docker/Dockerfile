@@ -58,6 +58,9 @@ RUN apt-get update && \
     apt-get dist-upgrade -y && \
     rm -rf /var/lib/apt/lists/*
 RUN useradd --create-home --home-dir /home/dockeruser --shell /bin/sh --uid 993 --user-group --comment "" dockeruser
+# Default umask for /home/dockeruser is 750 in ubuntu 24.04,
+# 755 allows FUNCTION_DIR to be used as the working dir
+RUN chmod 755 /home/dockeruser
 USER dockeruser
 ENV HOME=/home/dockeruser
 WORKDIR ${FUNCTION_DIR}

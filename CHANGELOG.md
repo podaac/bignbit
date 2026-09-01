@@ -7,11 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- [issue/137](https://github.com/podaac/bignbit/issues/137): Add ability to specify additional Harmony parameters to request
 ### Changed
 ### Deprecated
 ### Removed
 ### Fixed
 - [issue/205](https://github.com/podaac/bignbit/issues/194): Add `granules` keyword to payload output even when there is no output for proper cumulus status reporting
+- Fixed issue with FUNCTION_DIR umask in docker build process (bug introduced in bignbit 0.8.2)
+- [issue/206](https://github.com/podaac/bignbit/issues/206): Added retry logic for long lambda cold starts encountered in some deployments
 ### Security
 
 ## [0.8.2]
