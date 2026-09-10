@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+### Changed
+### Deprecated
+### Removed
+### Fixed
+### Security
+
+## [0.8.3]
+### Added
 - [issue/137](https://github.com/podaac/bignbit/issues/137): Add ability to specify additional Harmony parameters to request
 ### Changed
 ### Deprecated
