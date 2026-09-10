@@ -31,6 +31,14 @@
         },
         {
           "ErrorEquals": [
+            "Lambda.CodeArtifactUserPendingException"
+          ],
+          "IntervalSeconds": 60,
+          "MaxAttempts": 5,
+          "BackoffRate": 1
+        },
+        {
+          "ErrorEquals": [
             "Lambda.Unknown"
           ],
           "BackoffRate": 2,
@@ -67,6 +75,14 @@
           "IntervalSeconds":2,
           "MaxAttempts":16,
           "BackoffRate":2
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.CodeArtifactUserPendingException"
+          ],
+          "IntervalSeconds": 60,
+          "MaxAttempts": 5,
+          "BackoffRate": 1
         },
         {
           "ErrorEquals": [
@@ -123,6 +139,14 @@
           "IntervalSeconds":2,
           "MaxAttempts":6,
           "BackoffRate":2
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.CodeArtifactUserPendingException"
+          ],
+          "IntervalSeconds": 60,
+          "MaxAttempts": 5,
+          "BackoffRate": 1
         },
         {
           "ErrorEquals": [
@@ -183,6 +207,14 @@
         },
         {
           "ErrorEquals": [
+            "Lambda.CodeArtifactUserPendingException"
+          ],
+          "IntervalSeconds": 60,
+          "MaxAttempts": 5,
+          "BackoffRate": 1
+        },
+        {
+          "ErrorEquals": [
             "Lambda.Unknown"
           ],
           "BackoffRate": 2,
@@ -222,6 +254,14 @@
           "IntervalSeconds":2,
           "MaxAttempts":6,
           "BackoffRate":2
+        },
+        {
+          "ErrorEquals": [
+            "Lambda.CodeArtifactUserPendingException"
+          ],
+          "IntervalSeconds": 60,
+          "MaxAttempts": 5,
+          "BackoffRate": 1
         },
         {
           "ErrorEquals": [
@@ -302,6 +342,14 @@
                         "BackoffRate": 2
                       },
                       {
+                        "ErrorEquals": [
+                          "Lambda.CodeArtifactUserPendingException"
+                        ],
+                        "IntervalSeconds": 60,
+                        "MaxAttempts": 5,
+                        "BackoffRate": 1
+                      },
+                      {
                         "ErrorEquals": ["Lambda.Unknown"],
                         "BackoffRate": 2,
                         "IntervalSeconds": 2,
@@ -349,6 +397,14 @@
                         "IntervalSeconds":2,
                         "MaxAttempts":6,
                         "BackoffRate":2
+                      },
+                      {
+                        "ErrorEquals": [
+                          "Lambda.CodeArtifactUserPendingException"
+                        ],
+                        "IntervalSeconds": 60,
+                        "MaxAttempts": 5,
+                        "BackoffRate": 1
                       },
                       {
                         "ErrorEquals": [
@@ -419,6 +475,14 @@
         },
         {
           "ErrorEquals": [
+            "Lambda.CodeArtifactUserPendingException"
+          ],
+          "IntervalSeconds": 60,
+          "MaxAttempts": 5,
+          "BackoffRate": 1
+        },
+        {
+          "ErrorEquals": [
             "Lambda.Unknown"
           ],
           "BackoffRate": 2,
@@ -473,10 +537,26 @@
                   "Lambda.AWSLambdaException",
                   "Lambda.SdkClientException",
                   "Lambda.TooManyRequestsException"
-                  ],
+                ],
                 "IntervalSeconds": 2,
                 "MaxAttempts": 6,
                 "BackoffRate": 2
+              },
+              {
+                "ErrorEquals": [
+                  "Lambda.CodeArtifactUserPendingException"
+                ],
+                "IntervalSeconds": 60,
+                "MaxAttempts": 5,
+                "BackoffRate": 1
+              },
+              {
+                "ErrorEquals": [
+                  "Lambda.Unknown"
+                ],
+                "BackoffRate": 2,
+                "IntervalSeconds": 2,
+                "MaxAttempts": 2
               }
             ],
             "End": true

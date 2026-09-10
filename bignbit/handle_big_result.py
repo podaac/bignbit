@@ -117,7 +117,10 @@ class CMA(Process):
                 cma_file_list.extend(file_sublist)
             # If there is truly no data, return no CNM URLs and finish the workflow.
             if not cma_file_list:
-                return {'pobit': []}
+                return {
+                    'granules': self.input.get('granules', []),
+                    'pobit': [],
+                }
         else:
             cma_file_list = result_list
             partial_id = utils.extract_mgrs_grid_code(granule_umm_json)
