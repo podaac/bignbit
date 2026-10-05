@@ -2,10 +2,11 @@ import json
 import pathlib
 import urllib.request
 from os.path import dirname, realpath
+from unittest.mock import patch, MagicMock
 
 import pytest
 
-from bignbit.apply_opera_hls_treatment import the_opera_hls_treatment
+from bignbit.apply_opera_hls_treatment import the_opera_hls_treatment, get_file
 
 
 @pytest.fixture()
@@ -22,3 +23,29 @@ def test_the_opera_hls_treatment(tmp_path):
     result = the_opera_hls_treatment(test_data_input, tmp_path, 'T48SUE')
 
     assert result
+
+
+@patch('bignbit.apply_opera_hls_treatment.boto3')
+def test_get_file_requester_pays(mock_boto3, tmp_path):
+    """Requester pays should set RequestPayer on the download call."""
+    mock_obj = MagicMock()
+    mock_boto3.resource.return_value.Bucket.return_value.Object.return_value = mock_obj
+
+    local_filepath = tmp_path.joinpath('download.tiff')
+    get_file('some-bucket', 'some/key.tiff', local_filepath, requester_pays=True)
+
+    _, kwargs = mock_obj.download_fileobj.call_args
+    assert kwargs['ExtraArgs'] == {'RequestPayer': 'requester'}
+
+
+@patch('bignbit.apply_opera_hls_treatment.boto3')
+def test_get_file_no_requester_pays(mock_boto3, tmp_path):
+    """Without requester pays, no RequestPayer args should be sent."""
+    mock_obj = MagicMock()
+    mock_boto3.resource.return_value.Bucket.return_value.Object.return_value = mock_obj
+
+    local_filepath = tmp_path.joinpath('download.tiff')
+    get_file('some-bucket', 'some/key.tiff', local_filepath)
+
+    _, kwargs = mock_obj.download_fileobj.call_args
+    assert kwargs['ExtraArgs'] is None

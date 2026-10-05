@@ -417,6 +417,14 @@ Examples:
         )
     )
     parser.add_argument(
+        '--requestorPays',
+        action='store_true',
+        help=(
+            'Set to true if the source data bucket is configured as requester pays, meaning '
+            'the requester is charged for access. Default is `requestorPays = False`.'
+        )
+    )
+    parser.add_argument(
         '--s3Destination',
         type=str,
         nargs=2,

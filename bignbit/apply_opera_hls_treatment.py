@@ -53,17 +53,18 @@ class CMA(Process):
         """
         cma_file_list = self.input['big']
         staging_bucket = self.config.get('bignbit_staging_bucket')
+        requester_pays = self.config.get('requestorPays', False)
 
         mgrs_grid_code = utils.extract_mgrs_grid_code(self.input['granule_umm_json'])
         file_metadata_list = transform_images(cma_file_list, pathlib.Path(f"{self.path}"), mgrs_grid_code,
-                                              staging_bucket)
+                                              staging_bucket, requester_pays)
         del self.input['big']
         self.input['big'] = file_metadata_list
         return self.input
 
 
 def transform_images(cma_file_list: List[Dict], temp_dir: pathlib.Path, mgrs_grid_code: str,
-                     staging_bucket: str) -> List[Dict]:
+                     staging_bucket: str, requester_pays: bool = False) -> List[Dict]:
     """
     Applies special OPERA HLS processing to each input image. Each input image will result in multiple output transformed
     images.
@@ -78,6 +79,8 @@ def transform_images(cma_file_list: List[Dict], temp_dir: pathlib.Path, mgrs_gri
         MGRS grid code for the current granule being processed
     staging_bucket
         Staging bucket to which transformed files should be written
+    requester_pays
+        Whether the source bucket is configured as requester pays
 
     Returns
     -------
@@ -91,7 +94,7 @@ def transform_images(cma_file_list: List[Dict], temp_dir: pathlib.Path, mgrs_gri
 
         # Download the file for processing
         source_image_local_filepath = get_file(cma_file_meta['bucket'], cma_file_meta['key'],
-                                               temp_dir.joinpath(cma_file_meta['key']))
+                                               temp_dir.joinpath(cma_file_meta['key']), requester_pays)
         CUMULUS_LOGGER.info(f'Downloaded: {source_image_local_filepath}')
 
         # Reproject and resample image to sub-tiles
@@ -115,7 +118,8 @@ def transform_images(cma_file_list: List[Dict], temp_dir: pathlib.Path, mgrs_gri
     return file_metadata_results
 
 
-def get_file(bucket: str, key: str, local_filepath: pathlib.Path) -> pathlib.Path:
+def get_file(bucket: str, key: str, local_filepath: pathlib.Path,
+             requester_pays: bool = False) -> pathlib.Path:
     """
     Download a file from s3
 
@@ -127,6 +131,8 @@ def get_file(bucket: str, key: str, local_filepath: pathlib.Path) -> pathlib.Pat
         Key of object in bucket
     local_filepath
         Full path including filename of location object should be downloaded to
+    requester_pays
+        Whether the source bucket is configured as requester pays
 
     Returns
     -------
@@ -137,9 +143,11 @@ def get_file(bucket: str, key: str, local_filepath: pathlib.Path) -> pathlib.Pat
     bucket = s3.Bucket(bucket)
     obj = bucket.Object(key)
 
+    extra_args = {'RequestPayer': 'requester'} if requester_pays else None
+
     local_filepath.resolve().parent.mkdir(parents=True, exist_ok=True)
     with open(local_filepath, 'wb') as data:
-        obj.download_fileobj(data)
+        obj.download_fileobj(data, ExtraArgs=extra_args)
 
     return local_filepath
 
