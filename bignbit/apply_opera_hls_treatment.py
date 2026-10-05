@@ -53,7 +53,7 @@ class CMA(Process):
         """
         cma_file_list = self.input['big']
         staging_bucket = self.config.get('bignbit_staging_bucket')
-        requester_pays = self.config.get('requestorPays', False)
+        requester_pays = self.config.get('requesterPays', False)
 
         mgrs_grid_code = utils.extract_mgrs_grid_code(self.input['granule_umm_json'])
         file_metadata_list = transform_images(cma_file_list, pathlib.Path(f"{self.path}"), mgrs_grid_code,
