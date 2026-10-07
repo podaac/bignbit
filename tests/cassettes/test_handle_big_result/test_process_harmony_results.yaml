@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: null
+    body: '{"jobIDs": ["3d276f84-56e2-4f0a-acb2-35b9fcaaa317"]}'
     headers:
       Accept:
       - '*/*'
@@ -8,10 +8,12 @@ interactions:
       - gzip, deflate
       Connection:
       - keep-alive
+      Content-Type:
+      - application/json
       User-Agent:
       - python-requests/2.32.5
-    method: GET
-    uri: https://harmony.uat.earthdata.nasa.gov/jobs/3d276f84-56e2-4f0a-acb2-35b9fcaaa317?linktype=https
+    method: POST
+    uri: https://harmony.uat.earthdata.nasa.gov/jobs/status
   response:
     body:
       string: See Other. Redirecting to https://uat.urs.earthdata.nasa.gov/oauth/authorize?response_type=code&client_id=Wll59b2ShcZGg87xl3fRAg&redirect_uri=https%3A%2F%2Fharmony.uat.earthdata.nasa.gov%2Foauth2%2Fredirect&state=0cd0e2be0941f7771d0da54477da520e
@@ -130,7 +132,7 @@ interactions:
     uri: https://harmony.uat.earthdata.nasa.gov/oauth2/redirect?code=_kCf8ngzcrvVkTigL8t7bIP6WXGWh8iiAlWYnR5ixntlh3BrhN4LygfHofuoyFZu37kmv6BvEUZ8PTXO0QVJr_AoP3pSarzPVgNt6g&state=0cd0e2be0941f7771d0da54477da520e
   response:
     body:
-      string: Temporary Redirect. Redirecting to https://harmony.uat.earthdata.nasa.gov/jobs/3d276f84-56e2-4f0a-acb2-35b9fcaaa317?linktype=https
+      string: Temporary Redirect. Redirecting to https://harmony.uat.earthdata.nasa.gov/jobs/status
     headers:
       Connection:
       - keep-alive
@@ -141,7 +143,7 @@ interactions:
       Date:
       - Tue, 17 Feb 2026 18:19:37 GMT
       Location:
-      - https://harmony.uat.earthdata.nasa.gov/jobs/3d276f84-56e2-4f0a-acb2-35b9fcaaa317?linktype=https
+      - https://harmony.uat.earthdata.nasa.gov/jobs/status
       Server:
       - CloudFront
       Strict-Transport-Security:
@@ -169,6 +171,30 @@ interactions:
     status:
       code: 307
       message: Temporary Redirect
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      User-Agent:
+      - python-requests/2.32.5
+    method: GET
+    uri: https://harmony.uat.earthdata.nasa.gov/jobs/status
+  response:
+    body:
+      string: '{"jobStatuses":[{"jobID":"3d276f84-56e2-4f0a-acb2-35b9fcaaa317","status":"successful","progress":100}],"notFoundJobIDs":[]}'
+    headers:
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json; charset=utf-8
+    status:
+      code: 200
+      message: OK
 - request:
     body: null
     headers:

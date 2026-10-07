@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- [issue/212](https://github.com/podaac/bignbit/issues/212): Add `requesterPays` dataset config option so source files can be downloaded from requester pays buckets
 ### Changed
 ### Deprecated
 ### Removed
