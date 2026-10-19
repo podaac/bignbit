@@ -23,6 +23,7 @@ requests = "^2.34.2"
 # necessarily the (newer) GDAL pinned for dev/CI in conda-environment.yaml.
 gdal = {version = "3.12.4", optional = true}
 importlib-resources = "^7.1.0"
+jsonschema = "^4.26.0"
 
 [tool.poetry.extras]
 gdal = ["gdal"]

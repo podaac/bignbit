@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- GITC-9675: Validate dataset configurations against a bundled JSON schema in the `get_dataset_configuration` lambda
 ### Changed
 ### Deprecated
 ### Removed
