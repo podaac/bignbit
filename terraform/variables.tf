@@ -54,6 +54,12 @@ variable "bignbit_staging_bucket" {
   default = ""
 }
 
+# NOTE: The staging bucket's region is controlled by the `aws.staging` aliased provider
+# that the consumer passes into this module (see required_providers in main.tf), not by a
+# variable. AWS provider v5.x cannot set a per-resource region, so it must come from the
+# provider configuration. Point `aws.staging` at us-west-2 for Harmony compatibility. See:
+# https://github.com/nasa/harmony/blob/0f82b4f405373fe8c07eaa41a3840b0554356504/services/harmony/app/markdown/cloud-access.md
+
 variable "harmony_staging_path" {
   type = string
   description = "Path relative to bignbit_staging_bucket where harmony results will be saved."
@@ -73,6 +79,12 @@ variable "gibs_queue_name" {
 variable "gibs_account_id" {
   type = string
   description = "AWS account ID for GIBS"
+}
+
+variable "create_gibs_mock_queue" {
+  type        = bool
+  default     = false
+  description = "When true, creates an internal SQS FIFO queue to stand in for the external GIBS queue. Use in sandbox/sit environments."
 }
 
 variable "edl_user_ssm" {

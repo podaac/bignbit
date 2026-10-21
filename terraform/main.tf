@@ -3,6 +3,11 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = ">= 5.100"
+      # The staging bucket must live in a fixed region (us-west-2 for Harmony) that is
+      # independent of the region used by the rest of the stack. AWS provider v5.x cannot
+      # set a per-resource region, so the consumer must pass an aliased provider pinned to
+      # that region. (A per-resource `region` argument only exists in provider v6+.)
+      configuration_aliases = [aws.staging]
     }
     null = {
       source  = "hashicorp/null"
@@ -31,5 +36,8 @@ locals {
   } : var.default_tags
 
   current_aws_region = data.aws_region.current.name
+
+  gibs_sqs_region = var.create_gibs_mock_queue ? data.aws_region.current.name : var.gibs_region
+  gibs_sqs_url    = var.create_gibs_mock_queue ? aws_sqs_queue.gibs_mock_queue[0].url : "https://sqs.${var.gibs_region}.amazonaws.com/${var.gibs_account_id}/${var.gibs_queue_name}"
 
 }
